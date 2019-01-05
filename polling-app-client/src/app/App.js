@@ -38,7 +38,7 @@ class App extends Component {
       placement: 'topRight',
       top: 70,
       duration: 3,
-    });    
+    });
   }
 
   loadCurrentUser() {
@@ -46,24 +46,24 @@ class App extends Component {
       isLoading: true
     });
     getCurrentUser()
-    .then(response => {
-      this.setState({
-        currentUser: response,
-        isAuthenticated: true,
-        isLoading: false
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false
+        });
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });
       });
-    }).catch(error => {
-      this.setState({
-        isLoading: false
-      });  
-    });
   }
 
   componentDidMount() {
     this.loadCurrentUser();
   }
 
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -72,7 +72,7 @@ class App extends Component {
     });
 
     this.props.history.push(redirectTo);
-    
+
     notification[notificationType]({
       message: 'Polling App',
       description: description,
@@ -89,34 +89,34 @@ class App extends Component {
   }
 
   render() {
-    if(this.state.isLoading) {
-      return <LoadingIndicator />
+    if (this.state.isLoading) {
+      return <LoadingIndicator/>;
     }
     return (
-        <Layout className="app-container">
-          <AppHeader isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
-            onLogout={this.handleLogout} />
+      <Layout className="app-container">
+        <AppHeader isAuthenticated={this.state.isAuthenticated}
+          currentUser={this.state.currentUser}
+          onLogout={this.handleLogout} />
 
-          <Content className="app-content">
-            <div className="container">
-              <Switch>      
-                <Route exact path="/" 
-                  render={(props) => <PollList isAuthenticated={this.state.isAuthenticated} 
-                      currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
-                </Route>
-                <Route path="/login" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-                <Route path="/signup" component={Signup}></Route>
-                <Route path="/users/:username" 
-                  render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
-                </Route>
-                <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
-                <Route component={NotFound}></Route>
-              </Switch>
-            </div>
-          </Content>
-        </Layout>
+        <Content className="app-content">
+          <div className="container">
+            <Switch>
+              <Route exact path="/"
+                render={(props) => <PollList isAuthenticated={this.state.isAuthenticated}
+                  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+              </Route>
+              <Route path="/login"
+                render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
+              <Route path="/signup" component={Signup}></Route>
+              <Route path="/users/:username"
+                render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props} />}>
+              </Route>
+              <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
+              <Route component={NotFound}></Route>
+            </Switch>
+          </div>
+        </Content>
+      </Layout>
     );
   }
 }

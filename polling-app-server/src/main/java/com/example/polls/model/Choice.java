@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
  * Created by rajeevkumarsingh on 20/11/17.
  */
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
 @Table(name = "choices")
