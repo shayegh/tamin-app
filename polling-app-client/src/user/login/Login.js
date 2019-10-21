@@ -3,16 +3,16 @@ import { login } from '../../util/APIUtils';
 import './Login.css';
 import { Link } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../constants';
-
+import { toast } from 'react-toastify';
 import { Form, Input, Button, Icon, notification } from 'antd';
 const FormItem = Form.Item;
 
 class Login extends Component {
     render() {
-        const AntWrappedLoginForm = Form.create()(LoginForm)
+        const AntWrappedLoginForm = Form.create()(LoginForm);
         return (
             <div className="login-container">
-                <h1 className="page-title">Login</h1>
+                <h1 className="page-title">ورود به سیستم</h1>
                 <div className="login-content">
                     <AntWrappedLoginForm onLogin={this.props.onLogin} />
                 </div>
@@ -24,10 +24,10 @@ class Login extends Component {
 class LoginForm extends Component {
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault();   
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -38,20 +38,14 @@ class LoginForm extends Component {
                     this.props.onLogin();
                 }).catch(error => {
                     if(error.status === 401) {
-                        notification.error({
-                            message: 'Polling App',
-                            description: 'Your Username or Password is incorrect. Please try again!'
-                        });                    
+                        toast.error( 'Your Username or Password is incorrect. Please try again!');
                     } else {
-                        notification.error({
-                            message: 'Polling App',
-                            description: error.message || 'Sorry! Something went wrong. Please try again!'
-                        });                                            
+                        toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
                     }
                 });
             }
         });
-    }
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -65,7 +59,7 @@ class LoginForm extends Component {
                         prefix={<Icon type="user" />}
                         size="large"
                         name="usernameOrEmail" 
-                        placeholder="Username or Email" />    
+                        placeholder="نام کاربری" />
                     )}
                 </FormItem>
                 <FormItem>
@@ -77,12 +71,12 @@ class LoginForm extends Component {
                         size="large"
                         name="password" 
                         type="password" 
-                        placeholder="Password"  />                        
+                        placeholder="کلمه عبور"  />
                 )}
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" htmlType="submit" size="large" className="login-form-button">Login</Button>
-                    Or <Link to="/signup">register now!</Link>
+                    <Button type="primary" htmlType="submit" size="large" className="login-form-button">ورود</Button>
+                    یا <Link to="/signup">ثبت نام!</Link>
                 </FormItem>
             </Form>
         );

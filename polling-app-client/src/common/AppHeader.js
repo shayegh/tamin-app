@@ -11,16 +11,16 @@ const Header = Layout.Header;
 class AppHeader extends Component {
     constructor(props) {
         super(props);   
-        this.handleMenuClick = this.handleMenuClick.bind(this);   
+        // this.handleMenuClick = this.handleMenuClick.bind(this);
     }
 
-    handleMenuClick({ key }) {
-      if(key === "logout") {
-        this.props.onLogout();
-      }
+  handleMenuClick = ({key}) =>{
+    if (key === "logout") {
+      this.props.onLogout();
     }
+  };
 
-    render() {
+  render() {
         let menuItems;
         if(this.props.currentUser) {
           menuItems = [
@@ -37,16 +37,16 @@ class AppHeader extends Component {
           <Menu.Item key="/profile" className="profile-menu">
                 <ProfileDropdownMenu 
                   currentUser={this.props.currentUser} 
-                  handleMenuClick={this.handleMenuClick}/>
+                  handleMenuClick={this.handleMenuClick.bind(this)}/>
             </Menu.Item>
           ]; 
         } else {
           menuItems = [
             <Menu.Item key="/login">
-              <Link to="/login">Login</Link>
+              <Link to="/login">ورود</Link>
             </Menu.Item>,
             <Menu.Item key="/signup">
-              <Link to="/signup">Signup</Link>
+              <Link to="/signup">ثبت نام</Link>
             </Menu.Item>                  
           ];
         }
@@ -54,9 +54,6 @@ class AppHeader extends Component {
         return (
             <Header className="app-header">
             <div className="container">
-              <div className="app-title" >
-                <Link to="/">Polling App</Link>
-              </div>
               <Menu
                 className="app-menu"
                 mode="horizontal"
@@ -64,6 +61,9 @@ class AppHeader extends Component {
                 style={{ lineHeight: '64px' }} >
                   {menuItems}
               </Menu>
+              <div className="app-title" >
+                <Link to="/">نرم افزار نظارت</Link>
+              </div>
             </div>
           </Header>
         );
@@ -72,7 +72,7 @@ class AppHeader extends Component {
 
 function ProfileDropdownMenu(props) {
   const dropdownMenu = (
-    <Menu onClick={props.handleMenuClick} className="profile-dropdown-menu">
+    <Menu onClick={props.handleMenuClick.bind(props)} className="profile-dropdown-menu">
       <Menu.Item key="user-info" className="dropdown-item" disabled>
         <div className="user-full-name-info">
           {props.currentUser.name}

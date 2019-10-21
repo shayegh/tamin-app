@@ -18,9 +18,20 @@ import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
-
+import { toast } from 'react-toastify';
 import { Layout, notification } from 'antd';
+import 'react-toastify/dist/ReactToastify.css';
 const { Content } = Layout;
+
+toast.configure( {
+  position: "bottom-left",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  rtl:true
+});
 
 class App extends Component {
   constructor(props) {
