@@ -18,10 +18,9 @@ class Profile extends Component {
             user: null,
             isLoading: false
         }
-        this.loadUserProfile = this.loadUserProfile.bind(this);
     }
 
-    loadUserProfile(username) {
+    loadUserProfile = (username) => {
         this.setState({
             isLoading: true
         });

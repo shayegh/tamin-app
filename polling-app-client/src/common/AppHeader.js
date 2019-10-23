@@ -47,7 +47,13 @@ class AppHeader extends Component {
             </Menu.Item>,
             <Menu.Item key="/signup">
               <Link to="/signup">ثبت نام</Link>
-            </Menu.Item>                  
+            </Menu.Item> ,
+            <Menu.Item key="/suplist">
+              <Link to="/suplist">لیست گزارشها</Link>
+            </Menu.Item>,
+            <Menu.Item key="/newsuprep">
+              <Link to="/newsuprep">ثبت گزارشا</Link>
+            </Menu.Item>
           ];
         }
 
@@ -86,7 +92,7 @@ function ProfileDropdownMenu(props) {
         <Link to={`/users/${props.currentUser.username}`}>Profile</Link>
       </Menu.Item>
       <Menu.Item key="logout" className="dropdown-item">
-        Logout
+        خروج
       </Menu.Item>
     </Menu>
   );
@@ -97,7 +103,8 @@ function ProfileDropdownMenu(props) {
       trigger={['click']}
       getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
       <a className="ant-dropdown-link">
-         <Icon type="user" className="nav-icon" style={{marginRight: 0}} /> <Icon type="down" />
+         <Icon type="user" className="nav-icon" style={{marginRight: 0}} />
+         <Icon type="down" />
       </a>
     </Dropdown>
   );
