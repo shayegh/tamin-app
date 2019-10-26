@@ -1,71 +1,108 @@
-import React, {Component} from 'react';
-import { Table, Button } from 'antd';
+import React from "react";
+import {Button, Col, Form, Icon, Row, Select} from "antd";
+import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
+import * as yup from "yup";
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-  },
-];
+import "./index.css";
+import {InputField} from "./common/components/InputField";
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
+const FormItem = Form.Item;
+const Option = Select.Option;
 
-export default class TestAntd extends Component {
+const InnerForm = ({
+                     props,
+                     values,
+                     errors,
+                     touched,
+                     setFieldTouched,
+                     setFieldValue,
+                     isSubmitting,
+                     handleSubmit
+                   }) => {
+  return (
+      <FormikForm onSubmit={handleSubmit}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <FormikField
+                name="email"
+                placeholder="Email"
+                prefix={
+                  <Icon type="user" style={{color: "rgba(0,0,0,.25)"}}/>
+                }
+                required={true}
+                component={InputField}
+            />
+          </Col>
+          <Col span={12}>
+            <FormikField
+                name="username"
+                placeholder="Full Name"
+                required={true}
+                component={InputField}
+            />
+          </Col>
+        </Row>
+        <FormItem>
+          <FormikField
+              name="fruit"
+              render={({field}) => (
+                  <Select
+                      {...field}
+                      onChange={value => setFieldValue("fruit", value)}
+                      onBlur={() => setFieldTouched("fruit", true)}
+                      value={values.fruit}
+                  >
+                    <Option key={1} value="Apple">
+                      Apple
+                    </Option>
+                    <Option key={2} value="Orange">
+                      Orange
+                    </Option>
+                    <Option key={3} value="Mango">
+                      Mango
+                    </Option>
+                    <Option key={4} value="Pineapple">
+                      Pineapple
+                    </Option>
+                  </Select>
+              )}
+          />
+        </FormItem>
+        <FormItem>
+          <Button htmlType="submit" type="primary" disabled={isSubmitting}>
+            Submit
+          </Button>
+        </FormItem>
+      </FormikForm>
+  );
+};
 
-  state = {
-    selectedRowKeys: [], // Check here to configure the default column
-    loading: false,
-  };
-  start = () => {
-    this.setState({ loading: true });
-    // ajax request after empty completing
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false,
-      });
-    }, 1000);
-  };
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  };
-
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
+const MyFormikForm = withFormik({
+  mapPropsToValues({username, fruit, email}) {
+    return {
+      username: username || "",
+      fruit: fruit || "",
+      email: email || ""
     };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-        <div>
-          <div style={{ marginBottom: 16 }}>
-            <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
-              Reload
-            </Button>
-            <span style={{ marginLeft: 8 }}>
-            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-          </span>
-          </div>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
-        </div>
-    );
+  },
+  validationSchema: yup.object().shape({
+    username: yup.string().required('Username is required'),
+    email: yup.string().required('ورود ایمیل اجباری است').email('Enter a valid Email'),
+  }),
+  handleSubmit(values, {resetForm, setErrors, setSubmitting}) {
+    setTimeout(() => {
+      console.log("Form values", values);
+      // save
+      setSubmitting(false);
+    }, 2000);
   }
+})(InnerForm);
+
+export default function testAntd() {
+  return (
+      <div className="App">
+        <h3>Chose a fruit</h3>
+        <MyFormikForm/>
+      </div>
+  );
 }
