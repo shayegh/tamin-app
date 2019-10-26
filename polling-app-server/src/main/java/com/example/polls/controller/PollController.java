@@ -9,6 +9,7 @@ import com.example.polls.security.CurrentUser;
 import com.example.polls.security.UserPrincipal;
 import com.example.polls.service.PollService;
 import com.example.polls.util.AppConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.net.URI;
 /**
  * Created by rajeevkumarsingh on 20/11/17.
  */
-
+@Slf4j
 @RestController
 @RequestMapping("/api/polls")
 public class PollController {
@@ -39,7 +40,6 @@ public class PollController {
     @Autowired
     private PollService pollService;
 
-    private static final Logger logger = LoggerFactory.getLogger(PollController.class);
 
     @GetMapping
     public PagedResponse<PollResponse> getPolls(@CurrentUser UserPrincipal currentUser,

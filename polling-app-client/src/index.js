@@ -10,7 +10,7 @@ import TestPrime from "./testPrime";
 
 ReactDOM.render(
     <Router>
-        <App />
+        <TestAntd />
     </Router>,
     document.getElementById('root')
 );
