@@ -20,12 +20,12 @@ const InnerForm = ({
                      handleSubmit
                    }) => {
   return (
-      <FormikForm onSubmit={handleSubmit}>
+      <FormikForm onSubmit={handleSubmit} >
         <Row gutter={16}>
           <Col span={12}>
             <FormikField
                 name="email"
-                placeholder="Email"
+                placeholder="ایمیل"
                 prefix={
                   <Icon type="user" style={{color: "rgba(0,0,0,.25)"}}/>
                 }
@@ -36,7 +36,7 @@ const InnerForm = ({
           <Col span={12}>
             <FormikField
                 name="username"
-                placeholder="Full Name"
+                placeholder="نام"
                 required={true}
                 component={InputField}
             />
