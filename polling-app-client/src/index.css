@@ -12,7 +12,10 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
-
+.datepicker-input{
+  color: #1890ff;
+  border: #8899A6;
+}
 .container {
   max-width: 1000px;
   margin-left: auto;
