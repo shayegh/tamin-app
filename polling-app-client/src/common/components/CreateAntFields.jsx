@@ -26,6 +26,7 @@ const CreateAntField = AntComponent => ({
   return (
       <div className="field-container">
         <FormItem
+            labelCol={props.labelCol}
             label={label}
             hasFeedback={
               !!((hasFeedback && submitted) || (hasFeedback && touched))
