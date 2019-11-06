@@ -5,7 +5,6 @@ import App from './app/App';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
 import TestAntd from "./testAntd";
-import TestMui from "./testMUI";
 import TestPrime from "./testPrime";
 
 ReactDOM.render(

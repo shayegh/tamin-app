@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, message, Popconfirm, Table} from "antd";
+import {Button, Icon, message, Popconfirm, Table} from "antd";
 import MyFormikForm from './MyForm';
 import {toast} from "react-toastify";
 
@@ -92,13 +92,11 @@ function TestAntd(props) {
             render: (text, record) => {
                 return (
                     <div>
-                        <Button
-                            onClick={() => {
-                                console.log(record);
-                                setCurrentFruit(record);
-                            }}>
-                            ویرایش
-                        </Button>
+                        <Icon type="edit" theme="twoTone" style={{marginLeft:5}}
+                              onClick={() => {
+                            console.log(record);
+                            setCurrentFruit(record);
+                        }} />
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
                             onConfirm={() => {
@@ -108,7 +106,7 @@ function TestAntd(props) {
                             okText="بله"
                             cancelText="خیر"
                         >
-                            <Button style={{marginRight: 5}} type='danger'>حذف</Button>
+                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' />
                         </Popconfirm>
                     </div>
                 )
