@@ -1,5 +1,6 @@
 import React from "react";
-import { DatePicker, Form, Input, TimePicker, Select } from "antd";
+import {DatePicker as antDatePicker, Form, Input, Select, TimePicker} from "antd";
+import DatePicker from 'react-datepicker2';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -23,6 +24,7 @@ const CreateAntField = AntComponent => ({
       form.setFieldValue(field.name, value);
   const onChange = value => form.setFieldValue(field.name, value);
   const onBlur = () => form.setFieldTouched(field.name, true);
+    // console.log('type:',type);
   return (
       <div className="field-container">
         <FormItem
@@ -50,6 +52,7 @@ const CreateAntField = AntComponent => ({
 };
 
 export const AntSelect = CreateAntField(Select);
-export const AntDatePicker = CreateAntField(DatePicker);
+export const AntDatePicker = CreateAntField(antDatePicker);
 export const AntInput = CreateAntField(Input);
 export const AntTimePicker = CreateAntField(TimePicker);
+export const JalaliDatePicker = CreateAntField(DatePicker);

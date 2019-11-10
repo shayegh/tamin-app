@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {Button, Icon, message, Popconfirm, Table} from "antd";
+import {Icon, message, Popconfirm, Table} from "antd";
 import MyFormikForm from './MyForm';
-import {toast} from "react-toastify";
 
 const dataSource = [
     {
@@ -30,7 +29,6 @@ function TestAntd(props) {
     // CRUD operations
     const addFruit = fruit => {
         fruit.key = fruits.length + 1;
-        // console.log(fruit);
         setFruits([...fruits, fruit]);
         setCurrentFruit(initialFormState);
         // toast.success('اطلاعات با موفقیت اضافه شد');
@@ -41,7 +39,7 @@ function TestAntd(props) {
     const deleteUser = fr => {
         // setEditing(false)
 
-        setFruits(fruits.filter(fruit => fruit.key !== fr.key))
+        setFruits(fruits.filter(fruit => fruit.key !== fr.key));
         message.success('Deleted Successfully')
     };
 
@@ -92,11 +90,11 @@ function TestAntd(props) {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="edit" theme="twoTone" style={{marginLeft:5}}
+                        <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
-                            console.log(record);
-                            setCurrentFruit(record);
-                        }} />
+                                  // console.log(record);
+                                  setCurrentFruit(record);
+                              }}/>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
                             onConfirm={() => {
@@ -106,7 +104,7 @@ function TestAntd(props) {
                             okText="بله"
                             cancelText="خیر"
                         >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' />
+                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96'/>
                         </Popconfirm>
                     </div>
                 )

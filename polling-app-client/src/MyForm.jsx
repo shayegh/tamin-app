@@ -1,10 +1,9 @@
 import React from 'react';
 import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import * as yup from "yup";
-import DatePicker from 'react-datepicker2';
 import moment from 'moment-jalaali';
 import "./index.css";
-import {AntInput, AntSelect} from "./common/components/CreateAntFields";
+import {AntInput, AntSelect, JalaliDatePicker} from "./common/components/CreateAntFields";
 import {Button, Col, Form, Icon, Row} from 'antd';
 
 const FormItem = Form.Item;
@@ -23,7 +22,7 @@ const InnerForm = ({
                        dirty
                    }) => {
     const selectOptions = ["Mark", "Bob", "Anthony"];
-    // console.log(props);
+    // console.log('Form values:', values);
     return (
         <FormikForm onSubmit={handleSubmit}>
             <Row gutter={16}>
@@ -39,7 +38,6 @@ const InnerForm = ({
                         required={true}
                         hasFeedback
                         component={AntInput}
-
                     />
                 </Col>
                 <Col span={12}>
@@ -70,17 +68,22 @@ const InnerForm = ({
                     />
                 </Col>
                 <Col span={12}>
-                    <FormItem label='تاریخ' labelCol={{span: 12, offset: 12}}>
-                        <FormikField
-                            name='svdate'
-                            render={({field}) => (
-                                <DatePicker {...field} value={values.svdate} isGregorian={false} className='ant-input'
-                                            inputJalaaliFormat="jYYYY/jMM/jDD" timePicker={false}/>
-                            )}
-                        />
-                    </FormItem>
+                    <FormikField
+                        labelCol={{span: 12, offset: 12}}
+                        name="date"
+                        isGregorian={false}
+                        className='ant-input'
+                        inputJalaaliFormat="jYYYY/jMM/jDD"
+                        timePicker={false}
+                        placeholder="تاریخ"
+                        label='تاریخ'
+                        required={true}
+                        hasFeedback
+                        component={JalaliDatePicker}
+                    />
                 </Col>
             </Row>
+
             <FormItem>
                 <Button htmlType="submit" type="primary" disabled={isSubmitting}>
                     Submit
@@ -97,26 +100,24 @@ const MyFormikForm = withFormik({
     enableReinitialize: true,
     mapPropsToValues: ({currentFruit}) => {
         console.log('Map Props to Value', currentFruit);
-
         return {
             username: currentFruit.username || "",
             fruit: currentFruit.fruit || "",
             email: currentFruit.email || "",
-            svdate: currentFruit.date ? moment(currentFruit.date) : moment(),
             bookingClient: currentFruit.bookingClient || "",
+            date: currentFruit.date ? moment(currentFruit.date,'jYYYY/jMM/jDD'):moment()
 
         };
     },
     validationSchema: yup.object().shape({
         username: yup.string().required('نام کاربری اجباری می باشد'),
         email: yup.string().required('ورود ایمیل اجباری است').email('آدرس ایمیل صحیح نیست'),
-        svdate: yup.string().required('فیلد تاریخ اجباری است')
+        date: yup.string().required('فیلد تاریخ اجباری است')
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
         setTimeout(() => {
             console.log("Form values", values);
-            // console.log(values.svdate.format('jYYYY/jM/jD'));
-            let jdate = values.svdate.format('jYYYY/jM/jD');
+            let jdate = values.date.format('jYYYY/jM/jD');
             props.addFruit({...values, date: jdate});
             // alert(JSON.stringify(props.data, null, 2));
             // save
