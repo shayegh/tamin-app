@@ -1,9 +1,9 @@
 {
   "name": "supervising-app-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.24.2",
+    "antd": "^3.25.1",
     "classnames": "^2.2.6",
     "clsx": "^1.0.4",
     "customize-cra": "^0.4.1",
@@ -12,11 +12,11 @@
     "primeicons": "^1.0.0",
     "primereact": "^3.1.7",
     "prop-types": "^15.7.2",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "react-cookie": "^3.0.8",
     "react-datepicker2": "^3.0.3",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "^3.2.0",
     "react-toastify": "^5.4.0",
     "yup": "^0.27.0"

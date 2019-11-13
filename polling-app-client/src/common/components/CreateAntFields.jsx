@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker2';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TextArea } = Input;
 
 const CreateAntField = AntComponent => ({
                                           field,
@@ -54,5 +55,6 @@ const CreateAntField = AntComponent => ({
 export const AntSelect = CreateAntField(Select);
 export const AntDatePicker = CreateAntField(antDatePicker);
 export const AntInput = CreateAntField(Input);
+export const AntTextArea = CreateAntField(TextArea);
 export const AntTimePicker = CreateAntField(TimePicker);
 export const JalaliDatePicker = CreateAntField(DatePicker);

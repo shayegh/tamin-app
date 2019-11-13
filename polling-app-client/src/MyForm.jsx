@@ -57,7 +57,7 @@ const InnerForm = ({
                 <Col span={12}>
                     <FormikField
                         labelCol={{span: 12, offset: 12}}
-                        label='میوه'
+                        label='نام نماینده'
                         component={AntSelect}
                         name="bookingClient"
                         defaultValue={values.fruit}
