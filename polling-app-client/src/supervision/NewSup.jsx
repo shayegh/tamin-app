@@ -22,10 +22,11 @@ const NewSup = () => {
     // Setting state
     const [details, setDetails] = useState(dataSource);
     const [currentDetail, setCurrentDetail] = useState(initialFormState);
+    const [showDetail, setShowDetail] = useState(false);
     // CRUD operations
-    const addDetail = fruit => {
-        fruit.key = details.length + 1;
-        setDetails([...details, fruit]);
+    const addDetail = detail => {
+        detail.id = details.length + 1;
+        setDetails([...details, detail]);
         setCurrentDetail(initialFormState);
         // toast.success('اطلاعات با موفقیت اضافه شد');
         message.success('اطلاعات با موفقیت اضافه شد');
@@ -38,6 +39,12 @@ const NewSup = () => {
         setDetails(details.filter(fruit => fruit.key !== fr.key));
         message.success('Deleted Successfully')
     };
+
+    const addHeader = () => {
+        setShowDetail(true);
+
+    };
+
     const columns = [
         {
             title: 'موضوع',
@@ -71,7 +78,7 @@ const NewSup = () => {
                     <div>
                         <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
-                                  console.log(record);
+                                  // console.log(record);
                                   setCurrentDetail(record);
                               }}/>
                         <Popconfirm
@@ -98,9 +105,11 @@ const NewSup = () => {
 
     return (
         <div className="App">
-            <SupHeaderForm/>
-            <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
-            <Table dataSource={dataSource} columns={columns} size="small"/>
+            <SupHeaderForm addHeader={addHeader}/>
+            {showDetail? <div>
+                <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
+                <Table dataSource={details} columns={columns} size="small"/>
+            </div>: null}
         </div>
     )
 

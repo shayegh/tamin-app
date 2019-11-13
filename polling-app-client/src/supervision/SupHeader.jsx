@@ -84,6 +84,7 @@ const InnerForm = ({
                         label='کارشناس ناظر '
                         type='text'
                         name="Supervisor"
+                        required={true}
                         hasFeedback
                     />
                 </Col>
@@ -187,12 +188,13 @@ const SupHeaderForm = withFormik({
         brch: yup.string().required('ورود نام شعبه اجباری است'),
         surveyDate: yup.string().required('فیلد تاریخ اجباری است'),
         Supervisor: yup.string().required('فیلد نام ناظر اجباری است'),
+        surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
         setTimeout(() => {
             console.log("Form values", values);
             // let jdate = values.date.format('jYYYY/jM/jD');
-            // props.addFruit({...values, date: jdate});
+            props.addHeader();
             // alert(JSON.stringify(props.data, null, 2));
             // save
             setSubmitting(false);

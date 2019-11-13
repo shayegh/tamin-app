@@ -2,6 +2,7 @@ import React from 'react';
 import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import {Button, Col, Form, Row} from 'antd';
 import * as yup from "yup";
+import {setLocale} from "yup";
 import {AntInput} from "../common/components/CreateAntFields";
 
 const FormItem = Form.Item;
@@ -83,6 +84,21 @@ const InnerForm = ({
         </FormikForm>
     );
 };
+
+setLocale({
+    mixed: {
+        notType: function notType(_ref) {
+            switch (_ref.type) {
+                case 'number':
+                    return 'مقدار این فیلد باید عددی باشد';
+                case 'string':
+                    return 'Not a string error or any other custom error message';
+                default:
+                    return 'Wrong type error or any other custom error message';
+            }
+        }
+    }
+});
 
 const SupDetailForm = withFormik({
     enableReinitialize: true,
