@@ -23,6 +23,25 @@ const request = (options) => {
     );
 };
 
+
+export function getAllHeaders(page, size) {
+    page = page || 0;
+    size = size || POLL_LIST_SIZE;
+
+    return request({
+        url: API_BASE_URL + "/headers?page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+
+export function createHeader(headerData) {
+    return request({
+        url: API_BASE_URL + "/headers",
+        method: 'POST',
+        body: JSON.stringify(headerData)
+    });
+}
+
 export function getAllPolls(page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;

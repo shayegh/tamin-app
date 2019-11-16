@@ -11,8 +11,9 @@ import com.example.polls.repository.PollRepository;
 import com.example.polls.repository.UserRepository;
 import com.example.polls.repository.VoteRepository;
 import com.example.polls.security.UserPrincipal;
-import com.example.polls.util.AppConstants;
 import com.example.polls.util.ModelMapper;
+import com.example.polls.util.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -46,7 +45,7 @@ public class PollService {
     // private static final Logger log = LoggerFactory.getLogger(PollService.class);
 
     public PagedResponse<PollResponse> getAllPolls(UserPrincipal currentUser, int page, int size) {
-        validatePageNumberAndSize(page, size);
+        Utils.validatePageNumberAndSize(page, size);
 
         // Retrieve Polls
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
@@ -75,7 +74,7 @@ public class PollService {
     }
 
     public PagedResponse<PollResponse> getPollsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
-        validatePageNumberAndSize(page, size);
+        Utils.validatePageNumberAndSize(page, size);
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -106,7 +105,7 @@ public class PollService {
     }
 
     public PagedResponse<PollResponse> getPollsVotedBy(String username, UserPrincipal currentUser, int page, int size) {
-        validatePageNumberAndSize(page, size);
+       Utils.validatePageNumberAndSize(page, size);
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -227,15 +226,7 @@ public class PollService {
     }
 
 
-    private void validatePageNumberAndSize(int page, int size) {
-        if(page < 0) {
-            throw new BadRequestException("Page number cannot be less than zero.");
-        }
 
-        if(size > AppConstants.MAX_PAGE_SIZE) {
-            throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
-        }
-    }
 
     private Map<Long, Long> getChoiceVoteCountMap(List<Long> pollIds) {
         // Retrieve Vote Counts of every Choice belonging to the given pollIds

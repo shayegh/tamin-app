@@ -30,3 +30,5 @@ nbdist/
 .ebextensions
 
 src/main/resources/application-prod.properties
+
+*.log

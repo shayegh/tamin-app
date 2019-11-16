@@ -18,16 +18,19 @@ const dataSource = [
 
 const NewSup = () => {
 
-    const initialFormState = {id: null, srdSubject: '', srdSubjectCount: 0, srdSubjectErrorCount: 0, srdComment: ''};
+    const initialDetailFormState = {id: null, srdSubject: '', srdSubjectCount: 0, srdSubjectErrorCount: 0, srdComment: ''};
+    const initialHeaderFormState = {id: null, surveyDate: '', surveyCreateDate: '', srdSubjectErrorCount: 0, srdComment: ''};
     // Setting state
     const [details, setDetails] = useState(dataSource);
-    const [currentDetail, setCurrentDetail] = useState(initialFormState);
+    const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
+    const [currentHeader, setCurrentHeader] = useState(initialHeaderFormState);
     const [showDetail, setShowDetail] = useState(false);
+    const [headerID, setHeaderID] = useState(null);
     // CRUD operations
     const addDetail = detail => {
         detail.id = details.length + 1;
         setDetails([...details, detail]);
-        setCurrentDetail(initialFormState);
+        setCurrentDetail(initialDetailFormState);
         // toast.success('اطلاعات با موفقیت اضافه شد');
         message.success('اطلاعات با موفقیت اضافه شد');
 
@@ -36,12 +39,14 @@ const NewSup = () => {
     const deleteDetail = fr => {
         // setEditing(false)
 
-        setDetails(details.filter(fruit => fruit.key !== fr.key));
-        message.success('Deleted Successfully')
+        setDetails(details.filter(detail => detail.id !== fr.id));
+        message.success('اطلاعات با موفقیت حذف شد')
     };
 
-    const addHeader = () => {
+    const addHeader = (hid) => {
         setShowDetail(true);
+        console.log('Header ID:',hid);
+        setHeaderID(hid);
 
     };
 
@@ -105,7 +110,7 @@ const NewSup = () => {
 
     return (
         <div className="App">
-            <SupHeaderForm addHeader={addHeader}/>
+            <SupHeaderForm currentHeader={currentHeader} addHeader={addHeader}/>
             {showDetail? <div>
                 <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
                 <Table dataSource={details} columns={columns} size="small"/>

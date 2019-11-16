@@ -4,15 +4,16 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter as Router} from 'react-router-dom';
 import TestForm from "./TestForm";
+import App from "./app/App";
 
 ReactDOM.render(
     <Router>
-        <TestForm />
+        <App />
     </Router>,
     document.getElementById('root')
 );
 // ReactDOM.render(
-//     <TestPrime/>,
+//     <TestForm/>,
 //     document.getElementById('root')
 // );
 registerServiceWorker();

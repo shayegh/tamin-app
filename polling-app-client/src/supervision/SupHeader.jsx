@@ -3,6 +3,9 @@ import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import * as yup from "yup";
 import {AntInput, AntSelect, AntTextArea, JalaliDatePicker} from '../common/components/CreateAntFields';
 import {Button, Col, Form, message, Row} from 'antd';
+import moment from 'moment-jalaali';
+import {createHeader} from "../util/APIUtils";
+import {toast} from "react-toastify";
 
 const FormItem = Form.Item;
 
@@ -28,7 +31,7 @@ const InnerForm = ({
                         component={AntInput}
                         labelCol={{span: 12, offset: 12}}
                         label="شماره حکم ماموریت"
-                        name="missionNO"
+                        name="missionNo"
                         type='num'
                         required={true}
                         hasFeedback
@@ -39,7 +42,7 @@ const InnerForm = ({
                         component={AntSelect}
                         labelCol={{span: 12, offset: 12}}
                         label='شعبه '
-                        name="brch"
+                        name="brchName"
                         defaultValue={values.brch}
                         selectOptions={selectOptions}
                         tokenSeparators={[","]}
@@ -83,7 +86,7 @@ const InnerForm = ({
                         labelCol={{span: 12, offset: 12}}
                         label='کارشناس ناظر '
                         type='text'
-                        name="Supervisor"
+                        name="supervisorName"
                         required={true}
                         hasFeedback
                     />
@@ -104,7 +107,7 @@ const InnerForm = ({
                 </Col>
             </Row>
             <Row gutter={16}>
-                <Col span={12} >
+                <Col span={12}>
                     <FormikField
                         component={AntTextArea}
                         labelCol={{span: 12, offset: 12}}
@@ -171,35 +174,49 @@ const InnerForm = ({
 
 
 const SupHeaderForm = withFormik({
-    enableReinitialize: true,
-    mapPropsToValues: ({currentFruit}) => {
-        console.log('Map Props to Value', currentFruit);
+    // enableReinitialize: true,
+    mapPropsToValues: ({currentHeader}) => {
+        console.log('Map Props to Value', currentHeader);
         return {
-            // username: currentFruit.username || '',
-            // fruit: currentFruit.fruit || '',
-            // email: currentFruit.email || '',
-            // bookingClient: currentFruit.bookingClient || '',
-            // date: currentFruit.date ? moment(currentFruit.date,'jYYYY/jMM/jDD'):moment()
+            // username: currentHeader.username || '',
+            // fruit: currentHeader.fruit || '',
+            // email: currentHeader.email || '',
+            // bookingClient: currentHeader.bookingClient || '',
+            surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
+            surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
 
         };
     },
     validationSchema: yup.object().shape({
-        missionNO: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
-        brch: yup.string().required('ورود نام شعبه اجباری است'),
-        surveyDate: yup.string().required('فیلد تاریخ اجباری است'),
-        Supervisor: yup.string().required('فیلد نام ناظر اجباری است'),
+        missionNo: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
+        brchName: yup.string().required('ورود نام شعبه اجباری است'),
+        surveyDate: yup.string().required('فیلد تاریخ بازرسی اجباری است'),
+        surveyCreateDate: yup.string().required('فیلد تاریخ ثبت گزارش اجباری است'),
+        supervisorName: yup.string().required('فیلد نام ناظر اجباری است'),
         surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
-        setTimeout(() => {
-            console.log("Form values", values);
-            // let jdate = values.date.format('jYYYY/jM/jD');
-            props.addHeader();
-            // alert(JSON.stringify(props.data, null, 2));
-            // save
-            setSubmitting(false);
-            message.success('اطلاعات با موفقیت ثبت شد');
-        }, 200);
+        console.log("Form values", values);
+        let newValues = {
+            ...values,
+            surveyDate: values.surveyDate.format('jYYYY/jM/jD'),
+            surveyCreateDate: values.surveyCreateDate.format('jYYYY/jM/jD'),
+            preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jM/jD') : '',
+        };
+        // save
+        createHeader(newValues)
+            .then(response => {
+                toast.success('اطلاعات گزارش با موفقیت ثبت شد');
+                props.addHeader(response.oid);
+            }).catch(error => {
+            if (error.status === 401) {
+                message.error('You have been logged out. Please login create poll.');
+            } else {
+                console.log('Error Message :', error);
+                message.error(error.message || 'Sorry! Something went wrong. Please try again!');
+            }
+        });
+        setSubmitting(false);
     }
 })(InnerForm);
 
