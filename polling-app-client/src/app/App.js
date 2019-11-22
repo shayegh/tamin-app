@@ -116,7 +116,8 @@ class App extends Component {
                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup}/>
                 <Route path="/suplist" component={SupList}/>
-                <Route path="/newsuprep" component={NewSup}/>
+                <Route exact path="/newsuprep" component={NewSup}/>
+                <Route path="/newsuprep/:headerId" component={NewSup}/>
                 <Route path="/users/:username"
                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                    currentUser={this.state.currentUser} {...props} />}/>

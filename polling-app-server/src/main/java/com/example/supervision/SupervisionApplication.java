@@ -10,17 +10,17 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @EntityScan(basePackageClasses = {
-		PollsApplication.class,
+		SupervisionApplication.class,
 		Jsr310JpaConverters.class
 })
-public class PollsApplication {
+public class SupervisionApplication {
 
 	@PostConstruct
 	void init() {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tehran"));
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(PollsApplication.class, args);
+		SpringApplication.run(SupervisionApplication.class, args);
 	}
 }

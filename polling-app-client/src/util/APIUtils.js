@@ -1,26 +1,25 @@
-import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import {ACCESS_TOKEN, API_BASE_URL, POLL_LIST_SIZE} from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
-    })
-    
-    if(localStorage.getItem(ACCESS_TOKEN)) {
+    });
+
+    if (localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
 
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
-
     return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
+        .then(response =>
+            response.json().then(json => {
+                if (!response.ok) {
+                    return Promise.reject(json);
+                }
+                return json;
+            })
+        );
 };
 
 
@@ -34,14 +33,31 @@ export function getAllHeaders(page, size) {
     });
 }
 
+export function getHeader(headerId) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}`,
+        method: 'GET'
+    })
+
+}
+
 export function createHeader(headerData) {
     return request({
-        url: API_BASE_URL + "/headers",
+        url: `${API_BASE_URL}/headers`,
         method: 'POST',
         body: JSON.stringify(headerData)
     });
 }
 
+export function deleteHeader(headerId) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}`,
+        method: 'DELETE',
+        body: JSON.stringify(headerId)
+    });
+}
+///
+///
 export function getAllPolls(page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;
@@ -56,7 +72,7 @@ export function createPoll(pollData) {
     return request({
         url: API_BASE_URL + "/polls",
         method: 'POST',
-        body: JSON.stringify(pollData)         
+        body: JSON.stringify(pollData)
     });
 }
 
@@ -100,7 +116,7 @@ export function checkEmailAvailability(email) {
 
 
 export function getCurrentUser() {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 

@@ -158,7 +158,7 @@ const InnerForm = ({
             <Row>
                 <Col span={8}>
                     <FormItem>
-                        <Button htmlType="submit" type="primary" disabled={isSubmitting}>
+                        <Button htmlType="submit" type="primary" loading={isSubmitting} disabled={isSubmitting}>
                             ذخیره
                         </Button>
                         <Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}

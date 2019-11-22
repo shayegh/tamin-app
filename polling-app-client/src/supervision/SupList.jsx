@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {POLL_LIST_SIZE} from "../constants";
-import {getAllHeaders, getUserCreatedPolls, getUserVotedPolls} from "../util/APIUtils";
+import {deleteHeader, getAllHeaders, getUserCreatedPolls, getUserVotedPolls} from "../util/APIUtils";
 import {Button, Form, Icon, Popconfirm, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import {Link} from "react-router-dom";
+import {toast} from 'react-toastify';
 
 const FormItem = Form.Item;
 
@@ -24,7 +25,7 @@ class SupList extends Component {
 
     }
 
-    loadPollList = (page = 0, size = POLL_LIST_SIZE) => {
+    loadHeaderList = (page = 0, size = POLL_LIST_SIZE) => {
         let promise;
         if (this.props.username) {
             if (this.props.type === 'USER_CREATED_POLLS') {
@@ -46,9 +47,7 @@ class SupList extends Component {
 
         promise
             .then(response => {
-                console.log('Response', response);
                 const headers = this.state.headers.slice();
-                // const currentVotes = this.state.currentVotes.slice();
 
                 this.setState({
                     headers: headers.concat(response.content),
@@ -57,7 +56,6 @@ class SupList extends Component {
                     totalElements: response.totalElements,
                     totalPages: response.totalPages,
                     last: response.last,
-                    // currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
                     isLoading: false
                 })
             }).catch(error => {
@@ -109,7 +107,7 @@ class SupList extends Component {
         {
             title: 'عملیات',
             dataIndex: 'id',
-            key: 'id',
+            key: 'key',
             render: (text, record) => {
                 return (
                     <div>
@@ -121,7 +119,7 @@ class SupList extends Component {
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
                             onConfirm={() => {
-                                // deleteDetail(record);
+                                this.deleteHeader(record);
                             }}
                             onCancel={this.cancel}
                             okText="بله"
@@ -136,22 +134,41 @@ class SupList extends Component {
     ];
 
     edit = (e) => {
-        console.log('Edit Header ID:', e)
+        console.log('Edit Header ID:', e);
+        this.props.history.push(`/newsuprep/${e}`);
     };
     cancel = (e) => {
         // console.log(e);
         // message.error('Click on No');
     };
 
+    deleteHeader = (header) => {
+        let promise = deleteHeader(header.id);
+        promise.then(response => {
+                console.log('DeleteHeader Response :', response);
+                const headers = this.state.headers.filter(hr => hr.id !== header.id);
+                this.setState({headers});
+                toast.success('اطلاعات با موفقیت حذف شد');
+            }
+        ).catch(error => {
+            console.log('Error :', error);
+            toast.error('error');
+            this.setState({
+                isLoading: false
+            });
+        })
+
+    };
+
 
     componentDidMount() {
-        this.loadPollList();
+        this.loadHeaderList();
     }
 
 
     render() {
         return (
-            <div>
+            <div className="App">
                 {this.state.isLoading ?
                     <LoadingIndicator/> :
                     <div>
@@ -160,9 +177,8 @@ class SupList extends Component {
 
                             <Button htmlType="submit" type="primary">
                                 <Link to='/newsuprep'>
-                                جدید
+                                    جدید
                                 </Link>
-
                             </Button>
                         </FormItem>
                     </div>}
