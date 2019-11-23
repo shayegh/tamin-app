@@ -111,11 +111,9 @@ class SupList extends Component {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
-                              onClick={() => {
-                                  // console.log(record);
-                                  this.edit(text)
-                              }}/>
+                        <Link to={`/newsuprep/${text}`}>
+                            <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                        </Link>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
                             onConfirm={() => {

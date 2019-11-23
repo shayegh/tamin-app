@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, Icon, message, Popconfirm, Table} from "antd";
 import './Supervision.css';
 import SupHeaderForm from "./SupHeader";
 import SupDetailForm from "./SupDetail";
+import {getHeader} from '../util/APIUtils';
 
 const FormItem = Form.Item;
 
@@ -27,7 +28,28 @@ const NewSup = (props) => {
     const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
     const [currentHeader, setCurrentHeader] = useState(initialHeaderFormState);
     const [showDetail, setShowDetail] = useState(false);
+    const [reInitials, setReInitials] = useState(false);
     const [headerID, setHeaderID] = useState(null);
+
+    useEffect(()=>{
+
+        let headerId = props.match.params.headerId;
+        let promise;
+        if(headerId !== undefined){
+            console.log('Header ID : ',headerId);
+            promise = getHeader(headerId);
+            promise.then(response => {
+                console.log('Effect Response :',response);
+                setCurrentHeader(response);
+                setReInitials(true);
+            })
+        }else {
+            console.log('No Header ID');
+        }
+
+    },[]);
+
+
     // CRUD operations
     const addDetail = detail => {
         detail.id = details.length + 1;
@@ -46,6 +68,7 @@ const NewSup = (props) => {
     };
 
     const addHeader = (hid) => {
+        setReInitials(false);
         setShowDetail(true);
         console.log('Header ID:',hid);
         setHeaderID(hid);
@@ -112,7 +135,7 @@ const NewSup = (props) => {
 
     return (
         <div className="App">
-            <SupHeaderForm currentHeader={currentHeader} addHeader={addHeader}/>
+            <SupHeaderForm currentHeader={currentHeader} reInitials={reInitials} addHeader={addHeader}/>
             {showDetail? <div>
                 <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
                 <Table dataSource={details} columns={columns} size="small"/>

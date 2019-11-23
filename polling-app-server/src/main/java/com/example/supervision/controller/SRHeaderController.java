@@ -53,9 +53,14 @@ public class SRHeaderController {
         return srService.getAllHeaders(currentUser, page, size);
     }
 
+    @GetMapping(path = "/{headerId}")
+    public SRHeader getHeader(@PathVariable Long headerId) {
+        return headerRepository.findById(headerId)
+                .orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId.toString() + " not found"));
 
+    }
 
-    @PutMapping("/{headerId}")
+    @PutMapping(path = "/{headerId}", produces = "application/json")
     public SRHeader updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
         return headerRepository.findById(headerId).map(header -> {
 //            header.setTitle(headerRequest.getTitle());
@@ -67,14 +72,14 @@ public class SRHeaderController {
 
     @DeleteMapping("/{headerId}")
     public ResponseEntity<?> deletePost(@PathVariable Long headerId) {
-        log.debug("Header Id :{}",headerId);
-//        headerRepository.deleteById(headerId);
-//        return ResponseEntity.ok().build();
+        log.debug("Header Id :{}", headerId);
+        headerRepository.deleteById(headerId);
+        return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
 
-        return headerRepository.findById(headerId).map(post -> {
-            headerRepository.delete(post);
-            return ResponseEntity.ok(new ApiResponse(true,"Report Deleted Successfully"));
-        }).orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId + " not found"));
+//        return headerRepository.findById(headerId).map(post -> {
+//            headerRepository.delete(post);
+//            return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
+//        }).orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId + " not found"));
     }
 
 }

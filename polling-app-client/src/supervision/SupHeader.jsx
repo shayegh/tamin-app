@@ -174,13 +174,14 @@ const InnerForm = ({
 
 
 const SupHeaderForm = withFormik({
-    // enableReinitialize: true,
+    enableReinitialize: ({reInitials})=>reInitials,
     mapPropsToValues: ({currentHeader}) => {
         console.log('Map Props to Value', currentHeader);
         return {
-            // username: currentHeader.username || '',
-            // fruit: currentHeader.fruit || '',
-            // email: currentHeader.email || '',
+            missionNo: currentHeader.missionNo || '',
+            supervisorName: currentHeader.supervisorName || '',
+            surveySubject: currentHeader.surveySubject || '',
+            brchName: currentHeader.brchName || '',
             // bookingClient: currentHeader.bookingClient || '',
             surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
             surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
