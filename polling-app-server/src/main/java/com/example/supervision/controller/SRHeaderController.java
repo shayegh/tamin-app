@@ -66,16 +66,12 @@ public class SRHeaderController {
         Optional<SRHeader> header = headerRepository.findById(headerId);
         if(!header.isPresent())
             return ResponseEntity.notFound().build();
+        SRHeader srHeader = header.get();
         headerRequest.setId(headerId);
+        headerRequest.setCreatedAt(srHeader.getCreatedAt());
+        headerRequest.setCreatedBy(srHeader.getCreatedBy());
         headerRepository.save(headerRequest);
         return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully",headerId));
-//        return headerRepository.findById(headerId).map(header -> {
-////            header.setTitle(headerRequest.getTitle());
-////            header.setDescription(headerRequest.getDescription());
-////            header.setContent(headerRequest.getContent());
-//            headerRequest.setId(headerId);
-//            return headerRepository.save(header);
-//        }).orElseThrow(() -> new ResourceNotFoundException("Header " + headerId.toString() + " not found"));
     }
 
     @DeleteMapping("/{headerId}")

@@ -29,7 +29,8 @@ toast.configure({
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
-  rtl: true
+  rtl: true,
+  bodyClassName:'toastBody'
 });
 
 class App extends Component {

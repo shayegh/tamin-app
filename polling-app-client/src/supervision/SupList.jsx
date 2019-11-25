@@ -112,7 +112,7 @@ class SupList extends Component {
         {
             title: 'عملیات',
             dataIndex: 'id',
-            key: 'key',
+            key: 'id',
             render: (text, record) => {
                 return (
                     <div>
@@ -175,7 +175,7 @@ class SupList extends Component {
                 {this.state.isLoading ?
                     <LoadingIndicator/> :
                     <div>
-                        <Table dataSource={this.state.headers} columns={this.columns} size="small"/>
+                        <Table dataSource={this.state.headers} rowKey='id' columns={this.columns} size="small"/>
                         <FormItem>
 
                             <Button htmlType="submit" type="primary">

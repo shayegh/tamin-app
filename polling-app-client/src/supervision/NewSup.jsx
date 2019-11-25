@@ -1,26 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {Form, Icon, message, Popconfirm, Table} from "antd";
+import {Icon, Popconfirm, Table} from "antd";
 import './Supervision.css';
 import SupHeaderForm from "./SupHeader";
 import SupDetailForm from "./SupDetail";
 import {getHeader} from '../util/APIUtils';
+import {toast} from 'react-toastify';
 
-const FormItem = Form.Item;
-
-const dataSource = [
-    {
-        id: '1',
-        srdSubject: 'Mike',
-        srdSubjectCount: 5,
-        srdSubjectErrorCount: 32,
-        srdComment: '10 Downing Street',
-    },
-];
+const dataSource = [];
 
 const NewSup = (props) => {
 
-    const initialDetailFormState = {id: null, srdSubject: '', srdSubjectCount: 0, srdSubjectErrorCount: 0, srdComment: ''};
-    const initialHeaderFormState = {id: null, surveyDate: '', surveyCreateDate: '', srdSubjectErrorCount: 0, srdComment: ''};
+    const initialDetailFormState = {
+        id: null,
+        srdSubject: '',
+        srdSubjectCount: 0,
+        srdSubjectErrorCount: 0,
+        srdComment: ''
+    };
+    const initialHeaderFormState = {
+        id: null,
+        surveyDate: '',
+        surveyCreateDate: '',
+        srdSubjectErrorCount: 0,
+        srdComment: ''
+    };
     // Setting state
     const [details, setDetails] = useState(dataSource);
     const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
@@ -29,23 +32,21 @@ const NewSup = (props) => {
     const [reInitials, setReInitials] = useState(false);
     const [headerID, setHeaderID] = useState(null);
 
-    useEffect(()=>{
-
+    useEffect(() => {
         let headerId = props.match.params.headerId;
-        let promise;
-        if(headerId !== undefined){
-            console.log('Header ID : ',headerId);
-            promise = getHeader(headerId);
-            promise.then(response => {
-                console.log('Effect Response :',response);
-                setCurrentHeader(response);
-                setReInitials(true);
-            })
-        }else {
+        if (headerId !== undefined) {
+            // console.log('Header ID : ', headerId);
+            getHeader(headerId)
+                .then(response => {
+                    // console.log('Effect Response :', response);
+                    setCurrentHeader(response);
+                    // setReInitials(true);
+                })
+        } else {
             console.log('No Header ID');
         }
 
-    },[]);
+    }, []);
 
 
     // CRUD operations
@@ -53,8 +54,8 @@ const NewSup = (props) => {
         detail.id = details.length + 1;
         setDetails([...details, detail]);
         setCurrentDetail(initialDetailFormState);
-        // toast.success('اطلاعات با موفقیت اضافه شد');
-        message.success('اطلاعات با موفقیت اضافه شد');
+        toast.success('اطلاعات با موفقیت اضافه شد');
+        // message.success('اطلاعات با موفقیت اضافه شد');
 
     };
 
@@ -62,13 +63,13 @@ const NewSup = (props) => {
         // setEditing(false)
 
         setDetails(details.filter(detail => detail.id !== fr.id));
-        message.success('اطلاعات با موفقیت حذف شد')
+        toast.success('اطلاعات با موفقیت حذف شد')
     };
 
     const addHeader = (hid) => {
         setReInitials(false);
         setShowDetail(true);
-        console.log('Header ID:',hid);
+        console.log('Header ID:', hid);
         setHeaderID(hid);
 
     };
@@ -95,8 +96,7 @@ const NewSup = (props) => {
             title: 'توضیحات',
             dataIndex: 'srdComment',
             key: 'srdComment',
-        }
-        ,
+        },
         {
             title: 'عملیات',
             dataIndex: 'id',
@@ -134,10 +134,13 @@ const NewSup = (props) => {
     return (
         <div className="App">
             <SupHeaderForm currentHeader={currentHeader} reInitials={reInitials} addHeader={addHeader}/>
-            {showDetail? <div>
-                <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
-                <Table dataSource={details} columns={columns} size="small"/>
-            </div>: null}
+            {showDetail ?
+                <div>
+                    <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
+                    <Table dataSource={details} rowKey='id' columns={columns} size="small"/>
+                </div>
+                :
+                null}
         </div>
     )
 

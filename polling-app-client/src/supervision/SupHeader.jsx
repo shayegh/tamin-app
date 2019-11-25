@@ -2,10 +2,11 @@ import React from 'react';
 import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import * as yup from "yup";
 import {AntInput, AntSelect, AntTextArea, JalaliDatePicker} from '../common/components/CreateAntFields';
-import {Button, Col, Form, message, Row} from 'antd';
+import {Button, Col, Form, Row} from 'antd';
 import moment from 'moment-jalaali';
 import {createHeader, updateHeader} from "../util/APIUtils";
 import {toast} from "react-toastify";
+import {brchOptions, unitOptions} from '../constants';
 
 const FormItem = Form.Item;
 
@@ -22,8 +23,7 @@ const InnerForm = ({
                        submitCount,
                        dirty
                    }) => {
-    const brchOptions = ["یک یزد", "دو یزد", "سه یزد"];
-    const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
+
     return (
         <FormikForm onSubmit={handleSubmit}>
             <Row gutter={16}>
@@ -44,7 +44,7 @@ const InnerForm = ({
                         labelCol={{span: 12, offset: 12}}
                         label='شعبه '
                         name="brchName"
-                        defaultValue={values.brch}
+                        // defaultValue={values.brch}
                         selectOptions={brchOptions}
                         tokenSeparators={[","]}
                         required={true}
@@ -57,7 +57,7 @@ const InnerForm = ({
                         labelCol={{span: 12, offset: 12}}
                         label='واحد '
                         name="unitName"
-                        defaultValue={values.unit}
+                        // defaultValue={values.unit}
                         selectOptions={unitOptions}
                         tokenSeparators={[","]}
                         required={true}
@@ -188,9 +188,12 @@ const InnerForm = ({
 
 
 const SupHeaderForm = withFormik({
+    displayName: 'SupHeaderForm',
     enableReinitialize: ({reInitials}) => reInitials,
-    mapPropsToValues: ({currentHeader}) => {
+    mapPropsToValues: ({currentHeader, reInitials}) => {
         console.log('Map Props to Value', currentHeader);
+        console.log('Map Props to Value values', reInitials);
+        // if(reInitials)
         return {
             id: currentHeader.id ? currentHeader.id : undefined,
             missionNo: currentHeader.missionNo || '',
@@ -206,6 +209,7 @@ const SupHeaderForm = withFormik({
             surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
 
         };
+        // else return {}
     },
     validationSchema: yup.object().shape({
         missionNo: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
@@ -235,10 +239,10 @@ const SupHeaderForm = withFormik({
                     props.addHeader(response.oid);
                 }).catch(error => {
                 if (error.status === 401) {
-                    message.error('You have been logged out. Please login create poll.');
+                    toast.error('You have been logged out. Please login create poll.');
                 } else {
                     console.log('Error Message :', error);
-                    message.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
                 }
             });
         else
@@ -248,10 +252,10 @@ const SupHeaderForm = withFormik({
                     props.addHeader(response.oid);
                 }).catch(error => {
                 if (error.status === 401) {
-                    message.error('You have been logged out. Please login create poll.');
+                    toast.error('You have been logged out. Please login create poll.');
                 } else {
                     console.log('Error Message :', error);
-                    message.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
                 }
             });
         setSubmitting(false);
