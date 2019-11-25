@@ -24,6 +24,7 @@ public class SRDetail extends UserDateAudit {
 
     private Integer srdSubjectErrorCount;
 
+    @Column(columnDefinition = "TEXT")
     private String srdComment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

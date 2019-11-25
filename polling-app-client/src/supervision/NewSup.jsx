@@ -19,8 +19,6 @@ const dataSource = [
 
 const NewSup = (props) => {
 
-    console.log('New Sup props : ',props.match.params.headerId);
-
     const initialDetailFormState = {id: null, srdSubject: '', srdSubjectCount: 0, srdSubjectErrorCount: 0, srdComment: ''};
     const initialHeaderFormState = {id: null, surveyDate: '', surveyCreateDate: '', srdSubjectErrorCount: 0, srdComment: ''};
     // Setting state

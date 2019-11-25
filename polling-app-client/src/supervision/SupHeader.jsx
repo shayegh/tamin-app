@@ -4,7 +4,7 @@ import * as yup from "yup";
 import {AntInput, AntSelect, AntTextArea, JalaliDatePicker} from '../common/components/CreateAntFields';
 import {Button, Col, Form, message, Row} from 'antd';
 import moment from 'moment-jalaali';
-import {createHeader} from "../util/APIUtils";
+import {createHeader, updateHeader} from "../util/APIUtils";
 import {toast} from "react-toastify";
 
 const FormItem = Form.Item;
@@ -22,11 +22,12 @@ const InnerForm = ({
                        submitCount,
                        dirty
                    }) => {
-    const selectOptions = ["یک یزد", "دو یزد", "سه یزد"];
+    const brchOptions = ["یک یزد", "دو یزد", "سه یزد"];
+    const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
     return (
         <FormikForm onSubmit={handleSubmit}>
             <Row gutter={16}>
-                <Col span={8}>
+                <Col span={6}>
                     <FormikField
                         component={AntInput}
                         labelCol={{span: 12, offset: 12}}
@@ -37,20 +38,33 @@ const InnerForm = ({
                         hasFeedback
                     />
                 </Col>
-                <Col span={8}>
+                <Col span={6}>
                     <FormikField
                         component={AntSelect}
                         labelCol={{span: 12, offset: 12}}
                         label='شعبه '
                         name="brchName"
                         defaultValue={values.brch}
-                        selectOptions={selectOptions}
+                        selectOptions={brchOptions}
                         tokenSeparators={[","]}
                         required={true}
                         hasFeedback
                     />
                 </Col>
-                <Col span={8}>
+                <Col span={6}>
+                    <FormikField
+                        component={AntSelect}
+                        labelCol={{span: 12, offset: 12}}
+                        label='واحد '
+                        name="unitName"
+                        defaultValue={values.unit}
+                        selectOptions={unitOptions}
+                        tokenSeparators={[","]}
+                        required={true}
+                        hasFeedback
+                    />
+                </Col>
+                <Col span={6}>
                     <FormikField
                         component={JalaliDatePicker}
                         labelCol={{span: 12, offset: 12}}
@@ -174,16 +188,21 @@ const InnerForm = ({
 
 
 const SupHeaderForm = withFormik({
-    enableReinitialize: ({reInitials})=>reInitials,
+    enableReinitialize: ({reInitials}) => reInitials,
     mapPropsToValues: ({currentHeader}) => {
         console.log('Map Props to Value', currentHeader);
         return {
+            id: currentHeader.id ? currentHeader.id : undefined,
             missionNo: currentHeader.missionNo || '',
             supervisorName: currentHeader.supervisorName || '',
             surveySubject: currentHeader.surveySubject || '',
             brchName: currentHeader.brchName || '',
-            // bookingClient: currentHeader.bookingClient || '',
+            unitName: currentHeader.unitName || '',
+            preSurveyMatters: currentHeader.preSurveyMatters || '',
+            recommendationUnitManager: currentHeader.recommendationUnitManager || '',
+            recommendationBrchManager: currentHeader.recommendationBrchManager || '',
             surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
+            preSurveyDate: currentHeader.preSurveyDate ? moment(currentHeader.preSurveyDate, 'jYYYY/jMM/jDD') : moment(),
             surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
 
         };
@@ -191,6 +210,7 @@ const SupHeaderForm = withFormik({
     validationSchema: yup.object().shape({
         missionNo: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
         brchName: yup.string().required('ورود نام شعبه اجباری است'),
+        unitName: yup.string().required('ورود نام واحد اجباری است'),
         surveyDate: yup.string().required('فیلد تاریخ بازرسی اجباری است'),
         surveyCreateDate: yup.string().required('فیلد تاریخ ثبت گزارش اجباری است'),
         supervisorName: yup.string().required('فیلد نام ناظر اجباری است'),
@@ -205,18 +225,35 @@ const SupHeaderForm = withFormik({
             preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jM/jD') : '',
         };
         // save
-        createHeader(newValues)
-            .then(response => {
-                toast.success('اطلاعات گزارش با موفقیت ثبت شد');
-                props.addHeader(response.oid);
-            }).catch(error => {
-            if (error.status === 401) {
-                message.error('You have been logged out. Please login create poll.');
-            } else {
-                console.log('Error Message :', error);
-                message.error(error.message || 'Sorry! Something went wrong. Please try again!');
-            }
-        });
+
+        let headerId = values.id;
+        console.log('Form submit id:', headerId);
+        if (headerId === undefined)
+            createHeader(newValues)
+                .then(response => {
+                    toast.success('اطلاعات گزارش با موفقیت ثبت شد');
+                    props.addHeader(response.oid);
+                }).catch(error => {
+                if (error.status === 401) {
+                    message.error('You have been logged out. Please login create poll.');
+                } else {
+                    console.log('Error Message :', error);
+                    message.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                }
+            });
+        else
+            updateHeader(newValues, headerId)
+                .then(response => {
+                    toast.success('اطلاعات باموفقیت به روزرسانی شد');
+                    props.addHeader(response.oid);
+                }).catch(error => {
+                if (error.status === 401) {
+                    message.error('You have been logged out. Please login create poll.');
+                } else {
+                    console.log('Error Message :', error);
+                    message.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                }
+            });
         setSubmitting(false);
     }
 })(InnerForm);

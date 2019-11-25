@@ -30,6 +30,9 @@ public class SRHeader extends UserDateAudit {
     @NotBlank
     private String brchName;
 
+    @NotBlank
+    private String unitName;
+
     @NotNull
     private Long missionNo;
 
@@ -42,10 +45,13 @@ public class SRHeader extends UserDateAudit {
     @NotBlank
     private String surveySubject;
 
+    @Column(columnDefinition = "TEXT")
     private String surveyMatters;
 
+    @Column(columnDefinition = "TEXT")
     private String recommendationUnitManager;
 
+    @Column(columnDefinition = "TEXT")
     private String recommendationBrchManager;
 
     @OneToMany(

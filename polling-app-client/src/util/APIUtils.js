@@ -46,7 +46,15 @@ export function createHeader(headerData) {
         url: `${API_BASE_URL}/headers`,
         method: 'POST',
         body: JSON.stringify(headerData)
-    });
+    })
+}
+
+export function updateHeader(headerData,headerId) {
+    return request({
+        url:`${API_BASE_URL}/headers/${headerId}`,
+        method: 'PUT',
+        body:JSON.stringify(headerData)
+    })
 }
 
 export function deleteHeader(headerId) {

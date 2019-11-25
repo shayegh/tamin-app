@@ -83,6 +83,11 @@ class SupList extends Component {
             key: 'brchName',
         },
         {
+            title: ' واحد',
+            dataIndex: 'unitName',
+            key: 'unitName',
+        },
+        {
             title: ' تاریخ بازدید',
             dataIndex: 'surveyDate',
             key: 'surveyDate',
@@ -132,7 +137,7 @@ class SupList extends Component {
     ];
 
     edit = (e) => {
-        console.log('Edit Header ID:', e);
+        // console.log('Edit Header ID:', e);
         this.props.history.push(`/newsuprep/${e}`);
     };
     cancel = (e) => {

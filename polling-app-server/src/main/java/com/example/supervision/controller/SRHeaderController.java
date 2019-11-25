@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * Created by Shayegh@gmail.com on ۱۶/۱۱/۲۰۱۹ - ۱۰:۱۰ قبل‌ازظهر.
@@ -61,13 +62,20 @@ public class SRHeaderController {
     }
 
     @PutMapping(path = "/{headerId}", produces = "application/json")
-    public SRHeader updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
-        return headerRepository.findById(headerId).map(header -> {
-//            header.setTitle(headerRequest.getTitle());
-//            header.setDescription(headerRequest.getDescription());
-//            header.setContent(headerRequest.getContent());
-            return headerRepository.save(header);
-        }).orElseThrow(() -> new ResourceNotFoundException("PostId " + headerId.toString() + " not found"));
+    public ResponseEntity<?> updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
+        Optional<SRHeader> header = headerRepository.findById(headerId);
+        if(!header.isPresent())
+            return ResponseEntity.notFound().build();
+        headerRequest.setId(headerId);
+        headerRepository.save(headerRequest);
+        return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully",headerId));
+//        return headerRepository.findById(headerId).map(header -> {
+////            header.setTitle(headerRequest.getTitle());
+////            header.setDescription(headerRequest.getDescription());
+////            header.setContent(headerRequest.getContent());
+//            headerRequest.setId(headerId);
+//            return headerRepository.save(header);
+//        }).orElseThrow(() -> new ResourceNotFoundException("Header " + headerId.toString() + " not found"));
     }
 
     @DeleteMapping("/{headerId}")
