@@ -82,7 +82,14 @@ export function getAllDetailsByHeaderId(headerId) {
         url: `${API_BASE_URL}/headers/${headerId}/details`,
         method: 'GET'
     })
+}
 
+export function deleteDetail(headerId,detailId) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}/details/${detailId}`,
+        method: 'DELETE',
+        body: JSON.stringify(headerId)
+    });
 }
 
 ///

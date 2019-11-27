@@ -3,7 +3,7 @@ import SupHeader2 from "./SupHeader2";
 import {Icon, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
-import {getAllDetailsByHeaderId} from '../util/APIUtils';
+import {deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
 import {showError} from '../util/Helpers';
 
 const initialDetailFormState = {
@@ -39,10 +39,7 @@ export default class NewSup2 extends Component {
                         details: details.concat(response.content),
                         showDetail: true
                     });
-                }).catch(
-                error => showError(error)
-            )
-
+                }).catch(error => showError(error))
         }
     }
 
@@ -51,9 +48,6 @@ export default class NewSup2 extends Component {
             showDetail: true,
             headerId: hid
         });
-        // console.log('Header ID:', hid);
-        // setHeaderID(hid);
-
     };
 
     addDetail = detail => {
@@ -63,15 +57,18 @@ export default class NewSup2 extends Component {
             details: [...details, detail],
             currentDetail: initialDetailFormState
         });
-        // toast.success('اطلاعات با موفقیت اضافه شد');
-
     };
 
-    deleteDetail = fr => {
-        // setEditing(false)
-        let {details} = this.state;
-        this.setState({details: details.filter(detail => detail.id !== fr.id)});
-        toast.success('اطلاعات با موفقیت حذف شد')
+    deleteDetail = detail => {
+        let {headerId, details} = this.state;
+        this.setState({details: details.filter(de => de.id !== detail.id)});
+        deleteDetail(headerId, detail.id)
+            .then(response => {
+                    console.log('DeleteDetail Response :', response);
+                    this.setState({details: details.filter(de => de.id !== detail.id)});
+                    toast.success('اطلاعات با موفقیت حذف شد');
+                }
+            ).catch(error => showError(error));
     };
 
     columns = [
@@ -89,8 +86,6 @@ export default class NewSup2 extends Component {
             title: 'تعداد خطا',
             dataIndex: 'srdSubjectErrorCount',
             key: 'srdSubjectErrorCount',
-            // defaultSortOrder: 'descend',
-            // sorter: (a, b) => a.age - b.age,
         },
         {
             title: 'توضیحات',
@@ -133,7 +128,7 @@ export default class NewSup2 extends Component {
     render() {
         // let hId = this.props.match.params.headerId;
         let {showDetail, currentDetail, details, headerId} = this.state;
-        console.log('Details :',details);
+        console.log('Details :', details);
         return (
             <div className='App'>
                 <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={this.addHeader}/>

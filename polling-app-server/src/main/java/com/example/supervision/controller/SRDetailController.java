@@ -50,4 +50,13 @@ public class SRDetailController {
                                                  Pageable pageable) {
         return detailRepository.findBysrHeaderId(headerId, pageable);
     }
+
+    @DeleteMapping("/headers/{headerId}/details/{detailId}")
+    public ResponseEntity<?> deletePost(@PathVariable Long headerId,@PathVariable Long detailId) {
+//        log.debug("Header Id :{}", headerId);
+        detailRepository.deleteById(detailId);
+        return ResponseEntity.ok(new ApiResponse(true, "Detail Deleted Successfully"));
+
+    }
+
 }
