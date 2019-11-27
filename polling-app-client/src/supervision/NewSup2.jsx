@@ -3,6 +3,8 @@ import SupHeader2 from "./SupHeader2";
 import {Icon, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
+import {getAllDetailsByHeaderId} from '../util/APIUtils';
+import {showError} from '../util/Helpers';
 
 const initialDetailFormState = {
     id: null,
@@ -20,16 +22,34 @@ export default class NewSup2 extends Component {
         this.state = {
             showDetail: false,
             currentDetail: {},
-            headerId:null,
+            headerId: props.match.params.headerId,
             details: []
         }
 
     }
 
+    componentDidMount() {
+        let {headerId} = this.state;
+        console.log('Header ID', headerId);
+        if (headerId !== undefined) {
+            getAllDetailsByHeaderId(headerId)
+                .then(response => {
+                    const details = this.state.details.slice();
+                    this.setState({
+                        details: details.concat(response.content),
+                        showDetail: true
+                    });
+                }).catch(
+                error => showError(error)
+            )
+
+        }
+    }
+
     addHeader = (hid) => {
         this.setState({
             showDetail: true,
-            headerId:hid
+            headerId: hid
         });
         // console.log('Header ID:', hid);
         // setHeaderID(hid);
@@ -43,7 +63,7 @@ export default class NewSup2 extends Component {
             details: [...details, detail],
             currentDetail: initialDetailFormState
         });
-        toast.success('اطلاعات با موفقیت اضافه شد');
+        // toast.success('اطلاعات با موفقیت اضافه شد');
 
     };
 
@@ -87,7 +107,7 @@ export default class NewSup2 extends Component {
                         <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
-                                  this.setState({currentDetail:record});
+                                  this.setState({currentDetail: record});
                               }}/>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
@@ -111,14 +131,15 @@ export default class NewSup2 extends Component {
     };
 
     render() {
-        let headerId = this.props.match.params.headerId;
-        let {showDetail,currentDetail,details} = this.state;
+        // let hId = this.props.match.params.headerId;
+        let {showDetail, currentDetail, details, headerId} = this.state;
+        console.log('Details :',details);
         return (
             <div className='App'>
                 <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={this.addHeader}/>
                 {showDetail ?
                     <div>
-                        <SupDetailForm currentDetail={currentDetail} addDetail={this.addDetail}/>
+                        <SupDetailForm currentDetail={currentDetail} headerId={headerId} addDetail={this.addDetail}/>
                         <Table dataSource={details} rowKey='id' columns={this.columns} size="small"/>
                     </div>
                     :

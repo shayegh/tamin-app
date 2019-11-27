@@ -22,7 +22,9 @@ const request = (options) => {
         );
 };
 
-
+//
+//Header API
+//
 export function getAllHeaders(page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;
@@ -64,6 +66,25 @@ export function deleteHeader(headerId) {
         body: JSON.stringify(headerId)
     });
 }
+///
+///Detail API
+///
+export function createDetail(headerId,detailData) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}/details`,
+        method: 'POST',
+        body: JSON.stringify(detailData)
+    })
+}
+
+export function getAllDetailsByHeaderId(headerId) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}/details`,
+        method: 'GET'
+    })
+
+}
+
 ///
 ///
 export function getAllPolls(page, size) {

@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/headers")
+@RequestMapping("/api")
 public class SRHeaderController {
     @Autowired
     private SRService srService;
@@ -33,20 +33,20 @@ public class SRHeaderController {
     @Autowired
     private SRHeaderRepository headerRepository;
 
-    @PostMapping
+    @PostMapping(path = "/headers")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createHeader(@Valid @RequestBody SRHeader srHeader) {
         SRHeader header = srService.createSRHeader(srHeader);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{headerId}")
+                .fromCurrentRequest().path("/headers/{headerId}")
                 .buildAndExpand(header.getId()).toUri();
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "Header Created Successfully", header.getId()));
     }
 
-    @GetMapping
+    @GetMapping(path = "/headers")
     public PagedResponse<SRHeader> getHeaders(@CurrentUser UserPrincipal currentUser,
                                               @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                               @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
@@ -54,14 +54,14 @@ public class SRHeaderController {
         return srService.getAllHeaders(currentUser, page, size);
     }
 
-    @GetMapping(path = "/{headerId}")
+    @GetMapping(path = "/headers/{headerId}")
     public SRHeader getHeader(@PathVariable Long headerId) {
         return headerRepository.findById(headerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Header", "HeaderId ", headerId));
 
     }
 
-    @PutMapping(path = "/{headerId}", produces = "application/json")
+    @PutMapping(path = "/headers/{headerId}", produces = "application/json")
     public ResponseEntity<?> updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
         Optional<SRHeader> header = headerRepository.findById(headerId);
         if (!header.isPresent())
@@ -74,17 +74,15 @@ public class SRHeaderController {
         return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully", headerId));
     }
 
-    @DeleteMapping("/{headerId}")
+    @DeleteMapping("/headers/{headerId}")
     public ResponseEntity<?> deletePost(@PathVariable Long headerId) {
         log.debug("Header Id :{}", headerId);
         headerRepository.deleteById(headerId);
         return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
 
-//        return headerRepository.findById(headerId).map(post -> {
-//            headerRepository.delete(post);
-//            return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
-//        }).orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId + " not found"));
     }
+
+
 
 }
 

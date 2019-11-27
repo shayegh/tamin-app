@@ -4,6 +4,8 @@ import {Button, Col, Form, Row} from 'antd';
 import * as yup from "yup";
 import {setLocale} from "yup";
 import {AntInput} from "../common/components/CreateAntFields";
+import {createDetail} from '../util/APIUtils';
+import {toast} from 'react-toastify';
 
 const FormItem = Form.Item;
 
@@ -119,14 +121,25 @@ const SupDetailForm = withFormik({
         srdSubject: yup.string().required('فیلد موضوع اجباری است')
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
-        setTimeout(() => {
+
             console.log("Form values", values);
-            // let jdate = values.date.format('jYYYY/jM/jD');
+            createDetail(props.headerId,values)
+                .then(response => {
+                    toast.success('جزئیات با موفقیت ثبت شد');
+                    // addHeader(response.oid);
+                }).catch(error => {
+                if (error.status === 401) {
+                    toast.error('You have been logged out. Please login create poll.');
+                } else {
+                    console.log('Error Message :', error);
+                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                }
+            });
             props.addDetail(values);
             // alert(JSON.stringify(props.data, null, 2));
             // save
             setSubmitting(false);
-        }, 200);
+
     }
 })(InnerForm);
 

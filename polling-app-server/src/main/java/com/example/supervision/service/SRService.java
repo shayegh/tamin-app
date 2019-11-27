@@ -1,7 +1,10 @@
 package com.example.supervision.service;
 
+import com.example.supervision.exception.ResourceNotFoundException;
+import com.example.supervision.model.supervision.SRDetail;
 import com.example.supervision.model.supervision.SRHeader;
 import com.example.supervision.payload.PagedResponse;
+import com.example.supervision.repository.SRDetailRepository;
 import com.example.supervision.repository.SRHeaderRepository;
 import com.example.supervision.security.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,9 @@ public class SRService {
     @Autowired
     private SRHeaderRepository headerRepository;
 
+    @Autowired
+    private SRDetailRepository detailRepository;
+
     public SRHeader createSRHeader(SRHeader srHeader) {
 
         return headerRepository.save(srHeader);
@@ -36,7 +42,7 @@ public class SRService {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
         Page<SRHeader> srHeaders = headerRepository.findAll(pageable);
         log.debug("SRService is working");
-        if(srHeaders.getNumberOfElements() == 0) {
+        if (srHeaders.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), srHeaders.getNumber(),
                     srHeaders.getSize(), srHeaders.getTotalElements(), srHeaders.getTotalPages(), srHeaders.isLast());
         }
@@ -45,5 +51,10 @@ public class SRService {
 
     }
 
-
+    public SRDetail createSRDetail(Long headerId, SRDetail srDetail){
+        return headerRepository.findById(headerId).map(srHeader -> {
+            srDetail.setSrHeader(srHeader);
+            return detailRepository.save(srDetail);
+        }).orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId + " not found"));
+    }
 }

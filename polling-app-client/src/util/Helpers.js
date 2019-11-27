@@ -1,4 +1,5 @@
 import moment from 'moment-jalaali';
+import {toast} from 'react-toastify';
 
 export function formatDate(dateString) {
     const date = new Date(dateString);
@@ -40,5 +41,14 @@ export function compareByNum(a, b) {
 }
 
 export function compareDate(a, b) {
-    return moment(a || 0,'jYYYY/jMM/jDD').unix() - moment(b || 0,'jYYYY/jMM/jDD').unix()
+    return moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix()
+}
+
+export function showError(error) {
+    if (error.status === 401) {
+        toast.error('You have been logged out. Please login create poll.');
+    } else {
+        console.log('Error Message :', error);
+        toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
+    }
 }

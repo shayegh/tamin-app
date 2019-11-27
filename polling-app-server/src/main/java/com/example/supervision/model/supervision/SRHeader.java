@@ -1,6 +1,7 @@
 package com.example.supervision.model.supervision;
 
 import com.example.supervision.model.audit.UserDateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
@@ -63,6 +64,7 @@ public class SRHeader extends UserDateAudit {
 //    @Size(min = 2, max = 6)
     @Fetch(FetchMode.SELECT)
     @BatchSize(size = 30)
+    @JsonIgnore
     private List<SRDetail> srDetails = new ArrayList<>();
 
     public void addDetail(SRDetail detail) {
