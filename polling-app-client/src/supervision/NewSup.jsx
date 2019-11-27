@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Icon, Popconfirm, Table} from "antd";
 import './Supervision.css';
-import SupHeaderForm from "./SupHeader";
 import SupDetailForm from "./SupDetail";
 import {getHeader} from '../util/APIUtils';
 import {toast} from 'react-toastify';
+import SupHeader2 from "./SupHeader2";
 
 const dataSource = [];
 
@@ -24,21 +24,13 @@ const NewSup = (props) => {
         srdSubjectErrorCount: 0,
         srdComment: ''
     };
-    // Setting state
-    const [details, setDetails] = useState(dataSource);
-    const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
-    const [currentHeader, setCurrentHeader] = useState(initialHeaderFormState);
-    const [showDetail, setShowDetail] = useState(false);
-    const [reInitials, setReInitials] = useState(false);
-    const [headerID, setHeaderID] = useState(null);
-
     useEffect(() => {
         let headerId = props.match.params.headerId;
         if (headerId !== undefined) {
             // console.log('Header ID : ', headerId);
             getHeader(headerId)
                 .then(response => {
-                    // console.log('Effect Response :', response);
+                    console.log('Effect Response :', response);
                     setCurrentHeader(response);
                     // setReInitials(true);
                 })
@@ -47,6 +39,16 @@ const NewSup = (props) => {
         }
 
     }, []);
+
+
+    // Setting state
+    const [details, setDetails] = useState(dataSource);
+    const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
+    const [currentHeader, setCurrentHeader] = useState(initialHeaderFormState);
+    const [showDetail, setShowDetail] = useState(false);
+    const [reInitials, setReInitials] = useState(false);
+    const [headerID, setHeaderID] = useState(null);
+
 
 
     // CRUD operations
@@ -130,10 +132,10 @@ const NewSup = (props) => {
         // message.error('Click on No');
     };
 
-
+    console.log('current header',currentHeader);
     return (
         <div className="App">
-            <SupHeaderForm currentHeader={currentHeader} reInitials={reInitials} addHeader={addHeader}/>
+            <SupHeader2 currentHeader={currentHeader} reInitials={reInitials} addHeader={addHeader}/>
             {showDetail ?
                 <div>
                     <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>

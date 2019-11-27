@@ -57,21 +57,21 @@ public class SRHeaderController {
     @GetMapping(path = "/{headerId}")
     public SRHeader getHeader(@PathVariable Long headerId) {
         return headerRepository.findById(headerId)
-                .orElseThrow(() -> new ResourceNotFoundException("HeaderId " + headerId.toString() + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Header", "HeaderId ", headerId));
 
     }
 
     @PutMapping(path = "/{headerId}", produces = "application/json")
     public ResponseEntity<?> updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
         Optional<SRHeader> header = headerRepository.findById(headerId);
-        if(!header.isPresent())
+        if (!header.isPresent())
             return ResponseEntity.notFound().build();
         SRHeader srHeader = header.get();
         headerRequest.setId(headerId);
         headerRequest.setCreatedAt(srHeader.getCreatedAt());
         headerRequest.setCreatedBy(srHeader.getCreatedBy());
         headerRepository.save(headerRequest);
-        return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully",headerId));
+        return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully", headerId));
     }
 
     @DeleteMapping("/{headerId}")

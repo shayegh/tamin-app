@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {POLL_LIST_SIZE} from "../constants";
 import {deleteHeader, getAllHeaders, getUserCreatedPolls, getUserVotedPolls} from "../util/APIUtils";
-import {Button, Form, Icon, Popconfirm, Table} from "antd";
+import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import {Link} from "react-router-dom";
 import {toast} from 'react-toastify';
+import Highlighter from "react-highlight-words";
+import {compareByAlph, compareByNum} from "../util/Helpers";
 
 const FormItem = Form.Item;
 
@@ -20,7 +22,9 @@ class SupList extends Component {
             totalPages: 0,
             last: true,
             currentVotes: [],
-            isLoading: false
+            isLoading: false,
+            searchText: '',
+            searchedColumn: '',
         };
 
     }
@@ -66,6 +70,71 @@ class SupList extends Component {
 
     };
 
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    جستجو
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    بازنشانی
+                </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text => (
+            (this.state.searchedColumn === dataIndex) ?
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+                : text
+        ),
+    });
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
     columns = [
         {
             title: ' موضوع بازدید',
@@ -76,21 +145,26 @@ class SupList extends Component {
             title: 'شماره حکم ماموریت',
             dataIndex: 'missionNo',
             key: 'missionNo',
+            sorter: (a, b) => compareByNum(a.missionNo, b.missionNo)
         },
         {
             title: ' شعبه',
             dataIndex: 'brchName',
             key: 'brchName',
+            sorter: (a, b) => compareByAlph(a.unitName, b.unitName),
+            ...this.getColumnSearchProps('brchName'),
         },
         {
             title: ' واحد',
             dataIndex: 'unitName',
             key: 'unitName',
+            sorter: (a, b) => compareByAlph(a.unitName, b.unitName)
         },
         {
             title: ' تاریخ بازدید',
             dataIndex: 'surveyDate',
             key: 'surveyDate',
+            sorter: (a, b) => compareByAlph(a.surveyDate, b.surveyDate)
         },
         {
             title: 'تاریخ بازدید قبلی',
@@ -124,7 +198,7 @@ class SupList extends Component {
                             onConfirm={() => {
                                 this.deleteHeader(record);
                             }}
-                            onCancel={this.cancel}
+                            // onCancel={this.cancel}
                             okText="بله"
                             cancelText="خیر"
                         >
@@ -136,14 +210,10 @@ class SupList extends Component {
         }
     ];
 
-    edit = (e) => {
-        // console.log('Edit Header ID:', e);
-        this.props.history.push(`/newsuprep/${e}`);
-    };
-    cancel = (e) => {
-        // console.log(e);
-        // message.error('Click on No');
-    };
+    // cancel = (e) => {
+    //     // console.log(e);
+    //     // message.error('Click on No');
+    // };
 
     deleteHeader = (header) => {
         let promise = deleteHeader(header.id);

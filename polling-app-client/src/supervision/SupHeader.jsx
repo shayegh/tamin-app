@@ -195,15 +195,16 @@ const SupHeaderForm = withFormik({
         console.log('Map Props to Value values', reInitials);
         // if(reInitials)
         return {
+            ...currentHeader,
             id: currentHeader.id ? currentHeader.id : undefined,
-            missionNo: currentHeader.missionNo || '',
-            supervisorName: currentHeader.supervisorName || '',
-            surveySubject: currentHeader.surveySubject || '',
-            brchName: currentHeader.brchName || '',
-            unitName: currentHeader.unitName || '',
-            preSurveyMatters: currentHeader.preSurveyMatters || '',
-            recommendationUnitManager: currentHeader.recommendationUnitManager || '',
-            recommendationBrchManager: currentHeader.recommendationBrchManager || '',
+            // missionNo: currentHeader.missionNo || '',
+            // supervisorName: currentHeader.supervisorName || '',
+            // surveySubject: currentHeader.surveySubject || '',
+            // brchName: currentHeader.brchName || '',
+            // unitName: currentHeader.unitName || '',
+            // preSurveyMatters: currentHeader.preSurveyMatters || '',
+            // recommendationUnitManager: currentHeader.recommendationUnitManager || '',
+            // recommendationBrchManager: currentHeader.recommendationBrchManager || '',
             surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
             preSurveyDate: currentHeader.preSurveyDate ? moment(currentHeader.preSurveyDate, 'jYYYY/jMM/jDD') : moment(),
             surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()

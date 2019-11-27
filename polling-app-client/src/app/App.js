@@ -18,7 +18,7 @@ import {toast} from 'react-toastify';
 import {Layout, notification} from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import SupList from "../supervision/SupList";
-import NewSup from "../supervision/NewSup";
+import NewSup2 from "../supervision/NewSup2";
 
 const {Content} = Layout;
 
@@ -65,7 +65,7 @@ class App extends Component {
         isLoading: false
       });
     });
-  }
+  };
 
   componentDidMount() {
     this.loadCurrentUser();
@@ -85,7 +85,7 @@ class App extends Component {
       message: 'Polling App',
       description: description,
     });
-  }
+  };
 
   handleLogin = () => {
     notification.success({
@@ -94,7 +94,7 @@ class App extends Component {
     });
     this.loadCurrentUser();
     this.props.history.push("/");
-  }
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -117,8 +117,8 @@ class App extends Component {
                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup}/>
                 <Route path="/suplist" component={SupList}/>
-                <Route exact path="/newsuprep" component={NewSup}/>
-                <Route path="/newsuprep/:headerId" component={NewSup}/>
+                <Route exact path="/newsuprep" component={NewSup2}/>
+                <Route path="/newsuprep/:headerId" component={NewSup2}/>
                 <Route path="/users/:username"
                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                    currentUser={this.state.currentUser} {...props} />}/>
