@@ -134,6 +134,9 @@ export default class NewSup2 extends Component {
                 <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={this.addHeader}/>
                 {showDetail ?
                     <div>
+                        <section className='box'>
+                            <div className="box-title"><span>جزئیات گزارش</span></div>
+                        </section>
                         <SupDetailForm currentDetail={currentDetail} headerId={headerId} addDetail={this.addDetail}/>
                         <Table dataSource={details} rowKey='id' columns={this.columns} size="small"/>
                     </div>

@@ -8,7 +8,7 @@ import {ACCESS_TOKEN} from '../constants';
 import PollList from '../poll/PollList';
 import NewPoll from '../poll/NewPoll';
 import Login from '../user/login/Login';
-import Signup from '../user/signup/Signup';
+// import Signup1 from '../user/signup/Signup1';
 import Profile from '../user/profile/Profile';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
@@ -19,6 +19,7 @@ import {Layout, notification} from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import SupList from "../supervision/SupList";
 import NewSup2 from "../supervision/NewSup2";
+import SignUpForm from '../user/signup/Signup';
 
 const {Content} = Layout;
 
@@ -115,7 +116,7 @@ class App extends Component {
                                                     handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login"
                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                <Route path="/signup" component={Signup}/>
+                <Route path="/signup" component={SignUpForm}/>
                 <Route path="/suplist" component={SupList}/>
                 <Route exact path="/newsuprep" component={NewSup2}/>
                 <Route path="/newsuprep/:headerId" component={NewSup2}/>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {POLL_LIST_SIZE} from "../constants";
 import {deleteHeader, getAllHeaders, getUserCreatedPolls, getUserVotedPolls} from "../util/APIUtils";
-import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
+import {Button, Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 import {Link} from "react-router-dom";
 import {toast} from 'react-toastify';
@@ -21,10 +21,11 @@ class SupList extends Component {
             totalElements: 0,
             totalPages: 0,
             last: true,
-            currentVotes: [],
             isLoading: false,
             searchText: '',
             searchedColumn: '',
+            visible: false,
+            currentRecord: {}
         };
 
     }
@@ -71,8 +72,8 @@ class SupList extends Component {
     };
 
     getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+            <div style={{padding: 8}}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -81,24 +82,24 @@ class SupList extends Component {
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    style={{width: 188, marginBottom: 8, display: 'block'}}
                 />
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, marginRight: 8 }}
+                    style={{width: 90, marginRight: 8}}
                 >
                     جستجو
                 </Button>
-                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
                     بازنشانی
                 </Button>
             </div>
         ),
         filterIcon: filtered => (
-            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+            <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>
         ),
         onFilter: (value, record) =>
             record[dataIndex]
@@ -113,7 +114,7 @@ class SupList extends Component {
         render: text => (
             (this.state.searchedColumn === dataIndex) ?
                 <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
                     searchWords={[this.state.searchText]}
                     autoEscape
                     textToHighlight={text.toString()}
@@ -132,7 +133,7 @@ class SupList extends Component {
 
     handleReset = clearFilters => {
         clearFilters();
-        this.setState({ searchText: '' });
+        this.setState({searchText: ''});
     };
 
     columns = [
@@ -191,7 +192,9 @@ class SupList extends Component {
                 return (
                     <div>
                         <Link to={`/newsuprep/${text}`}>
-                            <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                            {/*<Tooltip title='ویرایش'>*/}
+                                <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                            {/*</Tooltip>*/}
                         </Link>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
@@ -201,9 +204,13 @@ class SupList extends Component {
                             // onCancel={this.cancel}
                             okText="بله"
                             cancelText="خیر"
+
                         >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96'/>
+                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                         </Popconfirm>
+                        <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" onClick={() => {
+                            this.showModal(record)
+                        }}/>
                     </div>
                 )
             }
@@ -238,6 +245,27 @@ class SupList extends Component {
         this.loadHeaderList();
     }
 
+    showModal = (record) => {
+        console.log(record);
+        this.setState({
+            visible: true,
+            currentRecord: record
+        });
+    };
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
 
     render() {
         return (
@@ -245,7 +273,8 @@ class SupList extends Component {
                 {this.state.isLoading ?
                     <LoadingIndicator/> :
                     <div>
-                        <Table dataSource={this.state.headers} rowKey='id' columns={this.columns} size="small"/>
+                        <Table dataSource={this.state.headers} rowKey='id' columns={this.columns}
+                               bodyStyle={{width: '100%'}} size="small"/>
                         <FormItem>
 
                             <Button htmlType="submit" type="primary">
@@ -255,7 +284,18 @@ class SupList extends Component {
                             </Button>
                         </FormItem>
                     </div>}
-
+                <Modal
+                    title="جزئیات"
+                    style={{direction: 'ltr'}}
+                    bodyStyle={{direction: 'rtl'}}
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <input/>
+                    <p>{this.state.currentRecord.id}</p>
+                    <p> :موضوغ{this.state.currentRecord.surveySubject}</p>
+                </Modal>
             </div>
         );
     }

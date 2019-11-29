@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { login } from '../../util/APIUtils';
+import React, {Component} from 'react';
+import {login} from '../../util/APIUtils';
 import './Login.css';
-import { Link } from 'react-router-dom';
-import { ACCESS_TOKEN } from '../../constants';
-import { toast } from 'react-toastify';
-import { Form, Input, Button, Icon } from 'antd';
+import {Link} from 'react-router-dom';
+import {ACCESS_TOKEN} from '../../constants';
+import {toast} from 'react-toastify';
+import {Button, Form, Icon, Input} from 'antd';
+
 const FormItem = Form.Item;
 
 class Login extends Component {
@@ -34,6 +35,7 @@ class LoginForm extends Component {
                 const loginRequest = Object.assign({}, values);
                 login(loginRequest)
                 .then(response => {
+                    console.log('Login Response :',response);
                     localStorage.setItem(ACCESS_TOKEN, response.accessToken);
                     this.props.onLogin();
                 }).catch(error => {

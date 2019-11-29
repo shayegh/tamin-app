@@ -1,12 +1,19 @@
 package com.example.supervision.security;
 
+import com.example.supervision.model.RoleName;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Created by rajeevkumarsingh on 19/08/17.
@@ -26,12 +33,17 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        log.debug("User name : {}, Roles:{}",userPrincipal.getUsername(),userPrincipal.getAuthorities());
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-
+        final String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        Claims claims = Jwts.claims().setSubject(Long.toString(userPrincipal.getId()));
+        claims.put("roles", authorities);
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+//                .setSubject(Long.toString(userPrincipal.getId()))
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -64,4 +76,27 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public String getUserRolesFromToken(String token) {
+        final Claims claims = getAllClaimsFromToken(token);
+        log.debug("Roles: {}",claims.get("roles").toString());
+        return claims.get("roles").toString();
+    }
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 }

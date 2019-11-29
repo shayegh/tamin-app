@@ -61,7 +61,8 @@ public class AuthController {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 String jwt = tokenProvider.generateToken(authentication);
-                return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+                String roles = tokenProvider.getUserRolesFromToken(jwt);
+                return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,roles));
         }
 
         @PostMapping("/signup")
@@ -77,7 +78,7 @@ public class AuthController {
 
                 // Creating user's account
                 User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-                                signUpRequest.getPassword());
+                                signUpRequest.getPassword(),signUpRequest.getBrchName(),signUpRequest.getUnitName());
 
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
 
