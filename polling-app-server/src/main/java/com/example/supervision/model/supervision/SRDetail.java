@@ -8,8 +8,6 @@ import com.example.supervision.model.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +31,9 @@ public class SRDetail extends UserDateAudit {
 
     @Column(columnDefinition = "TEXT")
     private String srdComment;
+
+    @Column(columnDefinition = "TEXT")
+    private String srdShobComment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "srHeader_id", nullable = false)

@@ -126,6 +126,8 @@ const SupDetailForm = withFormik({
             createDetail(props.headerId,values)
                 .then(response => {
                     toast.success('جزئیات با موفقیت ثبت شد');
+                    values={...values,id:response.oid};
+                    props.addDetail(values);
                     // addHeader(response.oid);
                 }).catch(error => {
                 if (error.status === 401) {
@@ -135,7 +137,7 @@ const SupDetailForm = withFormik({
                     toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
                 }
             });
-            props.addDetail(values);
+
             // alert(JSON.stringify(props.data, null, 2));
             // save
             setSubmitting(false);

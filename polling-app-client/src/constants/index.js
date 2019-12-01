@@ -20,3 +20,15 @@ export const PASSWORD_MAX_LENGTH = 20;
 
 export const brchOptions = ["یک یزد", "دو یزد", "سه یزد"];
 export const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
+
+export const Actions = {
+    Read: 'READ',
+    Edit: 'EDIT',
+    Delete: 'DELETE',
+    Create: 'CREATE',
+};
+
+export const Subjects={
+    Todo:'TODO',
+    Header:'HEADER'
+};

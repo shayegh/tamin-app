@@ -3,7 +3,7 @@ import SupHeader2 from "./SupHeader2";
 import {Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
-import {deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
+import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
 import {showError} from '../util/Helpers';
 
 const initialDetailFormState = {
@@ -11,7 +11,8 @@ const initialDetailFormState = {
     srdSubject: '',
     srdSubjectCount: 0,
     srdSubjectErrorCount: 0,
-    srdComment: ''
+    srdComment: '',
+    srdShobComment: ''
 };
 
 const FormItem = Form.Item;
@@ -24,10 +25,11 @@ export default class NewSup2 extends Component {
 
         this.state = {
             showDetail: false,
-            visible:false,
+            visible: false,
             currentDetail: {},
             headerId: props.match.params.headerId,
-            details: []
+            details: [],
+            shobComment: ''
         }
 
     }
@@ -56,7 +58,7 @@ export default class NewSup2 extends Component {
 
     addDetail = detail => {
         let {details} = this.state;
-        detail.id = details.length + 1;
+        // detail.id = details.length + 1;
         this.setState({
             details: [...details, detail],
             currentDetail: initialDetailFormState
@@ -92,9 +94,14 @@ export default class NewSup2 extends Component {
             key: 'srdSubjectErrorCount',
         },
         {
-            title: 'توضیحات',
+            title: 'نظر کارشناس',
             dataIndex: 'srdComment',
             key: 'srdComment',
+        },
+        {
+            title: 'توضیحات شعبه',
+            dataIndex: 'srdShobComment',
+            key: 'srdShobComment',
         },
         {
             title: 'عملیات',
@@ -103,7 +110,7 @@ export default class NewSup2 extends Component {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="check-circle" theme="twoTone" style={{marginLeft: 5}}
+                        <Icon type="file-text" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
                                   this.showModal(record);
@@ -130,15 +137,24 @@ export default class NewSup2 extends Component {
         // message.error('Click on No');
     };
     showModal = (record) => {
-        // console.log(record);
+        console.log('Detail',record);
         this.setState({
             visible: true,
-            currentDetail: record
+            currentDetail: record,
+            shobComment:record.srdShobComment
         });
     };
 
     handleOk = e => {
-        console.log(e);
+        let {headerId, currentDetail, shobComment} = this.state;
+        console.log('Shob Comment:',shobComment);
+        addShobComment(headerId, currentDetail.id, shobComment)
+            .then(response => {
+                console.log('ShobCommentDetail Response :', response);
+                // this.setState({details: details.filter(de => de.id !== detail.id)});
+                toast.success('توضیحات با موفقیت ثبت شد');
+            }
+        ).catch(error => showError(error));
         this.setState({
             visible: false,
         });
@@ -150,6 +166,12 @@ export default class NewSup2 extends Component {
             visible: false,
         });
     };
+
+
+    onChange = ({target: {value}}) => {
+        this.setState({shobComment: value});
+    };
+
     render() {
         // let hId = this.props.match.params.headerId;
         let {showDetail, currentDetail, details, headerId} = this.state;
@@ -163,7 +185,8 @@ export default class NewSup2 extends Component {
                             <div className="box-title"><span>جزئیات گزارش</span></div>
                         </section>
                         <SupDetailForm currentDetail={currentDetail} headerId={headerId} addDetail={this.addDetail}/>
-                        <Table dataSource={details} rowKey='id' columns={this.columns} size="small"/>
+                        <Table dataSource={details} rowKey='id' columns={this.columns} size="small"
+                               style={{width: '100%'}}/>
                     </div>
                     :
                     null}
@@ -175,15 +198,17 @@ export default class NewSup2 extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                  <FormItem
-                    label='توضیحات شعبه'
-                    required={true}
-                  >
-                    <TextArea></TextArea>
-                  </FormItem>
-                    <p> :موضوع{this.state.currentDetail.srdSubject}</p>
-                    <p>توضیحات شعبه :</p>
-                    <input/>
+                    {/*<p> :موضوع{this.state.currentDetail.srdSubject}</p>*/}
+                    {/*<FormItem*/}
+                    {/*    required={true}*/}
+                    {/*>*/}
+                        <TextArea
+                            value={this.state.shobComment}
+                            placeholder="توضیحات واحد"
+                            onChange={this.onChange}
+                            autoSize={{minRows: 2, maxRows: 6}}
+                        />
+                    {/*</FormItem>*/}
                 </Modal>
             </div>
         );

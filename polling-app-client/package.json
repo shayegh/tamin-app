@@ -3,6 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "@casl/ability": "^3.2.0",
+    "@casl/react": "^1.0.4",
     "antd": "^3.25.3",
     "classnames": "^2.2.6",
     "clsx": "^1.0.4",

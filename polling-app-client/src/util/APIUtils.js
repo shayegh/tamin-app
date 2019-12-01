@@ -76,6 +76,13 @@ export function createDetail(headerId,detailData) {
         body: JSON.stringify(detailData)
     })
 }
+export function addShobComment(headerId,detailId,shobComment) {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}/details/${detailId}`,
+        method: 'PUT',
+        body: JSON.stringify(shobComment)
+    })
+}
 
 export function getAllDetailsByHeaderId(headerId) {
     return request({
