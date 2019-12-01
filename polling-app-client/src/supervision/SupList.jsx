@@ -138,6 +138,11 @@ class SupList extends Component {
 
     columns = [
         {
+            title: 'ردیف',
+            key: 'index',
+            render :(text, record, index) => index+1,
+        },
+        {
             title: ' موضوع بازدید',
             dataIndex: 'surveySubject',
             key: 'surveySubject',

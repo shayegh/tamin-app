@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SupHeader2 from "./SupHeader2";
-import {Icon, Popconfirm, Table} from "antd";
+import {Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
 import {deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
@@ -14,6 +14,9 @@ const initialDetailFormState = {
     srdComment: ''
 };
 
+const FormItem = Form.Item;
+const {TextArea} = Input;
+
 export default class NewSup2 extends Component {
 
     constructor(props) {
@@ -21,6 +24,7 @@ export default class NewSup2 extends Component {
 
         this.state = {
             showDetail: false,
+            visible:false,
             currentDetail: {},
             headerId: props.match.params.headerId,
             details: []
@@ -99,10 +103,11 @@ export default class NewSup2 extends Component {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
+                        <Icon type="check-circle" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
-                                  this.setState({currentDetail: record});
+                                  this.showModal(record);
+                                  // this.setState({currentDetail: record});
                               }}/>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
@@ -124,7 +129,27 @@ export default class NewSup2 extends Component {
         console.log(e);
         // message.error('Click on No');
     };
+    showModal = (record) => {
+        // console.log(record);
+        this.setState({
+            visible: true,
+            currentDetail: record
+        });
+    };
 
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
     render() {
         // let hId = this.props.match.params.headerId;
         let {showDetail, currentDetail, details, headerId} = this.state;
@@ -142,6 +167,24 @@ export default class NewSup2 extends Component {
                     </div>
                     :
                     null}
+                <Modal
+                    title="جزئیات"
+                    style={{direction: 'ltr'}}
+                    bodyStyle={{direction: 'rtl'}}
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                  <FormItem
+                    label='توضیحات شعبه'
+                    required={true}
+                  >
+                    <TextArea></TextArea>
+                  </FormItem>
+                    <p> :موضوع{this.state.currentDetail.srdSubject}</p>
+                    <p>توضیحات شعبه :</p>
+                    <input/>
+                </Modal>
             </div>
         );
     }

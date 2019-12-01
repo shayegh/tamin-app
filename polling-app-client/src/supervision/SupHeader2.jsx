@@ -36,9 +36,61 @@ export default class SupHeader2 extends Component {
         return !nextProps.showDetail
     }
 
+    handelSubmit = (values, {resetForm, setErrors, setSubmitting}) => {
+        let {addHeader} = this.props;
+        console.log("Form values", values);
+        let newValues = {
+            ...values,
+            surveyDate: values.surveyDate.format('jYYYY/jM/jD'),
+            surveyCreateDate: values.surveyCreateDate.format('jYYYY/jM/jD'),
+            preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jM/jD') : '',
+        };
+        // save
+
+        let headerId = values.id;
+        console.log('Form submit id:', headerId);
+        if (headerId === undefined)
+            createHeader(newValues)
+                .then(response => {
+                    toast.success('اطلاعات گزارش با موفقیت ثبت شد');
+                    addHeader(response.oid);
+                }).catch(error => {
+                if (error.status === 401) {
+                    toast.error('You have been logged out. Please login create poll.');
+                } else {
+                    console.log('Error Message :', error);
+                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                }
+            });
+        else
+            updateHeader(newValues, headerId)
+                .then(response => {
+                    toast.success('اطلاعات باموفقیت به روزرسانی شد');
+                    addHeader(response.oid);
+                }).catch(error => {
+                if (error.status === 401) {
+                    toast.error('You have been logged out. Please login create poll.');
+                } else {
+                    console.log('Error Message :', error);
+                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
+                }
+            });
+        setSubmitting(false);
+
+    };
+
+    validationSchema = yup.object().shape({
+        missionNo: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
+        brchName: yup.string().required('ورود نام شعبه اجباری است'),
+        unitName: yup.string().required('ورود نام واحد اجباری است'),
+        surveyDate: yup.string().required('فیلد تاریخ بازرسی اجباری است'),
+        surveyCreateDate: yup.string().required('فیلد تاریخ ثبت گزارش اجباری است'),
+        supervisorName: yup.string().required('فیلد نام ناظر اجباری است'),
+        surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
+    });
+
     render() {
         let {currentHeader} = this.state;
-        let {addHeader} = this.props;
         return (
             <Formik
                 enableReinitialize={true}
@@ -49,56 +101,13 @@ export default class SupHeader2 extends Component {
                     preSurveyDate: currentHeader.preSurveyDate ? moment(currentHeader.preSurveyDate, 'jYYYY/jMM/jDD') : moment(),
                     surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
                 }}
-                validationSchema={
-                    yup.object().shape({
-                        missionNo: yup.number('مقدار شماره حکم باید به صورت عددی وارد شود').required('شماره حکم اجباری می باشد'),
-                        brchName: yup.string().required('ورود نام شعبه اجباری است'),
-                        unitName: yup.string().required('ورود نام واحد اجباری است'),
-                        surveyDate: yup.string().required('فیلد تاریخ بازرسی اجباری است'),
-                        surveyCreateDate: yup.string().required('فیلد تاریخ ثبت گزارش اجباری است'),
-                        supervisorName: yup.string().required('فیلد نام ناظر اجباری است'),
-                        surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
-                    })}
-                onSubmit={(values, {resetForm, setErrors, setSubmitting}) => {
-                    console.log("Form values", values);
-                    let newValues = {
-                        ...values,
-                        surveyDate: values.surveyDate.format('jYYYY/jM/jD'),
-                        surveyCreateDate: values.surveyCreateDate.format('jYYYY/jM/jD'),
-                        preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jM/jD') : '',
-                    };
-                    // save
-
-                    let headerId = values.id;
-                    console.log('Form submit id:', headerId);
-                    if (headerId === undefined)
-                        createHeader(newValues)
-                            .then(response => {
-                                toast.success('اطلاعات گزارش با موفقیت ثبت شد');
-                                addHeader(response.oid);
-                            }).catch(error => {
-                            if (error.status === 401) {
-                                toast.error('You have been logged out. Please login create poll.');
-                            } else {
-                                console.log('Error Message :', error);
-                                toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
-                            }
-                        });
-                    else
-                        updateHeader(newValues, headerId)
-                            .then(response => {
-                                toast.success('اطلاعات باموفقیت به روزرسانی شد');
-                                addHeader(response.oid);
-                            }).catch(error => {
-                            if (error.status === 401) {
-                                toast.error('You have been logged out. Please login create poll.');
-                            } else {
-                                console.log('Error Message :', error);
-                                toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
-                            }
-                        });
-                    setSubmitting(false);
-                }}>
+                validationSchema={this.validationSchema}
+                onSubmit={(values, {resetForm, setErrors, setSubmitting}) => this.handelSubmit(values, {
+                    resetForm,
+                    setErrors,
+                    setSubmitting
+                })}
+            >
                 {({
                       props,
                       values,
