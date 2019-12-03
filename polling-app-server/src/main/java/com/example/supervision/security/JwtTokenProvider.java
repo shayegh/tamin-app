@@ -1,18 +1,14 @@
 package com.example.supervision.security;
 
-import com.example.supervision.model.RoleName;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Type;
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,7 +28,7 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
-    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generateToken(Authentication authentication) {
 

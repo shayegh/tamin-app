@@ -40,6 +40,7 @@ public class SRService {
     public PagedResponse<SRHeader> getAllHeaders(UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+//        if(currentUser.getAuthorities().)
         Page<SRHeader> srHeaders = headerRepository.findAll(pageable);
         log.debug("SRService is working");
         if (srHeaders.getNumberOfElements() == 0) {
