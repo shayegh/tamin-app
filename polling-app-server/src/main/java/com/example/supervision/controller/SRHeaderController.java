@@ -9,6 +9,7 @@ import com.example.supervision.security.CurrentUser;
 import com.example.supervision.security.UserPrincipal;
 import com.example.supervision.service.SRService;
 import com.example.supervision.util.AppConstants;
+import com.example.supervision.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,8 @@ public class SRHeaderController {
     public PagedResponse<SRHeader> getHeaders(@CurrentUser UserPrincipal currentUser,
                                               @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                               @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-
+        if(Utils.hasRole("ROLE_USER"))
+            log.debug("USER has role USER");
         return srService.getAllHeaders(currentUser, page, size);
     }
 
