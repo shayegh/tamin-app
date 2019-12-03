@@ -1,7 +1,7 @@
-## Building a Full Stack Supervision app similar with Spring Boot, Spring Security, JWT, React and Ant Design
+## Building a Full Stack Supervision app with Spring Boot, Spring Security, JWT, React and Ant Design
 
 
-## Steps to Setup the Spring Boot Back end app (polling-app-server)
+## Steps to Setup the Spring Boot Back end app (tamin-app-server)
 
 1. **Clone the application**
 
@@ -49,7 +49,7 @@
 
 	Any new user who signs up to the app is assigned the `ROLE_USER` by default.
 
-## Steps to Setup the React Front end app (polling-app-client)
+## Steps to Setup the React Front end app (tamin-app-client)
 
 First go to the `polling-app-client` folder -
 
