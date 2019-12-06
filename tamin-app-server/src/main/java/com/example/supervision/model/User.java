@@ -1,12 +1,12 @@
 package com.example.supervision.model;
 
 import com.example.supervision.model.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "password")
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
@@ -49,6 +50,7 @@ public class User extends DateAudit {
 
     @NonNull
     @Size(max = 100)
+    @JsonIgnore
     private String password;
 
     @NonNull

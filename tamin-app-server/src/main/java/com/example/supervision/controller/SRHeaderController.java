@@ -48,15 +48,19 @@ public class SRHeaderController {
     }
 
     @GetMapping(path = "/headers")
+    @PreAuthorize("hasRole('USER')")
     public PagedResponse<SRHeader> getHeaders(@CurrentUser UserPrincipal currentUser,
                                               @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                               @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+
+        log.debug("UserPrincipal :{}",currentUser.toString());
         if(Utils.hasRole("ROLE_USER"))
             log.debug("USER has role USER");
         return srService.getAllHeaders(currentUser, page, size);
     }
 
     @GetMapping(path = "/headers/{headerId}")
+    @PreAuthorize("hasRole('USER')")
     public SRHeader getHeader(@PathVariable Long headerId) {
         return headerRepository.findById(headerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Header", "HeaderId ", headerId));
@@ -77,7 +81,7 @@ public class SRHeaderController {
     }
 
     @DeleteMapping("/headers/{headerId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long headerId) {
+    public ResponseEntity<?> deleteHeader(@PathVariable Long headerId) {
         log.debug("Header Id :{}", headerId);
         headerRepository.deleteById(headerId);
         return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
