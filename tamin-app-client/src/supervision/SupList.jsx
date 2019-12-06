@@ -78,7 +78,7 @@ class SupList extends Component {
                     ref={node => {
                         this.searchInput = node;
                     }}
-                    placeholder={`Search ${dataIndex}`}
+                    placeholder={`جستجو `}
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
@@ -138,7 +138,7 @@ class SupList extends Component {
 
     columns = [
         {
-            title: 'ردیف',
+            title: '#',
             key: 'index',
             render :(text, record, index) => index+1,
         },
@@ -146,6 +146,8 @@ class SupList extends Component {
             title: ' موضوع بازدید',
             dataIndex: 'surveySubject',
             key: 'surveySubject',
+            align:'right',
+            ...this.getColumnSearchProps('surveySubject'),
         },
         {
             title: 'شماره حکم ماموریت',
@@ -157,8 +159,16 @@ class SupList extends Component {
             title: ' شعبه',
             dataIndex: 'brchName',
             key: 'brchName',
-            sorter: (a, b) => compareByAlph(a.unitName, b.unitName),
+            sorter: (a, b) => compareByAlph(a.brchName, b.brchName),
             ...this.getColumnSearchProps('brchName'),
+            // render:(text)=>{
+            //     // console.log('Text',text);
+            //   let result=  brchOptions.find(obj => {
+            //         return obj.value == text
+            //     });
+            //     // console.log('Result',result);
+            //     return result.name;
+            // }
         },
         {
             title: ' واحد',

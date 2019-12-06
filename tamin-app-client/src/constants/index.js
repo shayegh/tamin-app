@@ -18,6 +18,33 @@ export const EMAIL_MAX_LENGTH = 40;
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
 
+// export const brchOptions = [
+//     {
+//         name: "یک یزد",
+//         value: 1
+//     },
+//     {
+//         name: "دو یزد",
+//         value: 2
+//     },
+//     {
+//         name: "سه یزد",
+//         value: 3
+//     }
+// ];
+// export const unitOptions = [
+//     {
+//         name: "مالی",
+//         value: 1
+//     },
+//     {
+//         name: "فناوری اطلاعات",
+//         value: 2
+//     },
+//     {
+//         name: "درآمد",
+//         value: 3
+//     }];
 export const brchOptions = ["یک یزد", "دو یزد", "سه یزد"];
 export const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
 
@@ -28,7 +55,7 @@ export const Actions = {
     Create: 'CREATE',
 };
 
-export const Subjects={
-    Todo:'TODO',
-    Header:'HEADER'
+export const Subjects = {
+    Todo: 'TODO',
+    Header: 'HEADER'
 };

@@ -4,8 +4,6 @@ import {Route, Switch, withRouter} from 'react-router-dom';
 
 import {getCurrentUser} from '../util/APIUtils';
 import {ACCESS_TOKEN} from '../constants';
-
-import PollList from '../poll/PollList';
 import NewPoll from '../poll/NewPoll';
 import Login from '../user/login/Login';
 // import Signup1 from '../user/signup/Signup1';
@@ -89,12 +87,10 @@ class App extends Component {
   };
 
   handleLogin = () => {
-    notification.success({
-      message: 'Polling App',
-      description: "You're successfully logged in.",
-    });
+    toast.success( "با موفقیت وارد شدید",
+    );
     this.loadCurrentUser();
-    this.props.history.push("/");
+    this.props.history.push("/suplist");
   };
 
   render() {
@@ -111,9 +107,7 @@ class App extends Component {
             <div className="container">
               <Switch>
                 <Route exact path="/"
-                       render={(props) => <PollList isAuthenticated={this.state.isAuthenticated}
-                                                    currentUser={this.state.currentUser}
-                                                    handleLogout={this.handleLogout} {...props} />}/>
+                       render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/login"
                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={SignUpForm}/>

@@ -5,7 +5,7 @@
   "dependencies": {
     "@casl/ability": "^3.2.0",
     "@casl/react": "^1.0.4",
-    "antd": "^3.25.3",
+    "antd": "^3.26.0",
     "classnames": "^2.2.6",
     "clsx": "^1.0.4",
     "customize-cra": "^0.9.1",
