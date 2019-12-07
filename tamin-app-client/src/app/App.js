@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SupList from "../supervision/SupList";
 import NewSup2 from "../supervision/NewSup2";
 import SignUpForm from '../user/signup/Signup';
-import UserContext from "../user/UserContext";
+import {UserProvider} from "../user/UserContext";
 
 const {Content} = Layout;
 
@@ -55,7 +55,7 @@ class App extends Component {
         });
         getCurrentUser()
             .then(response => {
-              console.log('load user response :',response);
+                console.log('load user response :', response);
                 this.setState({
                     currentUser: response,
                     isAuthenticated: true,
@@ -100,33 +100,33 @@ class App extends Component {
         }
         return (
             <Layout className="app-container">
-                <UserContext.Provider value={this.state.currentUser} >
-                <AppHeader isAuthenticated={this.state.isAuthenticated}
-                           currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout}/>
+                <UserProvider value={this.state.currentUser}>
+                    <AppHeader isAuthenticated={this.state.isAuthenticated}
+                               currentUser={this.state.currentUser}
+                               onLogout={this.handleLogout}/>
 
-                <Content className="app-content">
-                    <div className="container">
-                        <Switch>
-                            <Route exact path="/"
-                                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                            <Route path="/login"
-                                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                            <Route path="/signup" component={SignUpForm}/>
-                            <Route path="/suplist" component={SupList}/>
-                            <Route exact path="/newsuprep" component={NewSup2}/>
-                            <Route path="/newsuprep/:headerId" component={NewSup2}/>
-                            <Route path="/users/:username"
-                                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
-                                                               currentUser={this.state.currentUser} {...props} />}/>
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new"
-                                          component={NewPoll}
-                                          handleLogout={this.handleLogout}/>
-                            <Route component={NotFound}/>
-                        </Switch>
-                    </div>
-                </Content>
-                </UserContext.Provider>
+                    <Content className="app-content">
+                        <div className="container">
+                            <Switch>
+                                <Route exact path="/"
+                                       render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                                <Route path="/login"
+                                       render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                                <Route path="/signup" component={SignUpForm}/>
+                                <Route path="/suplist" component={SupList}/>
+                                <Route exact path="/newsuprep" component={NewSup2}/>
+                                <Route path="/newsuprep/:headerId" component={NewSup2}/>
+                                <Route path="/users/:username"
+                                       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
+                                                                   currentUser={this.state.currentUser} {...props} />}/>
+                                <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new"
+                                              component={NewPoll}
+                                              handleLogout={this.handleLogout}/>
+                                <Route component={NotFound}/>
+                            </Switch>
+                        </div>
+                    </Content>
+                </UserProvider>
             </Layout>
         );
     }

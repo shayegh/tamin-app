@@ -7,7 +7,7 @@ import {createHeader, getHeader, updateHeader} from "../util/APIUtils";
 import {toast} from "react-toastify";
 import {brchOptions, unitOptions} from '../constants';
 import * as yup from "yup";
-import UserContext from "../user/UserContext";
+import {UserContext} from "../user/UserContext";
 
 const FormItem = Form.Item;
 
@@ -19,7 +19,7 @@ export default class SupHeader2 extends Component {
         };
         // console.log('Props', props)
     }
-
+    static contextType = UserContext;
     componentDidMount() {
         let {headerId} = this.props;
         if (headerId !== undefined) {
@@ -90,20 +90,21 @@ export default class SupHeader2 extends Component {
         surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
     });
 
-    static contextType = UserContext;
+
+
     render() {
         let {currentHeader} = this.state;
-        let user = this.context;
-        // let {brchName,unitName} = user;
-        console.log('User Context:',user);
+        // const userCtx = this.context;
+        let {unitName, brchName} = this.context;
+        // console.log('User Brch Context:', unitName, brchName);
         return (
             <Formik
                 enableReinitialize={true}
                 initialValues={{
                     ...currentHeader,
                     id: currentHeader.id ? currentHeader.id : undefined,
-                    // brchName:user.brchName,
-                    // unitName:user.unitName,
+                    // brchName: currentHeader.brchName ? currentHeader.brchName : brchName,
+                    unitName: currentHeader.unitName ? currentHeader.unitName : unitName,
                     surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
                     preSurveyDate: currentHeader.preSurveyDate ? moment(currentHeader.preSurveyDate, 'jYYYY/jMM/jDD') : moment(),
                     surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
