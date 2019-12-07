@@ -18,7 +18,7 @@ const initialDetailFormState = {
 const FormItem = Form.Item;
 const {TextArea} = Input;
 
-export default class NewSup2 extends Component {
+class NewSup2 extends Component {
 
     constructor(props) {
         super(props);
@@ -47,6 +47,7 @@ export default class NewSup2 extends Component {
                     });
                 }).catch(error => showError(error))
         }
+
     }
 
     addHeader = (hid) => {
@@ -137,24 +138,24 @@ export default class NewSup2 extends Component {
         // message.error('Click on No');
     };
     showModal = (record) => {
-        console.log('Detail',record);
+        console.log('Detail', record);
         this.setState({
             visible: true,
             currentDetail: record,
-            shobComment:record.srdShobComment
+            shobComment: record.srdShobComment
         });
     };
 
     handleOk = e => {
         let {headerId, currentDetail, shobComment} = this.state;
-        console.log('Shob Comment:',shobComment);
+        console.log('Shob Comment:', shobComment);
         addShobComment(headerId, currentDetail.id, shobComment)
             .then(response => {
-                console.log('ShobCommentDetail Response :', response);
-                // this.setState({details: details.filter(de => de.id !== detail.id)});
-                toast.success('توضیحات با موفقیت ثبت شد');
-            }
-        ).catch(error => showError(error));
+                    console.log('ShobCommentDetail Response :', response);
+                    // this.setState({details: details.filter(de => de.id !== detail.id)});
+                    toast.success('توضیحات با موفقیت ثبت شد');
+                }
+            ).catch(error => showError(error));
         this.setState({
             visible: false,
         });
@@ -175,7 +176,7 @@ export default class NewSup2 extends Component {
     render() {
         // let hId = this.props.match.params.headerId;
         let {showDetail, currentDetail, details, headerId} = this.state;
-        console.log('Details :', details);
+        // console.log('Details :', details);
         return (
             <div className='App'>
                 <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={this.addHeader}/>
@@ -202,15 +203,17 @@ export default class NewSup2 extends Component {
                     {/*<FormItem*/}
                     {/*    required={true}*/}
                     {/*>*/}
-                        <TextArea
-                            value={this.state.shobComment}
-                            placeholder="توضیحات واحد"
-                            onChange={this.onChange}
-                            autoSize={{minRows: 2, maxRows: 6}}
-                        />
+                    <TextArea
+                        value={this.state.shobComment}
+                        placeholder="توضیحات واحد"
+                        onChange={this.onChange}
+                        autoSize={{minRows: 2, maxRows: 6}}
+                    />
                     {/*</FormItem>*/}
                 </Modal>
             </div>
         );
     }
 }
+
+export default NewSup2;

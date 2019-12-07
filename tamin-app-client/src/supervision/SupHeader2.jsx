@@ -7,6 +7,7 @@ import {createHeader, getHeader, updateHeader} from "../util/APIUtils";
 import {toast} from "react-toastify";
 import {brchOptions, unitOptions} from '../constants';
 import * as yup from "yup";
+import UserContext from "../user/UserContext";
 
 const FormItem = Form.Item;
 
@@ -16,7 +17,7 @@ export default class SupHeader2 extends Component {
         this.state = {
             currentHeader: {}
         };
-        console.log('Props', props)
+        // console.log('Props', props)
     }
 
     componentDidMount() {
@@ -89,14 +90,20 @@ export default class SupHeader2 extends Component {
         surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
     });
 
+    static contextType = UserContext;
     render() {
         let {currentHeader} = this.state;
+        let user = this.context;
+        // let {brchName,unitName} = user;
+        console.log('User Context:',user);
         return (
             <Formik
                 enableReinitialize={true}
                 initialValues={{
                     ...currentHeader,
                     id: currentHeader.id ? currentHeader.id : undefined,
+                    // brchName:user.brchName,
+                    // unitName:user.unitName,
                     surveyDate: currentHeader.surveyDate ? moment(currentHeader.surveyDate, 'jYYYY/jMM/jDD') : moment(),
                     preSurveyDate: currentHeader.preSurveyDate ? moment(currentHeader.preSurveyDate, 'jYYYY/jMM/jDD') : moment(),
                     surveyCreateDate: currentHeader.surveyCreateDate ? moment(currentHeader.surveyCreateDate, 'jYYYY/jMM/jDD') : moment()
@@ -140,7 +147,7 @@ export default class SupHeader2 extends Component {
                                     labelCol={{span: 12, offset: 12}}
                                     label='شعبه '
                                     name="brchName"
-                                    // defaultValue={values.brch}
+                                    // defaultValue={user.brchName}
                                     selectOptions={brchOptions}
                                     tokenSeparators={[","]}
                                     required={true}
@@ -153,7 +160,7 @@ export default class SupHeader2 extends Component {
                                     labelCol={{span: 12, offset: 12}}
                                     label='واحد '
                                     name="unitName"
-                                    // defaultValue={values.unit}
+                                    // defaultValue={user.unitName}
                                     selectOptions={unitOptions}
                                     tokenSeparators={[","]}
                                     required={true}

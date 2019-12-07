@@ -5,5 +5,8 @@ package com.example.supervision.model;
  */
 public enum  RoleName {
     ROLE_USER,
-    ROLE_ADMIN
+    ROLE_ADMIN,
+    ROLE_ED_BOSS,
+    ROLE_SHOB_BOSS,
+    ROLE_SHOB_UNIT_BOSS
 }

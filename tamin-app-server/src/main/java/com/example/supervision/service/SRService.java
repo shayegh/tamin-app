@@ -1,6 +1,7 @@
 package com.example.supervision.service;
 
 import com.example.supervision.exception.ResourceNotFoundException;
+import com.example.supervision.model.RoleName;
 import com.example.supervision.model.supervision.SRDetail;
 import com.example.supervision.model.supervision.SRHeader;
 import com.example.supervision.payload.PagedResponse;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+import static com.example.supervision.util.Utils.hasRole;
 import static com.example.supervision.util.Utils.validatePageNumberAndSize;
 
 /**
@@ -41,8 +43,17 @@ public class SRService {
         validatePageNumberAndSize(page, size);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 //        if(currentUser.getAuthorities().)
-        Page<SRHeader> srHeaders = headerRepository.findAll(pageable);
-        log.debug("SRService is working");
+        Page<SRHeader> srHeaders = Page.empty();
+        if (hasRole(RoleName.ROLE_ADMIN.name())) {
+            srHeaders = headerRepository.findAll(pageable);
+        } else if (hasRole(RoleName.ROLE_ED_BOSS.name())) {
+            srHeaders = headerRepository.findByUnitName(currentUser.getUnitName(), pageable);
+        } else if (hasRole(RoleName.ROLE_SHOB_BOSS.name()))
+            srHeaders = headerRepository.findByBrchName(currentUser.getBrchName(), pageable);
+        else if (hasRole(RoleName.ROLE_SHOB_UNIT_BOSS.name()))
+            srHeaders = headerRepository.findByBrchNameAndUnitName(currentUser.getBrchName(), currentUser.getUnitName(), pageable);
+
+        log.debug("SRHeader Count :{}",srHeaders.getTotalElements());
         if (srHeaders.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), srHeaders.getNumber(),
                     srHeaders.getSize(), srHeaders.getTotalElements(), srHeaders.getTotalPages(), srHeaders.isLast());
@@ -52,7 +63,7 @@ public class SRService {
 
     }
 
-    public SRDetail createSRDetail(Long headerId, SRDetail srDetail){
+    public SRDetail createSRDetail(Long headerId, SRDetail srDetail) {
         return headerRepository.findById(headerId).map(srHeader -> {
             srDetail.setSrHeader(srHeader);
             return detailRepository.save(srDetail);

@@ -19,6 +19,12 @@ public interface SRHeaderRepository extends JpaRepository<SRHeader, Long> {
 
     Page<SRHeader> findByCreatedBy(Long userId, Pageable pageable);
 
+    Page<SRHeader> findByBrchName(String brchName, Pageable pageable);
+
+    Page<SRHeader> findByUnitName(String unitName, Pageable pageable);
+
+    Page<SRHeader> findByBrchNameAndUnitName(String brchName, String unitName, Pageable pageable);
+
     long countByCreatedBy(Long userId);
 
     List<SRHeader> findByIdIn(List<Long> srHeaderIds);
