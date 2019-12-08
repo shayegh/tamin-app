@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {POLL_LIST_SIZE} from "../constants";
-import {deleteHeader, getAllHeaders, getUserCreatedPolls, getUserVotedPolls} from "../util/APIUtils";
-import {Button, Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
-import LoadingIndicator from "../common/LoadingIndicator";
+import {deleteHeader, getAllHeaders} from "../util/APIUtils";
+import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
 import {Link} from "react-router-dom";
 import {toast} from 'react-toastify';
 import Highlighter from "react-highlight-words";
-import {compareByAlph, compareByNum} from "../util/Helpers";
+import {compareByAlph, compareByNum, showError} from "../util/Helpers";
+
+import './Supervision.css'
 
 const FormItem = Form.Item;
 
@@ -24,33 +25,18 @@ class SupList extends Component {
             isLoading: false,
             searchText: '',
             searchedColumn: '',
-            visible: false,
+            // visible: false,
             currentRecord: {}
         };
 
     }
 
     loadHeaderList = (page = 0, size = POLL_LIST_SIZE) => {
-        let promise;
-        if (this.props.username) {
-            if (this.props.type === 'USER_CREATED_POLLS') {
-                promise = getUserCreatedPolls(this.props.username, page, size);
-            } else if (this.props.type === 'USER_VOTED_POLLS') {
-                promise = getUserVotedPolls(this.props.username, page, size);
-            }
-        } else {
-            promise = getAllHeaders(page, size);
-        }
-
-        if (!promise) {
-            return;
-        }
-
         this.setState({
             isLoading: true
         });
 
-        promise
+        getAllHeaders(page, size)
             .then(response => {
                 const headers = this.state.headers.slice();
 
@@ -66,7 +52,8 @@ class SupList extends Component {
             }).catch(error => {
             this.setState({
                 isLoading: false
-            })
+            });
+            showError(error);
         });
 
     };
@@ -140,13 +127,13 @@ class SupList extends Component {
         {
             title: '#',
             key: 'index',
-            render :(text, record, index) => index+1,
+            render: (text, record, index) => index + 1,
         },
         {
             title: ' موضوع بازدید',
             dataIndex: 'surveySubject',
             key: 'surveySubject',
-            align:'right',
+            align: 'right',
             ...this.getColumnSearchProps('surveySubject'),
         },
         {
@@ -161,14 +148,6 @@ class SupList extends Component {
             key: 'brchName',
             sorter: (a, b) => compareByAlph(a.brchName, b.brchName),
             ...this.getColumnSearchProps('brchName'),
-            // render:(text)=>{
-            //     // console.log('Text',text);
-            //   let result=  brchOptions.find(obj => {
-            //         return obj.value == text
-            //     });
-            //     // console.log('Result',result);
-            //     return result.name;
-            // }
         },
         {
             title: ' واحد',
@@ -208,7 +187,7 @@ class SupList extends Component {
                     <div>
                         <Link to={`/newsuprep/${text}`}>
                             {/*<Tooltip title='ویرایش'>*/}
-                                <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                            <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
                             {/*</Tooltip>*/}
                         </Link>
                         <Popconfirm
@@ -223,19 +202,24 @@ class SupList extends Component {
                         >
                             <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                         </Popconfirm>
-                        <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" onClick={() => {
-                            this.showModal(record)
-                        }}/>
+                        <Popconfirm
+                            title="آیا از تایید و ارسال مطمئن هستید؟"
+                            onConfirm={() => {
+                                // this.deleteHeader(record);
+                            }}
+                            // onCancel={this.cancel}
+                            okText="بله"
+                            cancelText="خیر"
+
+                        >
+                            <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/>
+                        </Popconfirm>
                     </div>
                 )
             }
         }
     ];
 
-    // cancel = (e) => {
-    //     // console.log(e);
-    //     // message.error('Click on No');
-    // };
 
     deleteHeader = (header) => {
         let promise = deleteHeader(header.id);
@@ -260,57 +244,26 @@ class SupList extends Component {
         this.loadHeaderList();
     }
 
-    showModal = (record) => {
-        console.log(record);
-        this.setState({
-            visible: true,
-            currentRecord: record
-        });
-    };
-
-    handleOk = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
 
     render() {
         return (
             <div className="App">
-                {this.state.isLoading ?
-                    <LoadingIndicator/> :
-                    <div>
-                        <Table dataSource={this.state.headers} rowKey='id' columns={this.columns}
-                               bodyStyle={{width: '100%'}} size="small"/>
-                        <FormItem>
-
-                            <Button htmlType="submit" type="primary">
-                                <Link to='/newsuprep'>
-                                    جدید
-                                </Link>
-                            </Button>
-                        </FormItem>
-                    </div>}
-                <Modal
-                    title="جزئیات"
-                    style={{direction: 'ltr'}}
-                    bodyStyle={{direction: 'rtl'}}
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <input/>
-                    <p>{this.state.currentRecord.id}</p>
-                    <p> :موضوغ{this.state.currentRecord.surveySubject}</p>
-                </Modal>
+                <Table dataSource={this.state.headers}
+                       rowKey={record => record.id} columns={this.columns}
+                       bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
+                       rowClassName={
+                           (record, index) => {
+                               if (record.status === 'NEW')
+                                   return 'new_report'
+                           }}
+                />
+                <FormItem>
+                    <Button htmlType="submit" type="primary">
+                        <Link to='/newsuprep'>
+                            جدید
+                        </Link>
+                    </Button>
+                </FormItem>
             </div>
         );
     }

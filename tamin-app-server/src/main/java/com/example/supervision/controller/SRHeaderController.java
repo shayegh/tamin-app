@@ -2,6 +2,7 @@ package com.example.supervision.controller;
 
 import com.example.supervision.exception.ResourceNotFoundException;
 import com.example.supervision.model.supervision.SRHeader;
+import com.example.supervision.model.supervision.SRHeaderStatus;
 import com.example.supervision.payload.ApiResponse;
 import com.example.supervision.payload.PagedResponse;
 import com.example.supervision.repository.SRHeaderRepository;
@@ -37,6 +38,7 @@ public class SRHeaderController {
     @PostMapping(path = "/headers")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createHeader(@Valid @RequestBody SRHeader srHeader) {
+        srHeader.setStatus(SRHeaderStatus.NEW.name());
         SRHeader header = srService.createSRHeader(srHeader);
 
         URI location = ServletUriComponentsBuilder

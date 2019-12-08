@@ -55,6 +55,9 @@ public class SRHeader extends UserDateAudit {
     @Column(columnDefinition = "TEXT")
     private String recommendationBrchManager;
 
+    @Size(max = 10)
+    private String status;
+
     @OneToMany(
             mappedBy = "srHeader",
             cascade = CascadeType.ALL,

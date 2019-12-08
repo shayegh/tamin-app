@@ -1,5 +1,6 @@
 import moment from 'moment-jalaali';
 import {toast} from 'react-toastify';
+import ReactDOM from 'react-dom';
 
 export const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -52,4 +53,8 @@ export const showError = (error) => {
         console.log('Error Message :', error);
         toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
     }
+};
+
+export const batchReact = (callback) =>{
+    ReactDOM.unstable_batchedUpdates(callback);
 };
