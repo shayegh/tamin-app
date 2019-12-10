@@ -66,6 +66,15 @@ export function deleteHeader(headerId) {
         body: JSON.stringify(headerId)
     });
 }
+
+export function confirmHeader(headerData,headerId) {
+    return request({
+        url:`${API_BASE_URL}/headers/${headerId}/cr`,
+        method: 'PUT',
+        body:JSON.stringify(headerData)
+    })
+}
+
 ///
 ///Detail API
 ///

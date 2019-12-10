@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {POLL_LIST_SIZE} from "../constants";
-import {deleteHeader, getAllHeaders} from "../util/APIUtils";
+import {confirmHeader, deleteHeader, getAllHeaders} from "../util/APIUtils";
 import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
 import {Link} from "react-router-dom";
 import {toast} from 'react-toastify';
 import Highlighter from "react-highlight-words";
 import {compareByAlph, compareByNum, showError} from "../util/Helpers";
 
-import './Supervision.css'
+import './Supervision.scss'
 
 const FormItem = Form.Item;
 
@@ -39,7 +39,6 @@ class SupList extends Component {
         getAllHeaders(page, size)
             .then(response => {
                 const headers = this.state.headers.slice();
-
                 this.setState({
                     headers: headers.concat(response.content),
                     page: response.page,
@@ -190,22 +189,25 @@ class SupList extends Component {
                             <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
                             {/*</Tooltip>*/}
                         </Link>
-                        <Popconfirm
-                            title="آیا از حذف مطمئن هستید؟"
-                            onConfirm={() => {
-                                this.deleteHeader(record);
-                            }}
-                            // onCancel={this.cancel}
-                            okText="بله"
-                            cancelText="خیر"
-
-                        >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
-                        </Popconfirm>
+                        {
+                            record.status === 'NEW' ?
+                                <Popconfirm
+                                    title="آیا از حذف مطمئن هستید؟"
+                                    onConfirm={() => {
+                                        this.deleteHeader(record);
+                                    }}
+                                    okText="بله"
+                                    cancelText="خیر"
+                                >
+                                    <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                                </Popconfirm>
+                                :
+                                null
+                        }
                         <Popconfirm
                             title="آیا از تایید و ارسال مطمئن هستید؟"
                             onConfirm={() => {
-                                // this.deleteHeader(record);
+                                this.confirmHeader(text);
                             }}
                             // onCancel={this.cancel}
                             okText="بله"
@@ -223,6 +225,9 @@ class SupList extends Component {
 
     deleteHeader = (header) => {
         let promise = deleteHeader(header.id);
+        this.setState({
+            isLoading: true
+        });
         promise.then(response => {
                 console.log('DeleteHeader Response :', response);
                 const headers = this.state.headers.filter(hr => hr.id !== header.id);
@@ -230,11 +235,25 @@ class SupList extends Component {
                 toast.success('اطلاعات با موفقیت حذف شد');
             }
         ).catch(error => {
-            console.log('Error :', error);
-            toast.error('error');
+            showError(error);
             this.setState({
                 isLoading: false
             });
+        })
+
+    };
+
+    confirmHeader = (headerId) => {
+        confirmHeader({status: 'ed_boss_confirm'}, headerId).then(response => {
+            const headers = this.state.headers.map(h =>
+                h.id === headerId
+                    ? {...h, status: 'ED_BOSS_CONFIRM'}
+                    : h
+            );
+            this.setState({headers});
+            toast.success('اطلاعات با موفقیت تایید شد');
+        }).catch(error => {
+            showError(error)
         })
 
     };
@@ -253,8 +272,8 @@ class SupList extends Component {
                        bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
                        rowClassName={
                            (record, index) => {
-                               if (record.status === 'NEW')
-                                   return 'new_report'
+                               if (record.status === 'ED_BOSS_CONFIRM')
+                                   return 'ed_boss_confirm_report'
                            }}
                 />
                 <FormItem>

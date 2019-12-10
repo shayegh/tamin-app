@@ -55,7 +55,7 @@ public class SRHeader extends UserDateAudit {
     @Column(columnDefinition = "TEXT")
     private String recommendationBrchManager;
 
-    @Size(max = 10)
+    @Size(max = 30)
     private String status;
 
     @OneToMany(

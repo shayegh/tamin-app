@@ -48,7 +48,7 @@ export const compareDate = (a, b) => {
 
 export const showError = (error) => {
     if (error.status === 401) {
-        toast.error('You have been logged out. Please login.');
+        toast.error('شما دسترسی لازم برای این کار را ندارید!');
     } else {
         console.log('Error Message :', error);
         toast.error(error.message || 'Sorry! Something went wrong. Please try again!');

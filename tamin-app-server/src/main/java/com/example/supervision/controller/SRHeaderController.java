@@ -70,6 +70,7 @@ public class SRHeaderController {
     }
 
     @PutMapping(path = "/headers/{headerId}", produces = "application/json")
+    @PreAuthorize("hasRole('ED_BOSS')")
     public ResponseEntity<?> updateHeader(@PathVariable Long headerId, @Valid @RequestBody SRHeader headerRequest) {
         Optional<SRHeader> header = headerRepository.findById(headerId);
         if (!header.isPresent())
@@ -82,7 +83,23 @@ public class SRHeaderController {
         return ResponseEntity.ok(new ApiResponse(true, "Report Updated Successfully", headerId));
     }
 
+    @PutMapping(path = "/headers/{headerId}/cr")
+    @PreAuthorize("hasRole('ED_BOSS')")
+    public ResponseEntity<?> confirmHeaderStatus(@PathVariable Long headerId, @Valid @RequestBody String headerRequest) {
+        log.debug("Header Request: {}",headerRequest);
+        Optional<SRHeader> header = headerRepository.findById(headerId);
+        if (!header.isPresent())
+            return ResponseEntity.notFound().build();
+        SRHeader srHeader = header.get();
+        srHeader.setStatus(SRHeaderStatus.ED_BOSS_CONFIRM.name());
+//        headerRequest.setId(headerId);
+//        headerRequest.setCreatedAt(srHeader.getCreatedAt());
+//        headerRequest.setCreatedBy(srHeader.getCreatedBy());
+        headerRepository.save(srHeader);
+        return ResponseEntity.ok(new ApiResponse(true, "Report Confirmed Successfully", headerId));
+    }
     @DeleteMapping("/headers/{headerId}")
+    @PreAuthorize("hasRole('ED_BOSS')")
     public ResponseEntity<?> deleteHeader(@PathVariable Long headerId) {
         log.debug("Header Id :{}", headerId);
         headerRepository.deleteById(headerId);

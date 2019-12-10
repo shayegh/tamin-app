@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Icon, Popconfirm, Table} from "antd";
-import './Supervision.css';
+import './Supervision.scss';
 import SupDetailForm from "./SupDetail";
 import {getHeader} from '../util/APIUtils';
 import {toast} from 'react-toastify';
