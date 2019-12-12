@@ -147,12 +147,14 @@ class SupList extends Component {
             key: 'brchName',
             sorter: (a, b) => compareByAlph(a.brchName, b.brchName),
             ...this.getColumnSearchProps('brchName'),
+            align: 'right',
         },
         {
             title: ' واحد',
             dataIndex: 'unitName',
             key: 'unitName',
-            sorter: (a, b) => compareByAlph(a.unitName, b.unitName)
+            sorter: (a, b) => compareByAlph(a.unitName, b.unitName),
+            align: 'right',
         },
         {
             title: ' تاریخ بازدید',
@@ -169,6 +171,7 @@ class SupList extends Component {
             title: 'کارشناس ناظر',
             dataIndex: 'supervisorName',
             key: 'supervisorName',
+            align: 'right',
             // defaultSortOrder: 'descend',
             // sorter: (a, b) => a.age - b.age,
         },

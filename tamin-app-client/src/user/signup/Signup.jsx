@@ -3,7 +3,7 @@ import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import {Button, Col, Form, Row} from 'antd';
 import * as yup from "yup";
 import {AntInput, AntPassword, AntSelect} from '../../common/components/CreateAntFields';
-import {brchOptions, unitOptions} from '../../constants';
+import {brchOptions, roles, unitOptions} from '../../constants';
 import {checkEmailAvailability, checkUsernameAvailability, signup} from '../../util/APIUtils';
 import {toast} from 'react-toastify';
 
@@ -91,6 +91,20 @@ const InnerForm = ({
                             label='واحد '
                             name="unitName"
                             selectOptions={unitOptions}
+                            tokenSeparators={[","]}
+                            required={true}
+                            hasFeedback
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <FormikField
+                            component={AntSelect}
+                            labelCol={{span: 12, offset: 12}}
+                            label='نقش '
+                            name="role"
+                            selectOptions={roles}
                             tokenSeparators={[","]}
                             required={true}
                             hasFeedback

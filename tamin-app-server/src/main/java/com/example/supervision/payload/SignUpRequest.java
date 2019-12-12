@@ -36,4 +36,6 @@ public class SignUpRequest {
     @NotBlank
     private String unitName;
 
+    private String role;
+
 }

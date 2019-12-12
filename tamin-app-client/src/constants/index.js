@@ -60,7 +60,7 @@ export const Subjects = {
     Header: 'HEADER'
 };
 
-export const Roles = [
+export const roles = [
     "ROLE_USER",
     "ROLE_ADMIN",
     "ROLE_ED_BOSS",
