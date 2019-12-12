@@ -158,7 +158,7 @@ class SupList extends Component {
             title: ' تاریخ بازدید',
             dataIndex: 'surveyDate',
             key: 'surveyDate',
-            sorter: (a, b) => compareByAlph(a.surveyDate, b.surveyDate)
+          //  sorter: (a, b) => compareDate(a.surveyDate, b.surveyDate)
         },
         {
             title: 'تاریخ بازدید قبلی',
@@ -231,7 +231,7 @@ class SupList extends Component {
         promise.then(response => {
                 console.log('DeleteHeader Response :', response);
                 const headers = this.state.headers.filter(hr => hr.id !== header.id);
-                this.setState({headers});
+                this.setState({headers, isLoading: false});
                 toast.success('اطلاعات با موفقیت حذف شد');
             }
         ).catch(error => {

@@ -1,0 +1,62 @@
+@import '~antd/dist/antd.css';
+
+$fontFamily: Vazir-FD, sans-serif;
+
+.App {
+  font-family: $fontFamily;
+  text-align: center;
+  margin-top: 6em;
+}
+
+.toastBody {
+  font-family: $fontFamily;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $fontFamily;
+}
+
+.datepicker-input {
+  color: #1890ff;
+  border: #8899A6;
+}
+
+.container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@font-face {
+  font-family: 'Vazir';
+  src: url('fonts/Vazir.eot');
+  src: local('Vazir'),
+  url('fonts/Vazir.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Vazir.woff2') format('woff2'),
+  url('fonts/Vazir.woff') format('woff'),
+  url('fonts/Vazir.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Vazir-FD';
+  src: url('fonts/Vazir-FD.eot');
+  src: local('Vazir'),
+  url('fonts/Vazir-FD.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Vazir-FD.woff2') format('woff2'),
+  url('fonts/Vazir-FD.woff') format('woff'),
+  url('fonts/Vazir-FD.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.7em;
+  }
+}

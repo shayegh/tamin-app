@@ -43,6 +43,8 @@ export const compareByNum = (a, b) => {
 };
 
 export const compareDate = (a, b) => {
+   // console.log(moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix());
+    // console.log();
     return moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix()
 };
 

@@ -45,7 +45,7 @@ export const PASSWORD_MAX_LENGTH = 20;
 //         name: "درآمد",
 //         value: 3
 //     }];
-export const brchOptions = ["اداره کل استان یزد","یک یزد", "دو یزد", "سه یزد"];
+export const brchOptions = ["اداره کل استان یزد", "یک یزد", "دو یزد", "سه یزد"];
 export const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
 
 export const Actions = {
@@ -59,3 +59,10 @@ export const Subjects = {
     Todo: 'TODO',
     Header: 'HEADER'
 };
+
+export const Roles = [
+    "ROLE_USER",
+    "ROLE_ADMIN",
+    "ROLE_ED_BOSS",
+    "ROLE_SHOB_BOSS",
+    "ROLE_SHOB_UNIT_BOSS"];

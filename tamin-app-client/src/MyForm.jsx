@@ -2,7 +2,7 @@ import React from 'react';
 import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import * as yup from "yup";
 import moment from 'moment-jalaali';
-import "./index.css";
+import "./index.scss";
 import {AntInput, AntSelect, JalaliDatePicker} from "./common/components/CreateAntFields";
 import {Button, Col, Form, Icon, Row} from 'antd';
 
