@@ -8,6 +8,7 @@ import Highlighter from "react-highlight-words";
 import {compareByAlph, compareByNum, showError} from "../util/Helpers";
 
 import './Supervision.scss'
+import ExportExcel from "../common/components/ExportExcel";
 
 const FormItem = Form.Item;
 
@@ -270,6 +271,7 @@ class SupList extends Component {
     render() {
         return (
             <div className="App">
+                <ExportExcel cols={this.columns} data={this.state.headers}/>
                 <Table dataSource={this.state.headers}
                        rowKey={record => record.id} columns={this.columns}
                        bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
