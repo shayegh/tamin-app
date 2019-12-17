@@ -6,14 +6,16 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-const ExportExcel = ({data, cols}) => {
+const ExportExcel = ({data, cols, fileName, style}) => {
     return (
-        <ExcelFile element={<Icon type="file-excel" theme="twoTone" twoToneColor='#52c41a' />}>
+        <ExcelFile element={<Icon type="file-excel" theme="twoTone" twoToneColor='#52c41a'
+                                  style={style}/>}
+                   filename={fileName}>
             <ExcelSheet data={data} name="Sheet1">
                 {
-                    cols.map(({title, key}) => (
-                    <ExcelColumn label={title} value={key}/>
-                ))
+                    cols
+                        .filter(col => col.key !== 'id' && col.key !== 'index')
+                        .map(({title, key}) => <ExcelColumn key={title} label={title} value={key}/>)
                 }
             </ExcelSheet>
         </ExcelFile>

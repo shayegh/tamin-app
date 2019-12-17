@@ -161,7 +161,7 @@ class SupList extends Component {
             title: ' تاریخ بازدید',
             dataIndex: 'surveyDate',
             key: 'surveyDate',
-          //  sorter: (a, b) => compareDate(a.surveyDate, b.surveyDate)
+            //  sorter: (a, b) => compareDate(a.surveyDate, b.surveyDate)
         },
         {
             title: 'تاریخ بازدید قبلی',
@@ -271,7 +271,8 @@ class SupList extends Component {
     render() {
         return (
             <div className="App">
-                <ExportExcel cols={this.columns} data={this.state.headers}/>
+                <ExportExcel cols={this.columns} data={this.state.headers} fileName='SRList'
+                             style={{float: "left", cursor: "pointer", fontSize: '18px'}}/>
                 <Table dataSource={this.state.headers}
                        rowKey={record => record.id} columns={this.columns}
                        bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
@@ -281,7 +282,7 @@ class SupList extends Component {
                                    return 'ed_boss_confirm_report'
                            }}
                 />
-                <FormItem>
+                <FormItem style={{float: "left"}}>
                     <Button htmlType="submit" type="primary">
                         <Link to='/newsuprep'>
                             جدید
