@@ -19,6 +19,7 @@ import SupList from "../supervision/SupList";
 import NewSup2 from "../supervision/NewSup2";
 import SignUpForm from '../user/signup/Signup';
 import {UserProvider} from "../user/UserContext";
+import {showError} from "../util/Helpers";
 
 const {Content} = Layout;
 
@@ -49,19 +50,21 @@ class App extends Component {
         });
     }
 
-    loadCurrentUser = () => {
+    loadCurrentUser = (roles) => {
         this.setState({
             isLoading: true
         });
         getCurrentUser()
             .then(response => {
-                console.log('load user response :', response);
+                // console.log('load user response :', response);
+                response = {...response,roles};
                 this.setState({
                     currentUser: response,
                     isAuthenticated: true,
                     isLoading: false
                 });
             }).catch(error => {
+            showError(error);
             this.setState({
                 isLoading: false
             });
@@ -88,9 +91,10 @@ class App extends Component {
         });
     };
 
-    handleLogin = () => {
+    handleLogin = (userRole) => {
         toast.success("با موفقیت وارد شدید");
-        this.loadCurrentUser();
+        // console.log('UserRole',userRole);
+        this.loadCurrentUser(userRole);
         this.props.history.push("/suplist");
     };
 

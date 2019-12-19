@@ -37,10 +37,10 @@ class LoginForm extends Component {
                 .then(response => {
                     console.log('Login Response :',response);
                     localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                    this.props.onLogin();
+                    this.props.onLogin(response.roles);
                 }).catch(error => {
                     if(error.status === 401) {
-                        toast.error( 'Your Username or Password is incorrect. Please try again!');
+                        toast.error( 'نام کاربری یا کلمه عبور اشتباه می باشد، مجددا تلاش نمایید.');
                     } else {
                         toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
                     }
@@ -55,7 +55,7 @@ class LoginForm extends Component {
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>
                     {getFieldDecorator('usernameOrEmail', {
-                        rules: [{ required: true, message: 'Please input your username or email!' }],
+                        rules: [{ required: true, message: 'نام کاربری خود را وارد نمایید!' }],
                     })(
                     <Input 
                         prefix={<Icon type="user" />}
@@ -66,7 +66,7 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                 {getFieldDecorator('password', {
-                    rules: [{ required: true, message: 'Please input your Password!' }],
+                    rules: [{ required: true, message: 'پسورد را وارد نمایید' }],
                 })(
                     <Input 
                         prefix={<Icon type="lock" />}

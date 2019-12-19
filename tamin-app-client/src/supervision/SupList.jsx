@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {POLL_LIST_SIZE} from "../constants";
+import {ConfirmRoles, POLL_LIST_SIZE, SRStatus} from "../constants";
 import {confirmHeader, deleteHeader, getAllHeaders} from "../util/APIUtils";
 import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
 import {Link} from "react-router-dom";
@@ -9,6 +9,7 @@ import {compareByAlph, compareByNum, showError} from "../util/Helpers";
 
 import './Supervision.scss'
 import ExportExcel from "../common/components/ExportExcel";
+import {UserContext} from "../user/UserContext";
 
 const FormItem = Form.Item;
 
@@ -31,6 +32,8 @@ class SupList extends Component {
         };
 
     }
+
+    static contextType = UserContext;
 
     loadHeaderList = (page = 0, size = POLL_LIST_SIZE) => {
         this.setState({
@@ -189,9 +192,11 @@ class SupList extends Component {
                 return (
                     <div>
                         <Link to={`/newsuprep/${text}`}>
-                            {/*<Tooltip title='ویرایش'>*/}
-                            <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
-                            {/*</Tooltip>*/}
+                            {record.status === 'NEW' ?
+                                <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                            :
+                                <Icon type="eye"  twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                            }
                         </Link>
                         {
                             record.status === 'NEW' ?
@@ -248,10 +253,20 @@ class SupList extends Component {
     };
 
     confirmHeader = (headerId) => {
-        confirmHeader({status: 'ed_boss_confirm'}, headerId).then(response => {
+        console.log('Context : ',this.context);
+        let {roles} = this.context;
+        let st = '';
+        if (roles.includes(ConfirmRoles.ROLE_ED_BOSS))
+            st = {status: SRStatus.ED_BOSS_CONFIRM};
+        else if (roles.includes(ConfirmRoles.ROLE_SHOB_BOSS))
+            st = {status: SRStatus.SHOB_BOSS_CONFIRM};
+        else if (roles.includes(ConfirmRoles.ROLE_SHOB_UNIT_BOSS))
+            st = {status: SRStatus.SHOB_UNIT_BOSS_CONFIRM};
+
+        confirmHeader(st, headerId).then(response => {
             const headers = this.state.headers.map(h =>
                 h.id === headerId
-                    ? {...h, status: 'ED_BOSS_CONFIRM'}
+                    ? {...h, status: st.status}
                     : h
             );
             this.setState({headers});
@@ -278,8 +293,9 @@ class SupList extends Component {
                        bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
                        rowClassName={
                            (record, index) => {
-                               if (record.status === 'ED_BOSS_CONFIRM')
-                                   return 'ed_boss_confirm_report'
+                                return record.status;
+                               // if (record.status === SRStatus.ED_BOSS_CONFIRM)
+                               //     return 'ed_boss_confirm_report'
                            }}
                 />
                 <FormItem style={{float: "left"}}>

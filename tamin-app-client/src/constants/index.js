@@ -66,3 +66,16 @@ export const roles = [
     "ROLE_ED_BOSS",
     "ROLE_SHOB_BOSS",
     "ROLE_SHOB_UNIT_BOSS"];
+
+export const ConfirmRoles = {
+    ROLE_ED_BOSS: "ROLE_ED_BOSS",
+    ROLE_SHOB_BOSS: "ROLE_SHOB_BOSS",
+    ROLE_SHOB_UNIT_BOSS: "ROLE_SHOB_UNIT_BOSS"
+};
+
+export const SRStatus = {
+    NEW:"NEW",
+    ED_BOSS_CONFIRM: "ED_BOSS_CONFIRM",
+    SHOB_BOSS_CONFIRM: "SHOB_BOSS_CONFIRM",
+    SHOB_UNIT_BOSS_CONFIRM: "SHOB_UNIT_BOSS_CONFIRM"
+};

@@ -32,7 +32,7 @@ public class SRDetailController {
     SRDetailRepository detailRepository;
 
     @PostMapping("/headers/{headerId}/details")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS')")
     public ResponseEntity<?> createComment(@PathVariable(value = "headerId") Long headerId,
                                            @Valid @RequestBody SRDetail detail) {
         SRDetail srDetail = srService.createSRDetail(headerId, detail);
@@ -61,6 +61,7 @@ public class SRDetailController {
     }
 
     @PutMapping("/headers/{headerId}/details/{detailId}")
+    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS')")
     public ResponseEntity<?> addShobComment(@PathVariable Long headerId, @PathVariable Long detailId,
                                             @Valid @RequestBody String shobComment) {
         log.debug("Shob Comment :{}",shobComment.replace("\"",""));

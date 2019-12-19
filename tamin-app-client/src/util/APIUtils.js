@@ -43,6 +43,13 @@ export function getHeader(headerId) {
 
 }
 
+export const getHeaderStatus = (headerId) => {
+    return request({
+        url: `${API_BASE_URL}/headers/${headerId}`,
+        method: 'GET'
+    })
+};
+
 export function createHeader(headerData) {
     return request({
         url: `${API_BASE_URL}/headers`,
@@ -51,11 +58,11 @@ export function createHeader(headerData) {
     })
 }
 
-export function updateHeader(headerData,headerId) {
+export function updateHeader(headerData, headerId) {
     return request({
-        url:`${API_BASE_URL}/headers/${headerId}`,
+        url: `${API_BASE_URL}/headers/${headerId}`,
         method: 'PUT',
-        body:JSON.stringify(headerData)
+        body: JSON.stringify(headerData)
     })
 }
 
@@ -67,25 +74,26 @@ export function deleteHeader(headerId) {
     });
 }
 
-export function confirmHeader(headerData,headerId) {
+export function confirmHeader(headerData, headerId) {
     return request({
-        url:`${API_BASE_URL}/headers/${headerId}/cr`,
+        url: `${API_BASE_URL}/headers/${headerId}/cr`,
         method: 'PUT',
-        body:JSON.stringify(headerData)
+        body: JSON.stringify(headerData)
     })
 }
 
 ///
 ///Detail API
 ///
-export function createDetail(headerId,detailData) {
+export function createDetail(headerId, detailData) {
     return request({
         url: `${API_BASE_URL}/headers/${headerId}/details`,
         method: 'POST',
         body: JSON.stringify(detailData)
     })
 }
-export function addShobComment(headerId,detailId,shobComment) {
+
+export function addShobComment(headerId, detailId, shobComment) {
     return request({
         url: `${API_BASE_URL}/headers/${headerId}/details/${detailId}`,
         method: 'PUT',
@@ -100,7 +108,7 @@ export function getAllDetailsByHeaderId(headerId) {
     })
 }
 
-export function deleteDetail(headerId,detailId) {
+export function deleteDetail(headerId, detailId) {
     return request({
         url: `${API_BASE_URL}/headers/${headerId}/details/${detailId}`,
         method: 'DELETE',

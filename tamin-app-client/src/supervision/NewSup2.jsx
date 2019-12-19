@@ -5,6 +5,8 @@ import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
 import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
 import {showError} from '../util/Helpers';
+import {UserContext} from "../user/UserContext";
+import {ConfirmRoles} from "../constants";
 
 const initialDetailFormState = {
     id: null,
@@ -33,6 +35,8 @@ class NewSup2 extends Component {
         }
 
     }
+
+    static contextType = UserContext;
 
     componentDidMount() {
         let {headerId} = this.state;
@@ -122,7 +126,7 @@ class NewSup2 extends Component {
                             onConfirm={() => {
                                 this.deleteDetail(record);
                             }}
-                            onCancel={this.cancel}
+                            // onCancel={this.cancel}
                             okText="بله"
                             cancelText="خیر"
                         >
@@ -176,6 +180,10 @@ class NewSup2 extends Component {
     render() {
         // let hId = this.props.match.params.headerId;
         let {showDetail, currentDetail, details, headerId} = this.state;
+        let {roles} = this.context;
+        let showDetailForm = false;
+        if (roles.includes(ConfirmRoles.ROLE_ED_BOSS))
+            showDetailForm = true;
         // console.log('Details :', details);
         return (
             <div className='App'>
@@ -185,7 +193,10 @@ class NewSup2 extends Component {
                         <section className='box'>
                             <div className="box-title"><span>جزئیات گزارش</span></div>
                         </section>
-                        <SupDetailForm currentDetail={currentDetail} headerId={headerId} addDetail={this.addDetail}/>
+                        {showDetailForm ?
+                            <SupDetailForm currentDetail={currentDetail} headerId={headerId}
+                                           addDetail={this.addDetail}/>
+                            : null}
                         <Table dataSource={details} rowKey='id' columns={this.columns} size="small"
                                style={{width: '100%'}}/>
                     </div>

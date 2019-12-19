@@ -8,6 +8,7 @@ public enum SRHeaderStatus {
     ED_BOSS_CONFIRM,
     ED_BOSS_REJECT,
     SHOB_BOSS_CONFIRM,
-    SHOB_BOSS_REJECT
+    SHOB_BOSS_REJECT,
+    SHOB_UNIT_BOSS_CONFIRM,
 
 }

@@ -6,8 +6,10 @@ import com.example.supervision.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,7 +22,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -68,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RoleHierarchyImpl roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_ED_BOSS ROLE_ED_BOSS > ROLE_SHOB_BOSS ROLE_SHOB_BOSS > ROLE_SHOB_UNIT_BOSS ROLE_SHOB_UNIT_BOSS > ROLE_USER");
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_ED_BOSS and ROLE_ED_BOSS > ROLE_SHOB_BOSS and ROLE_SHOB_BOSS > ROLE_SHOB_UNIT_BOSS and ROLE_SHOB_UNIT_BOSS > ROLE_USER");
         return roleHierarchy;
     }
 
@@ -78,6 +84,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return defaultWebSecurityExpressionHandler;
     }
 
+    @Bean
+    public AffirmativeBased getAccessDecisionManager() {
+        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy());
+
+        WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
+        webExpressionVoter.setExpressionHandler(expressionHandler);
+
+        List<AccessDecisionVoter<? extends Object>> voters = new ArrayList<>();
+
+        voters.add(webExpressionVoter);
+        return new AffirmativeBased(voters);
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -92,8 +111,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .expressionHandler(webExpressionHandler())
-                .antMatchers("/",
+                    .expressionHandler(webExpressionHandler())
+                    .accessDecisionManager(getAccessDecisionManager())
+                    .antMatchers("/",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",

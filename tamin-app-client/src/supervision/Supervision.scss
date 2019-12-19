@@ -5,7 +5,7 @@
 
 .box-title {
     position: absolute;
-    top: -14px;
+    top: -28px;
     margin-left: 16px;
     padding: 1px 8px;
     /*color: #ff1c08;*/
@@ -53,6 +53,18 @@
     background-color: #657786;
 }
 
-.ed_boss_confirm_report{
+.ED_BOSS_CONFIRM{
     background-color: #42ffa8;
+}
+
+.SHOB_BOSS_CONFIRM{
+    background-color: #50b1ff;
+}
+
+.SHOB_UNIT_BOSS_CONFIRM{
+    background-color: #5856d6;
+}
+
+.hide {
+    display: none;
 }

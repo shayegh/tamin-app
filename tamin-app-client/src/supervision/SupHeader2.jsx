@@ -5,7 +5,7 @@ import {Button, Col, Form, Row} from 'antd';
 import moment from 'moment-jalaali';
 import {createHeader, getHeader, updateHeader} from "../util/APIUtils";
 import {toast} from "react-toastify";
-import {brchOptions, unitOptions} from '../constants';
+import {brchOptions, SRStatus, unitOptions} from '../constants';
 import * as yup from "yup";
 import {UserContext} from "../user/UserContext";
 
@@ -19,7 +19,9 @@ export default class SupHeader2 extends Component {
         };
         // console.log('Props', props)
     }
+
     static contextType = UserContext;
+
     componentDidMount() {
         let {headerId} = this.props;
         if (headerId !== undefined) {
@@ -91,10 +93,10 @@ export default class SupHeader2 extends Component {
     });
 
 
-
     render() {
         let {currentHeader} = this.state;
         // const userCtx = this.context;
+        let st = currentHeader.status;
         let {unitName, brchName} = this.context;
         // console.log('User Brch Context:', unitName, brchName);
         return (
@@ -276,8 +278,9 @@ export default class SupHeader2 extends Component {
                         <Row>
                             <Col span={8}>
                                 <FormItem>
-                                    <Button htmlType="submit" type="primary" loading={isSubmitting}
-                                            disabled={isSubmitting}>
+                                    <Button htmlType="submit" type="primary"
+                                            loading={isSubmitting}
+                                            disabled={isSubmitting || st !== SRStatus.NEW }>
                                         ذخیره
                                     </Button>
                                     {/*<Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}*/}

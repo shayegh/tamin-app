@@ -14,6 +14,7 @@ public class UserSummary {
     private String brchName;
     private String unitName;
 
+
     public UserSummary(Long id, String username, String name) {
         this.id = id;
         this.username = username;

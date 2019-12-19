@@ -4,6 +4,7 @@ import com.example.supervision.exception.ResourceNotFoundException;
 import com.example.supervision.model.RoleName;
 import com.example.supervision.model.supervision.SRDetail;
 import com.example.supervision.model.supervision.SRHeader;
+import com.example.supervision.model.supervision.SRHeaderStatus;
 import com.example.supervision.payload.PagedResponse;
 import com.example.supervision.repository.SRDetailRepository;
 import com.example.supervision.repository.SRHeaderRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.example.supervision.util.Utils.hasRole;
@@ -48,12 +50,15 @@ public class SRService {
             srHeaders = headerRepository.findAll(pageable);
         } else if (hasRole(RoleName.ROLE_ED_BOSS.name())) {
             srHeaders = headerRepository.findByUnitName(currentUser.getUnitName(), pageable);
-        } else if (hasRole(RoleName.ROLE_SHOB_BOSS.name()))
-            srHeaders = headerRepository.findByBrchName(currentUser.getBrchName(), pageable);
-        else if (hasRole(RoleName.ROLE_SHOB_UNIT_BOSS.name()))
-            srHeaders = headerRepository.findByBrchNameAndUnitName(currentUser.getBrchName(), currentUser.getUnitName(), pageable);
+        } else if (hasRole(RoleName.ROLE_SHOB_BOSS.name())) {
+            String[] status = {SRHeaderStatus.ED_BOSS_CONFIRM.toString(), SRHeaderStatus.SHOB_BOSS_CONFIRM.toString(), SRHeaderStatus.SHOB_UNIT_BOSS_CONFIRM.toString()};
+            srHeaders = headerRepository.findByBrchNameAndStatusIn(currentUser.getBrchName(), Arrays.asList(status), pageable);
+        } else if (hasRole(RoleName.ROLE_SHOB_UNIT_BOSS.name())) {
+            String[] status = {SRHeaderStatus.ED_BOSS_CONFIRM.toString(), SRHeaderStatus.SHOB_BOSS_CONFIRM.toString(), SRHeaderStatus.SHOB_UNIT_BOSS_CONFIRM.toString()};
+            srHeaders = headerRepository.findByBrchNameAndUnitNameAndStatusIn(currentUser.getBrchName(), currentUser.getUnitName(),Arrays.asList(status), pageable);
+        }
 
-        log.debug("SRHeader Count :{}",srHeaders.getTotalElements());
+        log.debug("SRHeader Count :{}", srHeaders.getTotalElements());
         if (srHeaders.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), srHeaders.getNumber(),
                     srHeaders.getSize(), srHeaders.getTotalElements(), srHeaders.getTotalPages(), srHeaders.isLast());
