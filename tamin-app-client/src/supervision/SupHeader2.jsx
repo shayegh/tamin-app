@@ -31,6 +31,8 @@ export default class SupHeader2 extends Component {
                     this.setState({currentHeader: response});
                 })
         } else {
+            let currentHeader = {status:SRStatus.NEW};
+            this.setState({currentHeader});
             console.log('No Header ID');
         }
     }
@@ -97,8 +99,8 @@ export default class SupHeader2 extends Component {
         let {currentHeader} = this.state;
         // const userCtx = this.context;
         let st = currentHeader.status;
-        let {unitName, brchName} = this.context;
-        // console.log('User Brch Context:', unitName, brchName);
+        let {unitName} = this.context;
+        // console.log('current Header:', currentHeader);
         return (
             <Formik
                 enableReinitialize={true}
