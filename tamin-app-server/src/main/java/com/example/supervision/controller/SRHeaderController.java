@@ -11,9 +11,6 @@ import com.example.supervision.security.UserPrincipal;
 import com.example.supervision.service.SRService;
 import com.example.supervision.util.AppConstants;
 import com.example.supervision.util.Utils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +20,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
+
+import static com.example.supervision.util.Utils.getJsonPropertyString;
 
 /**
  * Created by Shayegh@gmail.com on ۱۶/۱۱/۲۰۱۹ - ۱۰:۱۰ قبل‌ازظهر.
@@ -54,7 +52,7 @@ public class SRHeaderController {
     }
 
     @GetMapping(path = "/headers")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS','ADMIN')")
     public PagedResponse<SRHeader> getHeaders(@CurrentUser UserPrincipal currentUser,
                                               @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                               @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
@@ -65,7 +63,7 @@ public class SRHeaderController {
     }
 
     @GetMapping(path = "/headers/{headerId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS','ADMIN')")
     public SRHeader getHeader(@PathVariable Long headerId) {
         return headerRepository.findById(headerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Header", "HeaderId ", headerId));
@@ -90,17 +88,7 @@ public class SRHeaderController {
     @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS')")
     public ResponseEntity<?> confirmHeaderStatus(@PathVariable Long headerId, @Valid @RequestBody String headerRequest) {
         log.debug("Header Request: {}", headerRequest);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> jsonMap;
-        String status = "";
-        try {
-            jsonMap = objectMapper.readValue(headerRequest, new TypeReference<Map<String, Object>>() {
-            });
-             status = jsonMap.get("status").toString();
-            log.debug("Status : {}", status);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String status = getJsonPropertyString(headerRequest, "status");
 
         Optional<SRHeader> header = headerRepository.findById(headerId);
         if (!header.isPresent())
@@ -119,7 +107,4 @@ public class SRHeaderController {
         return ResponseEntity.ok(new ApiResponse(true, "Report Deleted Successfully"));
 
     }
-
-
 }
-

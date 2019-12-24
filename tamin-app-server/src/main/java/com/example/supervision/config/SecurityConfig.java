@@ -6,6 +6,7 @@ import com.example.supervision.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -97,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         voters.add(webExpressionVoter);
         return new AffirmativeBased(voters);
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -111,15 +113,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .expressionHandler(webExpressionHandler())
-                    .accessDecisionManager(getAccessDecisionManager())
-                    .antMatchers("/",
+                .expressionHandler(webExpressionHandler())
+                .accessDecisionManager(getAccessDecisionManager())
+                .antMatchers("/",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
                         "/**/*.svg",
                         "/**/*.jpg",
                         "/**/*.html",
+                        "/**/*.ttf",
+                        "/**/*.woff",
+                        "/**/*.woff2",
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
@@ -127,11 +132,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
-                .antMatchers("/api/polls/**", "/api/users/**", "/api/headers/**")
-//                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/headers/**")
-                .permitAll();
-//                .anyRequest()
-//                .authenticated();
+//                .antMatchers("/api/polls/**", "/api/users/**", "/api/headers/**")
+                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/headers/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
 //TODO Check Security Config
 

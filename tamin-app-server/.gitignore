@@ -32,3 +32,4 @@ nbdist/
 src/main/resources/application-prod.properties
 
 *.log
+/src/main/resources/static/

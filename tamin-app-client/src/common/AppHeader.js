@@ -8,7 +8,6 @@ const Header = Layout.Header;
 class AppHeader extends Component {
     constructor(props) {
         super(props);
-        // this.handleMenuClick = this.handleMenuClick.bind(this);
     }
 
     handleMenuClick = ({key}) => {
@@ -26,11 +25,6 @@ class AppHeader extends Component {
                         <Icon type="home" className="nav-icon"/>
                     </Link>
                 </Menu.Item>,
-                // <Menu.Item key="/poll/new">
-                //   <Link to="/poll/new">
-                //     <img src={pollIcon} alt="poll" className="poll-icon"/>
-                //  </Link>
-                //      </Menu.Item>,
                 <Menu.Item  style={{float: 'right'}} key="/profile" className="profile-menu">
                     <ProfileDropdownMenu
                         style={{float: 'right'}}
@@ -49,9 +43,9 @@ class AppHeader extends Component {
                 <Menu.Item key="/login">
                     <Link to="/login">ورود</Link>
                 </Menu.Item>,
-                <Menu.Item key="/signup">
-                    <Link to="/signup">ثبت نام</Link>
-                </Menu.Item>,
+                // <Menu.Item key="/signup">
+                //     <Link to="/signup">ثبت نام</Link>
+                // </Menu.Item>,
 
             ];
         }

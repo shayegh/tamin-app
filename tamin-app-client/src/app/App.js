@@ -85,10 +85,7 @@ class App extends Component {
 
         this.props.history.push(redirectTo);
 
-        notification[notificationType]({
-            message: 'Polling App',
-            description: description,
-        });
+        toast.success("با موفقیت خارج شدید");
     };
 
     handleLogin = (userRole) => {
@@ -116,7 +113,9 @@ class App extends Component {
                                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                                 <Route path="/login"
                                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                                <Route path="/signup" component={SignUpForm}/>
+                                <PrivateRoute authenticated={this.state.isAuthenticated}
+                                              handleLogout={this.handleLogout}
+                                              path="/signup" component={SignUpForm}/>
                                 <Route path="/suplist" component={SupList}/>
                                 <Route exact path="/newsuprep" component={NewSup2}/>
                                 <Route path="/newsuprep/:headerId" component={NewSup2}/>

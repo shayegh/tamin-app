@@ -32,9 +32,9 @@ public class SRDetailController {
     SRDetailRepository detailRepository;
 
     @PostMapping("/headers/{headerId}/details")
-    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS')")
-    public ResponseEntity<?> createComment(@PathVariable(value = "headerId") Long headerId,
-                                           @Valid @RequestBody SRDetail detail) {
+    @PreAuthorize("hasRole('ED_BOSS')")
+    public ResponseEntity<?> createDetail(@PathVariable(value = "headerId") Long headerId,
+                                          @Valid @RequestBody SRDetail detail) {
         SRDetail srDetail = srService.createSRDetail(headerId, detail);
 
         URI location = ServletUriComponentsBuilder
@@ -47,13 +47,15 @@ public class SRDetailController {
     }
 
     @GetMapping("/headers/{headerId}/details")
+    @PreAuthorize("hasAnyRole('SHOB_BOSS','SHOB_UNIT_BOSS','ED_BOSS')")
     public Page<SRDetail> getAllDetailsByHeaderId(@PathVariable(value = "headerId") Long headerId,
                                                   Pageable pageable) {
         return detailRepository.findBysrHeaderId(headerId, pageable);
     }
 
     @DeleteMapping("/headers/{headerId}/details/{detailId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long headerId, @PathVariable Long detailId) {
+    @PreAuthorize("hasRole('ED_BOSS')")
+    public ResponseEntity<?> deleteDetail(@PathVariable Long headerId, @PathVariable Long detailId) {
 //        log.debug("Header Id :{}", headerId);
         detailRepository.deleteById(detailId);
         return ResponseEntity.ok(new ApiResponse(true, "Detail Deleted Successfully"));
