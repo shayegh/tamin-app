@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {login} from '../../util/APIUtils';
 import './Login.css';
-import {Link} from 'react-router-dom';
 import {ACCESS_TOKEN} from '../../constants';
 import {toast} from 'react-toastify';
 import {Button, Form, Icon, Input} from 'antd';
@@ -35,7 +34,7 @@ class LoginForm extends Component {
                 const loginRequest = Object.assign({}, values);
                 login(loginRequest)
                 .then(response => {
-                    console.log('Login Response :',response);
+                    // console.log('Login Response :',response);
                     localStorage.setItem(ACCESS_TOKEN, response.accessToken);
                     this.props.onLogin(response.roles);
                 }).catch(error => {
@@ -78,7 +77,7 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                     <Button type="primary" htmlType="submit" size="large" className="login-form-button">ورود</Button>
-                    یا <Link to="/signup">ثبت نام!</Link>
+                    {/*یا <Link to="/signup">ثبت نام!</Link>*/}
                 </FormItem>
             </Form>
         );
