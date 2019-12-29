@@ -7,13 +7,13 @@
 
 	```bash
 	git clone https://github.com/shayegh/tamin-app.git
-	cd polling-app-server
+	cd tamin-app-server
 	```
 
 2. **Create MySQL database**
 
 	```bash
-	create database polling_app
+	create database tamin_app
 	```
 
 3. **Change MySQL username and password as per your MySQL installation**
@@ -51,10 +51,10 @@
 
 ## Steps to Setup the React Front end app (tamin-app-client)
 
-First go to the `polling-app-client` folder -
+First go to the `tamin-app-client` folder -
 
 ```bash
-cd polling-app-client
+cd tamin-app-client
 ```
 
 Then type the following command to install the dependencies and start the application -
