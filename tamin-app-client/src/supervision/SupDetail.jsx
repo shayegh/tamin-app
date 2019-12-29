@@ -10,20 +10,12 @@ import {toast} from 'react-toastify';
 const FormItem = Form.Item;
 
 const InnerForm = ({
-                       props,
-                       values,
-                       errors,
-                       touched,
-                       setFieldTouched,
-                       setFieldValue,
                        isSubmitting,
-                       handleSubmit,
                        handleReset,
-                       submitCount,
                        dirty
                    }) => {
     return (
-        <FormikForm onSubmit={handleSubmit}>
+        <FormikForm>
             <Row gutter={16}>
                 <Col span={6}>
                     <FormikField
