@@ -31,7 +31,7 @@ export default class SupHeader2 extends Component {
                     this.setState({currentHeader: response});
                 })
         } else {
-            let currentHeader = {status:SRStatus.NEW};
+            let currentHeader = {status: SRStatus.NEW};
             this.setState({currentHeader});
             console.log('No Header ID');
         }
@@ -121,19 +121,9 @@ export default class SupHeader2 extends Component {
                 })}
             >
                 {({
-                      props,
-                      values,
-                      errors,
-                      touched,
-                      setFieldTouched,
-                      setFieldValue,
-                      isSubmitting,
-                      handleSubmit,
-                      handleReset,
-                      submitCount,
-                      dirty
+                      isSubmitting
                   }) => (
-                    <FormikForm onSubmit={handleSubmit}>
+                    <FormikForm>
                         <Row gutter={16}>
                             <Col span={6}>
                                 <FormikField
@@ -152,7 +142,6 @@ export default class SupHeader2 extends Component {
                                     labelCol={{span: 12, offset: 12}}
                                     label='شعبه '
                                     name="brchName"
-                                    // defaultValue={user.brchName}
                                     selectOptions={brchOptions}
                                     tokenSeparators={[","]}
                                     required={true}
@@ -165,11 +154,11 @@ export default class SupHeader2 extends Component {
                                     labelCol={{span: 12, offset: 12}}
                                     label='واحد '
                                     name="unitName"
-                                    // defaultValue={user.unitName}
                                     selectOptions={unitOptions}
                                     tokenSeparators={[","]}
                                     required={true}
                                     hasFeedback
+                                    disabled
                                 />
                             </Col>
                             <Col span={6}>
@@ -282,7 +271,7 @@ export default class SupHeader2 extends Component {
                                 <FormItem>
                                     <Button htmlType="submit" type="primary"
                                             loading={isSubmitting}
-                                            disabled={isSubmitting || st !== SRStatus.NEW }>
+                                            disabled={isSubmitting || st !== SRStatus.NEW}>
                                         ذخیره
                                     </Button>
                                     {/*<Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}*/}

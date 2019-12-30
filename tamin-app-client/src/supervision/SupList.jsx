@@ -297,6 +297,9 @@ class SupList extends Component {
                                // if (record.status === SRStatus.ED_BOSS_CONFIRM)
                                //     return 'ed_boss_confirm_report'
                            }}
+                       pagination={{
+                           showSizeChanger: true,
+                       }}
                 />
                 <FormItem style={{float: "left"}}>
                     <Button htmlType="submit" type="primary">
