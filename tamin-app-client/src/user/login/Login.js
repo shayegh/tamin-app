@@ -78,7 +78,7 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                     <Button type="primary" htmlType="submit" size="large" className="login-form-button">ورود</Button>
-                    یا <Link to="/signup">ثبت نام!</Link>
+                    {/*یا <Link to="/signup">ثبت نام!</Link>*/}
                 </FormItem>
             </Form>
         );
