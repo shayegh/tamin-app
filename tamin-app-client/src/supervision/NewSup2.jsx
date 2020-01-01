@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SupHeader2 from "./SupHeader2";
-import {Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
+import {Divider, Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
 import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
@@ -190,9 +190,7 @@ class NewSup2 extends Component {
                 <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={this.addHeader}/>
                 {showDetail ?
                     <div>
-                        <section className='box'>
-                            <div className="box-title"><span>جزئیات گزارش</span></div>
-                        </section>
+                        <Divider orientation='left'>جزئیات گزارش</Divider>
                         {showDetailForm ?
                             <SupDetailForm currentDetail={currentDetail} headerId={headerId}
                                            addDetail={this.addDetail}/>
