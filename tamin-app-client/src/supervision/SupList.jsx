@@ -299,6 +299,7 @@ class SupList extends Component {
                            }}
                        pagination={{
                            showSizeChanger: true,
+                           hideOnSinglePage:true,
                        }}
                 />
                 <FormItem style={{float: "left"}}>
