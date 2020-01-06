@@ -50,6 +50,20 @@ class App extends Component {
         });
     }
 
+    removeLoader = () => {
+        const ele = document.getElementById('ipl-progress-indicator');
+        if (ele) {
+            // fade out
+            ele.classList.add('available');
+            ele.outerHTML = ''
+            // setTimeout(() => {
+            //     // remove from DOM
+            //
+            // }, 2000)
+        }
+    }
+        ;
+
     loadCurrentUser = (roles) => {
         this.setState({
             isLoading: true
@@ -63,11 +77,13 @@ class App extends Component {
                     isAuthenticated: true,
                     isLoading: false
                 });
+                this.removeLoader();
             }).catch(error => {
             showError(error);
             this.setState({
                 isLoading: false
             });
+            this.removeLoader();
         });
     };
 

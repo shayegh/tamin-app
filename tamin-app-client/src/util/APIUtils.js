@@ -12,6 +12,7 @@ const request = (options) => {
     const defaults = {headers: headers};
     options = Object.assign({}, defaults, options);
     return fetch(options.url, options)
+        .then(handleErrors)
         .then(response =>
             response.json().then(json => {
                 if (!response.ok) {
@@ -19,9 +20,17 @@ const request = (options) => {
                 }
                 return json;
             })
-        );
+        ).catch(error => {
+            return Promise.reject(error);
+        });
 };
 
+const handleErrors = (response) => {
+    if (!response.ok) {
+        throw response;
+    }
+    return response;
+};
 //
 //Header API
 //

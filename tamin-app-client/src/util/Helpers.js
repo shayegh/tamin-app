@@ -51,6 +51,8 @@ export const compareDate = (a, b) => {
 export const showError = (error) => {
     if (error.status === 401) {
         toast.error('شما دسترسی لازم برای این کار را ندارید!');
+    } else if(error.status === 500){
+        toast.error('متاسفانه در حال حاضر سرور در دسترس نیست!');
     } else {
         console.log('Error Message :', error);
         toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
