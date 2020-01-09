@@ -12,8 +12,12 @@ import com.example.supervision.service.PollService;
 import com.example.supervision.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -22,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private PollRepository pollRepository;
@@ -61,6 +68,18 @@ public class UserController {
 
         return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt(), pollCount, voteCount,
                 user.getBrchName(), user.getUnitName());
+    }
+
+    //TODO کنترل اینکه کاربر جاری قصد تغییر رمز خوذ را دارد
+    @PostMapping("/user/changePass")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody ChangePassRequest changePassRequest) {
+//        userRepository.sa
+        User user = userRepository.findById(changePassRequest.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId",changePassRequest.getUserId()));
+        user.setPassword(passwordEncoder.encode(changePassRequest.getNewPass()));
+        userRepository.save(user);
+        return ResponseEntity.ok(new ApiResponse(true, "Password Changed Successfully!"));
     }
 
     @GetMapping("/users/{username}/polls")

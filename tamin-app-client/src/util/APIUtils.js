@@ -161,6 +161,14 @@ export function login(loginRequest) {
     });
 }
 
+export const changePass = (changePassRequest) => {
+    return request({
+        url: API_BASE_URL + "/user/changePass",
+        method: 'POST',
+        body: JSON.stringify(changePassRequest)
+    })
+};
+
 export function signup(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",

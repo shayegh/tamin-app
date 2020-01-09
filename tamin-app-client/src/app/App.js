@@ -20,6 +20,7 @@ import NewSup2 from "../supervision/NewSup2";
 import SignUpForm from '../user/signup/Signup';
 import {UserProvider} from "../user/UserContext";
 import {showError} from "../util/Helpers";
+import ChangePass from "../user/changepass/ChangePass";
 
 const {Content} = Layout;
 
@@ -62,7 +63,7 @@ class App extends Component {
             // }, 2000)
         }
     }
-        ;
+    ;
 
     loadCurrentUser = (roles) => {
         this.setState({
@@ -71,7 +72,7 @@ class App extends Component {
         getCurrentUser()
             .then(response => {
                 // console.log('load user response :', response);
-                response = {...response,roles};
+                response = {...response, roles};
                 this.setState({
                     currentUser: response,
                     isAuthenticated: true,
@@ -138,6 +139,7 @@ class App extends Component {
                                 <Route path="/users/:username"
                                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                                    currentUser={this.state.currentUser} {...props} />}/>
+                                <Route path="/changepass" component={ChangePass}/>
                                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new"
                                               component={NewPoll}
                                               handleLogout={this.handleLogout}/>

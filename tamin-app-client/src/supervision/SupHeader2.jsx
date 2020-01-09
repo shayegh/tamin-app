@@ -46,9 +46,9 @@ export default class SupHeader2 extends Component {
         console.log("Form values", values);
         let newValues = {
             ...values,
-            surveyDate: values.surveyDate.format('jYYYY/jM/jD'),
-            surveyCreateDate: values.surveyCreateDate.format('jYYYY/jM/jD'),
-            preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jM/jD') : '',
+            surveyDate: values.surveyDate.format('jYYYY/jMM/jDD'),
+            surveyCreateDate: values.surveyCreateDate.format('jYYYY/jMM/jDD'),
+            preSurveyDate: values.preSurveyDate ? values.preSurveyDate.format('jYYYY/jMM/jDD') : '',
         };
         // save
 
