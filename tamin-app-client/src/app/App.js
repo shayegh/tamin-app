@@ -21,6 +21,7 @@ import SignUpForm from '../user/signup/Signup';
 import {UserProvider} from "../user/UserContext";
 import {showError} from "../util/Helpers";
 import ChangePass from "../user/changepass/ChangePass";
+import UserList from "../user/UserList";
 
 const {Content} = Layout;
 
@@ -140,6 +141,7 @@ class App extends Component {
                                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                                    currentUser={this.state.currentUser} {...props} />}/>
                                 <Route path="/changepass" component={ChangePass}/>
+                                <Route path="/users" component={UserList}/>
                                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new"
                                               component={NewPoll}
                                               handleLogout={this.handleLogout}/>

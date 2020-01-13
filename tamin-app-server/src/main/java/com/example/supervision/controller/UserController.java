@@ -12,12 +12,20 @@ import com.example.supervision.service.PollService;
 import com.example.supervision.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
+
+import static com.example.supervision.util.Utils.validatePageNumberAndSize;
 
 @Slf4j
 @RestController
@@ -70,16 +78,35 @@ public class UserController {
                 user.getBrchName(), user.getUnitName());
     }
 
-    //TODO کنترل اینکه کاربر جاری قصد تغییر رمز خوذ را دارد
     @PostMapping("/user/changePass")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody ChangePassRequest changePassRequest) {
-//        userRepository.sa
-        User user = userRepository.findById(changePassRequest.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "userId",changePassRequest.getUserId()));
+    @PreAuthorize("#changePassRequest?.userName == authentication?.name")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody @Param("changePassRequest") ChangePassRequest changePassRequest) {
+        User user = userRepository.findByUsername(changePassRequest.getUserName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userName", changePassRequest.getUserName()));
+        if (!passwordEncoder.matches(changePassRequest.getOldPass(), user.getPassword())) {
+            log.error("OldPassword Does Not Match!");
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "OldPassword Does Not Match!"));
+        }
         user.setPassword(passwordEncoder.encode(changePassRequest.getNewPass()));
         userRepository.save(user);
         return ResponseEntity.ok(new ApiResponse(true, "Password Changed Successfully!"));
+    }
+
+    @GetMapping(path = "/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PagedResponse<User> getUsers(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+                                        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+        validatePageNumberAndSize(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        Page<User> users;
+        users = userRepository.findAll(pageable);
+
+        if (users.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), users.getNumber(),
+                    users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
+        }
+        return new PagedResponse<>(users.getContent(), users.getNumber(),
+                users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
     }
 
     @GetMapping("/users/{username}/polls")

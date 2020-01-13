@@ -16,6 +16,7 @@ const validationSchema = yup.object().shape({
 
 const ChangePass = () => {
     let user = useContext(UserContext);
+    console.log('User: ',user);
     return (
         <div className='App'>
             <h1>تغییر کلمه عبور</h1>
@@ -28,7 +29,7 @@ const ChangePass = () => {
                 validationSchema={validationSchema}
                 onSubmit={(values, {setSubmitting}) => {
                     let changePassRequest = {
-                        userId: user.id,
+                        userName: user.name,
                         ...values
                     };
                     changePass(changePassRequest).then(

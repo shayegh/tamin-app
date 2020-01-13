@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by Shayegh@gmail.com on ۰۹/۰۱/۲۰۲۰ - ۱۱:۰۰ قبل‌ازظهر.
@@ -12,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class ChangePassRequest {
-    @NotNull
-    private long userId;
+    @NotBlank
+    private String userName;
     @NotBlank
     private String oldPass;
     @NotBlank

@@ -210,6 +210,15 @@ export function getUserProfile(username) {
     });
 }
 
+export const getUsersList = ( page, size)=>{
+    page = page || 0;
+    size = size || POLL_LIST_SIZE;
+    return request({
+        url: API_BASE_URL + "/users/?page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+};
+
 export function getUserCreatedPolls(username, page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;

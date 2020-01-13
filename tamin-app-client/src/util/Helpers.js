@@ -43,7 +43,7 @@ export const compareByNum = (a, b) => {
 };
 
 export const compareDate = (a, b) => {
-   // console.log(moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix());
+    // console.log(moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix());
     // console.log();
     return moment(a || 0, 'jYYYY/jMM/jDD').unix() - moment(b || 0, 'jYYYY/jMM/jDD').unix()
 };
@@ -51,14 +51,16 @@ export const compareDate = (a, b) => {
 export const showError = (error) => {
     if (error.status === 401) {
         toast.error('شما دسترسی لازم برای این کار را ندارید!');
-    } else if(error.status === 500){
+    } else if (error.status === 500) {
         toast.error('متاسفانه در حال حاضر سرور در دسترس نیست!');
+    } else if (error.status === 403) {
+        toast.error('شما دسترسی لازم برای این کار را ندارید!-403');
     } else {
         console.log('Error Message :', error);
         toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
     }
 };
 
-export const batchReact = (callback) =>{
+export const batchReact = (callback) => {
     ReactDOM.unstable_batchedUpdates(callback);
 };

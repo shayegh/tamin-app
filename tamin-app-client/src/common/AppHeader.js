@@ -36,6 +36,9 @@ class AppHeader extends Component {
                 </Menu.Item>,
                 <Menu.Item key="/newsuprep">
                     <Link to="/newsuprep">ثبت گزارش</Link>
+                </Menu.Item>,
+                <Menu.Item key="/users">
+                    <Link to="/users"> کاربران</Link>
                 </Menu.Item>
             ];
         } else {
