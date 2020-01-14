@@ -4,24 +4,19 @@ import {Route, Switch, withRouter} from 'react-router-dom';
 
 import {getCurrentUser} from '../util/APIUtils';
 import {ACCESS_TOKEN} from '../constants';
-import NewPoll from '../poll/NewPoll';
 import Login from '../user/login/Login';
 // import Signup1 from '../user/signup/Signup1';
 import Profile from '../user/profile/Profile';
 import AppHeader from '../common/AppHeader';
-import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
 import {toast} from 'react-toastify';
 import {Layout, notification} from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
-import SupList from "../supervision/SupList";
-import NewSup2 from "../supervision/NewSup2";
 import SignUpForm from '../user/signup/Signup';
 import {UserProvider} from "../user/UserContext";
 import {showError} from "../util/Helpers";
-import ChangePass from "../user/changepass/ChangePass";
-import UserList from "../user/UserList";
+import routs from "../routs";
 
 const {Content} = Layout;
 
@@ -58,10 +53,6 @@ class App extends Component {
             // fade out
             ele.classList.add('available');
             ele.outerHTML = ''
-            // setTimeout(() => {
-            //     // remove from DOM
-            //
-            // }, 2000)
         }
     }
     ;
@@ -134,18 +125,14 @@ class App extends Component {
                                 <PrivateRoute authenticated={this.state.isAuthenticated}
                                               handleLogout={this.handleLogout}
                                               path="/signup" component={SignUpForm}/>
-                                <Route path="/suplist" component={SupList}/>
-                                <Route exact path="/newsuprep" component={NewSup2}/>
-                                <Route path="/newsuprep/:headerId" component={NewSup2}/>
                                 <Route path="/users/:username"
                                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                                    currentUser={this.state.currentUser} {...props} />}/>
-                                <Route path="/changepass" component={ChangePass}/>
-                                <Route path="/users" component={UserList}/>
-                                <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new"
-                                              component={NewPoll}
-                                              handleLogout={this.handleLogout}/>
-                                <Route component={NotFound}/>
+                                {
+                                    routs.map((rout)=>(
+                                        <Route {...rout}/>
+                                    ))
+                                }
                             </Switch>
                         </div>
                     </Content>
