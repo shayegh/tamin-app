@@ -1,21 +1,17 @@
 package com.example.supervision.payload;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
+/**
+ * Created by Shayegh@gmail.com on ۲۸/۰۱/۲۰۲۰ - ۱۲:۵۵ بعدازظهر.
+ */
 @Setter
 @Getter
-@AllArgsConstructor
-public class UserProfile {
-    private Long id;
-    private String username;
+public class UserResponse {
     private String name;
+    private String username;
     private String email;
-    private Instant joinedAt;
     private String brchName;
     private String unitName;
-
 }

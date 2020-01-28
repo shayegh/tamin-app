@@ -11,6 +11,7 @@ import com.example.supervision.security.UserPrincipal;
 import com.example.supervision.service.PollService;
 import com.example.supervision.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.supervision.util.Utils.validatePageNumberAndSize;
 
@@ -70,17 +73,31 @@ public class UserController {
     public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
-        long pollCount = pollRepository.countByCreatedBy(user.getId());
-        long voteCount = voteRepository.countByUserId(user.getId());
-
-        return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt(), pollCount, voteCount,
+        return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getCreatedAt(),
                 user.getBrchName(), user.getUnitName());
+    }
+
+    @PutMapping(path = "/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest userRequest) {
+        User user = userRepository.findByUsername(userRequest.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", userRequest.getUsername()));
+//        Optional<User> user = userRepository.findByUsername(userRequest.getUsername());
+//        if(!user.isPresent())
+//            return ResponseEntity.notFound().build();
+//        User user1 = user.get();
+//        if(userRequest.getPassword().isEmpty())
+//            userRequest.setPassword(user1.getPassword());
+//        userRequest.setId(user1.getId());
+        BeanUtils.copyProperties(userRequest, user);
+        log.debug("Updated User :{}", user);
+        userRepository.save(user);
+        return ResponseEntity.ok(new ApiResponse(true, "User Updated"));
     }
 
     @PostMapping("/user/changePass")
     @PreAuthorize("#changePassRequest?.userName == authentication?.name")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody @Param("changePassRequest") ChangePassRequest changePassRequest) {
+    public ResponseEntity<?> changeUserPass(@Valid @RequestBody @Param("changePassRequest") ChangePassRequest changePassRequest) {
         User user = userRepository.findByUsername(changePassRequest.getUserName())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userName", changePassRequest.getUserName()));
         if (!passwordEncoder.matches(changePassRequest.getOldPass(), user.getPassword())) {
@@ -94,18 +111,26 @@ public class UserController {
 
     @GetMapping(path = "/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public PagedResponse<User> getUsers(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-                                        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+    public PagedResponse<UserResponse> getUsers(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+                                                @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         validatePageNumberAndSize(page, size);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-        Page<User> users;
-        users = userRepository.findAll(pageable);
+        Page<User> users = userRepository.findAll(pageable);
 
         if (users.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), users.getNumber(),
                     users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
         }
-        return new PagedResponse<>(users.getContent(), users.getNumber(),
+        List<User> userList = users.getContent();
+        List<UserResponse> userResponseList = userList.stream()
+                .map(user -> {
+                    UserResponse userResponse = new UserResponse();
+                    BeanUtils.copyProperties(user, userResponse);
+                    return userResponse;
+                })
+                .collect(Collectors.toList());
+
+        return new PagedResponse<>(userResponseList, users.getNumber(),
                 users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
     }
 

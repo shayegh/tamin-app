@@ -62,12 +62,10 @@ public class PollService {
         Map<Long, Long> pollUserVoteMap = getPollUserVoteMap(currentUser, pollIds);
         Map<Long, User> creatorMap = getPollCreatorMap(polls.getContent());
 
-        List<PollResponse> pollResponses = polls.map(poll -> {
-            return ModelMapper.mapPollToPollResponse(poll,
-                    choiceVoteCountMap,
-                    creatorMap.get(poll.getCreatedBy()),
-                    pollUserVoteMap == null ? null : pollUserVoteMap.getOrDefault(poll.getId(), null));
-        }).getContent();
+        List<PollResponse> pollResponses = polls.map(poll -> ModelMapper.mapPollToPollResponse(poll,
+                choiceVoteCountMap,
+                creatorMap.get(poll.getCreatedBy()),
+                pollUserVoteMap == null ? null : pollUserVoteMap.getOrDefault(poll.getId(), null))).getContent();
 
         return new PagedResponse<>(pollResponses, polls.getNumber(),
                 polls.getSize(), polls.getTotalElements(), polls.getTotalPages(), polls.isLast());

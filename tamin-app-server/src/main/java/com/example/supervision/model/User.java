@@ -42,7 +42,7 @@ public class User extends DateAudit {
     @Size(max = 15)
     private String username;
 
-    @NaturalId
+//    @NaturalId
     @NonNull
     @Size(max = 40)
     @Email

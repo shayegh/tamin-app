@@ -124,7 +124,7 @@ class App extends Component {
                                        render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                                 <PrivateRoute authenticated={this.state.isAuthenticated}
                                               handleLogout={this.handleLogout}
-                                              path="/signup" component={SignUpForm}/>
+                                              path="/signup/:username?" component={SignUpForm}/>
                                 <Route path="/users/:username"
                                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                                    currentUser={this.state.currentUser} {...props} />}/>

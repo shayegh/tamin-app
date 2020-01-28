@@ -169,6 +169,14 @@ export const changePass = (changePassRequest) => {
     })
 };
 
+export const updateUser = (updateUserRequest) => {
+    return request({
+        url: API_BASE_URL + "/user",
+        method: 'PUT',
+        body: JSON.stringify(updateUserRequest)
+    })
+};
+
 export function signup(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",
