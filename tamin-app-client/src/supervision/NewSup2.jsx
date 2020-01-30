@@ -3,7 +3,7 @@ import SupHeader2 from "./SupHeader2";
 import {Divider, Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
-import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/APIUtils';
+import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/api';
 import {showError} from '../util/Helpers';
 import {UserContext} from "../user/UserContext";
 import {ConfirmRoles} from "../constants";

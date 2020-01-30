@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ConfirmRoles, POLL_LIST_SIZE, SRStatus} from "../constants";
-import {confirmHeader, deleteHeader, getAllHeaders} from "../util/APIUtils";
+import {confirmHeader, deleteHeader, getAllHeaders} from "../util/api";
 import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
 import {Link} from "react-router-dom";
 import {toast} from 'react-toastify';
