@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import './App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
 
-import {getCurrentUser} from '../util/APIUtils';
+import {getCurrentUser} from '../util/api';
 import {ACCESS_TOKEN} from '../constants';
 import Login from '../user/login/Login';
-// import Signup1 from '../user/signup/Signup1';
 import Profile from '../user/profile/Profile';
 import AppHeader from '../common/AppHeader';
-import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
 import {toast} from 'react-toastify';
 import {Layout, notification} from 'antd';
@@ -37,7 +35,6 @@ class App extends Component {
         this.state = {
             currentUser: null,
             isAuthenticated: false,
-            isLoading: false
         };
 
         notification.config({
@@ -58,9 +55,6 @@ class App extends Component {
     ;
 
     loadCurrentUser = (roles) => {
-        this.setState({
-            isLoading: true
-        });
         getCurrentUser()
             .then(response => {
                 // console.log('load user response :', response);
@@ -68,32 +62,24 @@ class App extends Component {
                 this.setState({
                     currentUser: response,
                     isAuthenticated: true,
-                    isLoading: false
                 });
-                this.removeLoader();
             }).catch(error => {
             showError(error);
-            this.setState({
-                isLoading: false
-            });
-            this.removeLoader();
         });
     };
 
     componentDidMount() {
         this.loadCurrentUser();
+        this.removeLoader();
     }
 
     handleLogout = (redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") => {
         localStorage.removeItem(ACCESS_TOKEN);
-
         this.setState({
             currentUser: null,
             isAuthenticated: false
         });
-
         this.props.history.push(redirectTo);
-
         toast.success("با موفقیت خارج شدید");
     };
 
@@ -105,9 +91,6 @@ class App extends Component {
     };
 
     render() {
-        if (this.state.isLoading) {
-            return <LoadingIndicator/>;
-        }
         return (
             <Layout className="app-container">
                 <UserProvider value={this.state.currentUser}>
@@ -129,7 +112,7 @@ class App extends Component {
                                        render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
                                                                    currentUser={this.state.currentUser} {...props} />}/>
                                 {
-                                    routs.map((rout)=>(
+                                    routs.map((rout) => (
                                         <Route {...rout}/>
                                     ))
                                 }
