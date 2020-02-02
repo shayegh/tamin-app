@@ -3,7 +3,7 @@ import {Field as FormikField, Form as FormikForm, Formik} from 'formik';
 import {AntPassword} from "../../common/components/CreateAntFields";
 import {Button} from "antd";
 import {UserContext} from "../UserContext";
-import {changePass} from "../../util/APIUtils";
+import {changePass} from "../../util/api";
 import {toast} from "react-toastify";
 import {showError} from "../../util/Helpers";
 import * as yup from "yup";
@@ -15,7 +15,7 @@ const validationSchema = yup.object().shape({
 });
 
 const ChangePass = () => {
-    let user = useContext(UserContext);
+    const user = useContext(UserContext);
     console.log('User: ',user);
     return (
         <div className='App'>

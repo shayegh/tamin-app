@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getUsersList} from "../util/APIUtils";
+import {getUsersList} from "../util/api";
 import {compareByAlph, showError} from "../util/Helpers";
 import {Link} from "react-router-dom";
 import {Button, Icon, Popconfirm, Table, Tooltip} from "antd";

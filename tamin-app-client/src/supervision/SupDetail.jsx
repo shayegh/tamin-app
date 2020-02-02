@@ -4,7 +4,7 @@ import {Button, Col, Form, Row} from 'antd';
 import * as yup from "yup";
 import {setLocale} from "yup";
 import {AntInput} from "../common/components/CreateAntFields";
-import {createDetail} from '../util/APIUtils';
+import {createDetail} from '../util/api';
 import {toast} from 'react-toastify';
 
 const FormItem = Form.Item;

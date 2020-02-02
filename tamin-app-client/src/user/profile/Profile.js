@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getUserProfile} from '../../util/APIUtils';
+import {getUserProfile} from '../../util/api';
 import {Avatar, Tabs} from 'antd';
 import {getAvatarColor} from '../../util/Colors';
 import {formatDate} from '../../util/Helpers';

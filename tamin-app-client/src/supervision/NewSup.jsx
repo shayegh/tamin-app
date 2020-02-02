@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Icon, Popconfirm, Table} from "antd";
 import './Supervision.scss';
 import SupDetailForm from "./SupDetail";
-import {getHeader} from '../util/APIUtils';
+import {getHeader} from '../util/api';
 import {toast} from 'react-toastify';
 import SupHeader2 from "./SupHeader2";
 

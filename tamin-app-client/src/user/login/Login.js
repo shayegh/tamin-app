@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {login} from '../../util/APIUtils';
+import {login} from '../../util/api';
 import './Login.css';
 import {ACCESS_TOKEN} from '../../constants';
 import {toast} from 'react-toastify';

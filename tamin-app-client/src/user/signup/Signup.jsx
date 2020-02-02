@@ -4,13 +4,7 @@ import {Button, Col, Row} from 'antd';
 import * as yup from "yup";
 import {AntInput, AntPassword, AntSelect} from '../../common/components/CreateAntFields';
 import {brchOptions, roles, unitOptions} from '../../constants';
-import {
-    checkEmailAvailability,
-    checkUsernameAvailability,
-    getUserProfile,
-    signup,
-    updateUser
-} from '../../util/APIUtils';
+import {checkEmailAvailability, checkUsernameAvailability, getUserProfile, signup, updateUser} from '../../util/api';
 import {toast} from 'react-toastify';
 import {showError} from "../../util/Helpers";
 
