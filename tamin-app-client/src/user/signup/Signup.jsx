@@ -7,6 +7,7 @@ import {brchOptions, roles, unitOptions} from '../../constants';
 import {checkEmailAvailability, checkUsernameAvailability, getUserProfile, signup, updateUser} from '../../util/api';
 import {toast} from 'react-toastify';
 import {showError} from "../../util/Helpers";
+import {useParams} from "react-router-dom";
 
 const validationSchema = yup.object().shape({
     newUser: yup.boolean().required(),
@@ -53,8 +54,8 @@ const validationSchema = yup.object().shape({
 });
 
 const SignUpForm = (props) => {
-    console.log(props.match.params.username);
-    let {username} = props.match.params;
+    let {username} = useParams();
+    console.log('UserName: ',username);
     let newUser = true;
     if (username !== undefined)
         newUser = false;

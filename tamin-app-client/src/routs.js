@@ -1,8 +1,8 @@
 import SupList from "./supervision/SupList";
-import NewSup2 from "./supervision/NewSup2";
 import ChangePass from "./user/changepass/ChangePass";
 import UserList from "./user/UserList";
 import NotFound from "./common/NotFound";
+import NewSup from "./supervision/NewSup";
 
 const routs = [
     {
@@ -15,8 +15,9 @@ const routs = [
     //     component: NewSup2
     // },
     {
-        path: "/newsuprep/:headerId([0-9]+)?",
-        component: NewSup2
+        // path: "/newsuprep/:headerId([0-9]+)?",
+        path: "/newsuprep/:hId([0-9]+)?",
+        component: NewSup
     },
     {
         path: "/changepass",

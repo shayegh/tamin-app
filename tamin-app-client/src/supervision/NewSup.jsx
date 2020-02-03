@@ -1,11 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Icon, Popconfirm, Table} from "antd";
+import React, {useContext, useEffect, useState} from 'react';
+import {Divider, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import './Supervision.scss';
 import SupDetailForm from "./SupDetail";
-import {getHeader} from '../util/api';
+import {addShobComment, deleteDetail as deleteDetailApi, getAllDetailsByHeaderId} from '../util/api';
 import {toast} from 'react-toastify';
 import SupHeader2 from "./SupHeader2";
+import {useParams} from "react-router-dom";
+import {showError} from "../util/Helpers";
+import {UserContext} from "../user/UserContext";
+import {ConfirmRoles} from "../constants";
 
+const {TextArea} = Input;
 const dataSource = [];
 
 const NewSup = (props) => {
@@ -17,61 +22,50 @@ const NewSup = (props) => {
         srdSubjectErrorCount: 0,
         srdComment: ''
     };
-    const initialHeaderFormState = {
-        id: null,
-        surveyDate: '',
-        surveyCreateDate: '',
-        srdSubjectErrorCount: 0,
-        srdComment: ''
-    };
-    useEffect(() => {
-        let headerId = props.match.params.headerId;
-        if (headerId !== undefined) {
-            // console.log('Header ID : ', headerId);
-            getHeader(headerId)
-                .then(response => {
-                    console.log('Effect Response :', response);
-                    setCurrentHeader(response);
-                    // setReInitials(true);
-                })
-        } else {
-            console.log('No Header ID');
-        }
 
-    }, []);
-
+    let {hId} = useParams();
 
     // Setting state
     const [details, setDetails] = useState(dataSource);
     const [currentDetail, setCurrentDetail] = useState(initialDetailFormState);
-    const [currentHeader, setCurrentHeader] = useState(initialHeaderFormState);
     const [showDetail, setShowDetail] = useState(false);
-    const [reInitials, setReInitials] = useState(false);
-    const [headerID, setHeaderID] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [shobComment, setShobComment] = useState('');
+    const [headerId, setHeaderID] = useState(hId);
 
 
+    useEffect(() => {
+        if (headerId !== undefined) {
+            getAllDetailsByHeaderId(headerId)
+                .then(response => {
+                    setDetails(prevState => prevState.concat(response.content));
+                    setShowDetail(true);
+                }).catch(error => showError(error))
+        }
+
+    }, [hId]);
 
     // CRUD operations
     const addDetail = detail => {
-        detail.id = details.length + 1;
         setDetails([...details, detail]);
         setCurrentDetail(initialDetailFormState);
-        toast.success('اطلاعات با موفقیت اضافه شد');
-        // message.success('اطلاعات با موفقیت اضافه شد');
-
     };
 
-    const deleteDetail = fr => {
-        // setEditing(false)
-
-        setDetails(details.filter(detail => detail.id !== fr.id));
-        toast.success('اطلاعات با موفقیت حذف شد')
+    const deleteDetail = detail => {
+        //TODO کنترل لازم بودن setDetail اول
+        setDetails(details.filter(de => de.id !== detail.id));
+        deleteDetailApi(headerId, detail.id)
+            .then(response => {
+                    console.log('DeleteDetail Response :', response);
+                    setDetails(details.filter(de => de.id !== detail.id));
+                    toast.success('اطلاعات با موفقیت حذف شد');
+                }
+            ).catch(error => showError(error));
     };
 
     const addHeader = (hid) => {
-        setReInitials(false);
-        setShowDetail(true);
         console.log('Header ID:', hid);
+        setShowDetail(true);
         setHeaderID(hid);
 
     };
@@ -91,13 +85,16 @@ const NewSup = (props) => {
             title: 'تعداد خطا',
             dataIndex: 'srdSubjectErrorCount',
             key: 'srdSubjectErrorCount',
-            // defaultSortOrder: 'descend',
-            // sorter: (a, b) => a.age - b.age,
         },
         {
-            title: 'توضیحات',
+            title: 'نظر کارشناس',
             dataIndex: 'srdComment',
             key: 'srdComment',
+        },
+        {
+            title: 'توضیحات شعبه',
+            dataIndex: 'srdShobComment',
+            key: 'srdShobComment',
         },
         {
             title: 'عملیات',
@@ -106,17 +103,18 @@ const NewSup = (props) => {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
+                        <Icon type="file-text" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
-                                  setCurrentDetail(record);
+                                  showModal(record);
+                                  // this.setState({currentDetail: record});
                               }}/>
                         <Popconfirm
                             title="آیا از حذف مطمئن هستید؟"
                             onConfirm={() => {
                                 deleteDetail(record);
                             }}
-                            onCancel={cancel}
+                            // onCancel={this.cancel}
                             okText="بله"
                             cancelText="خیر"
                         >
@@ -127,25 +125,71 @@ const NewSup = (props) => {
             }
         }
     ];
-    const cancel = (e) => {
-        console.log(e);
-        // message.error('Click on No');
+
+    const showModal = (record) => {
+        console.log('Detail', record);
+        setVisible(true);
+        setCurrentDetail(record);
+        setShobComment(record.srdShobComment);
     };
 
-    console.log('current header',currentHeader);
+    const handleOk = e => {
+        console.log('Shob Comment:', shobComment);
+        addShobComment(headerId, currentDetail.id, shobComment)
+            .then(response => {
+                    console.log('ShobCommentDetail Response :', response);
+                    toast.success('توضیحات با موفقیت ثبت شد');
+                }
+            ).catch(error => showError(error));
+        setVisible(false);
+    };
+
+    const handleCancel = e => {
+        console.log(e);
+        setVisible(false);
+    };
+
+    const onChange = ({target: {value}}) => {
+        setShobComment(value);
+    };
+
+    let {roles} = useContext(UserContext);
+    let showDetailForm = false;
+    if (roles.includes(ConfirmRoles.ROLE_ED_BOSS))
+        showDetailForm = true;
+
     return (
-        <div className="App">
-            <SupHeader2 currentHeader={currentHeader} reInitials={reInitials} addHeader={addHeader}/>
+        <div className='App'>
+            <SupHeader2 headerId={headerId} showDetail={showDetail} addHeader={addHeader}/>
             {showDetail ?
                 <div>
-                    <SupDetailForm currentDetail={currentDetail} addDetail={addDetail}/>
-                    <Table dataSource={details} rowKey='id' columns={columns} size="small"/>
+                    <Divider orientation='left'>جزئیات گزارش</Divider>
+                    {showDetailForm ?
+                        <SupDetailForm currentDetail={currentDetail} headerId={headerId}
+                                       addDetail={addDetail}/>
+                        : null}
+                    <Table dataSource={details} rowKey='id' columns={columns} size="small"
+                           style={{width: '100%'}}/>
                 </div>
                 :
                 null}
+            <Modal
+                title="جزئیات"
+                style={{direction: 'ltr'}}
+                bodyStyle={{direction: 'rtl'}}
+                visible={visible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <TextArea
+                    value={shobComment}
+                    placeholder="توضیحات واحد"
+                    onChange={onChange}
+                    autoSize={{minRows: 2, maxRows: 6}}
+                />
+            </Modal>
         </div>
-    )
-
+    );
 };
 
 export default NewSup;
