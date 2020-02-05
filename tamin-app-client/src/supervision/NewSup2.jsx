@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SupHeader2 from "./SupHeader2";
-import {Divider, Form, Icon, Input, Modal, Popconfirm, Table} from "antd";
+import {Divider, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import SupDetailForm from "./SupDetail";
 import {toast} from "react-toastify";
 import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/api';
@@ -17,7 +17,6 @@ const initialDetailFormState = {
     srdShobComment: ''
 };
 
-const FormItem = Form.Item;
 const {TextArea} = Input;
 
 class NewSup2 extends Component {
