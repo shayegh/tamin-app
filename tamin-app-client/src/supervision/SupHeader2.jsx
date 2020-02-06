@@ -92,6 +92,7 @@ export default class SupHeader2 extends Component {
         surveyCreateDate: yup.string().required('فیلد تاریخ ثبت گزارش اجباری است'),
         supervisorName: yup.string().required('فیلد نام ناظر اجباری است'),
         surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
+        preSurveyMatters: yup.string().required('فیلد موضوعات قابل پیگیری اجباری است'),
     });
 
 
@@ -226,6 +227,7 @@ export default class SupHeader2 extends Component {
                                     autoSize={{minRows: 2, maxRows: 6}}
                                     type='text'
                                     name='preSurveyMatters'
+                                    required={true}
                                     hasFeedback
                                 />
                             </Col>
@@ -243,7 +245,7 @@ export default class SupHeader2 extends Component {
                             </Col>
                         </Row>
                         <Row gutter={16}>
-                            <Col span={12}>
+                            <Col span={24}>
                                 <FormikField
                                     component={AntTextArea}
                                     labelCol={{span: 12, offset: 12}}
@@ -254,7 +256,9 @@ export default class SupHeader2 extends Component {
                                     hasFeedback
                                 />
                             </Col>
-                            <Col span={12}>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
                                 <FormikField
                                     component={AntTextArea}
                                     labelCol={{span: 12, offset: 12}}
@@ -268,7 +272,7 @@ export default class SupHeader2 extends Component {
                         </Row>
                         <Row>
                             <Col span={8}>
-                                <FormItem>
+                                <FormItem style={{float: 'left'}} >
                                     <Button htmlType="submit" type="primary"
                                             loading={isSubmitting}
                                             disabled={isSubmitting || st !== SRStatus.NEW}>

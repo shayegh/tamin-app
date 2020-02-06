@@ -45,8 +45,8 @@ export const PASSWORD_MAX_LENGTH = 20;
 //         name: "درآمد",
 //         value: 3
 //     }];
-export const brchOptions = ["اداره کل استان یزد", "یک یزد", "دو یزد", "سه یزد","چهار یزد","پنج یزد"];
-export const unitOptions = ["مالی", "فناوری اطلاعات", "درآمد"];
+export const brchOptions = ["اداره کل استان یزد", "یک یزد", "دو یزد", "سه یزد", "چهار یزد", "پنج یزد", "یک اردکان", "میبد", "زارچ", "اشکذر", "تفت","مهریز", "بافق", "ابرکوه", "خاتم", "بهاباد", "دو اردکان"];
+export const unitOptions = ["مالی","اداری","آمار","بودجه", "فناوری اطلاعات", "درآمد","فنی","مستمری","نامنویسی","بازرسی"];
 
 export const Actions = {
     Read: 'READ',
@@ -74,7 +74,7 @@ export const ConfirmRoles = {
 };
 
 export const SRStatus = {
-    NEW:"NEW",
+    NEW: "NEW",
     ED_BOSS_CONFIRM: "ED_BOSS_CONFIRM",
     SHOB_BOSS_CONFIRM: "SHOB_BOSS_CONFIRM",
     SHOB_UNIT_BOSS_CONFIRM: "SHOB_UNIT_BOSS_CONFIRM"

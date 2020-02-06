@@ -13,7 +13,7 @@ import {ConfirmRoles} from "../constants";
 const {TextArea} = Input;
 const dataSource = [];
 
-const NewSup = (props) => {
+const NewSup = () => {
 
     const initialDetailFormState = {
         id: null,
@@ -22,7 +22,7 @@ const NewSup = (props) => {
         srdSubjectErrorCount: 0,
         srdComment: ''
     };
-
+    //Current Header ID
     let {hId} = useParams();
 
     // Setting state
@@ -92,7 +92,7 @@ const NewSup = (props) => {
             key: 'srdComment',
         },
         {
-            title: 'توضیحات شعبه',
+            title: 'پاسخ شعبه',
             dataIndex: 'srdShobComment',
             key: 'srdShobComment',
         },
@@ -155,7 +155,7 @@ const NewSup = (props) => {
 
     let {roles} = useContext(UserContext);
     let showDetailForm = false;
-    if (roles.includes(ConfirmRoles.ROLE_ED_BOSS))
+    if (roles !== undefined && roles.includes(ConfirmRoles.ROLE_ED_BOSS))
         showDetailForm = true;
 
     return (
@@ -173,6 +173,7 @@ const NewSup = (props) => {
                 </div>
                 :
                 null}
+            {/*<ShobComment headerId={headerId} detailId={currentDetail.id} shobComment={shobComment} showModal={visible}/>*/}
             <Modal
                 title="جزئیات"
                 style={{direction: 'ltr'}}
@@ -183,7 +184,7 @@ const NewSup = (props) => {
             >
                 <TextArea
                     value={shobComment}
-                    placeholder="توضیحات واحد"
+                    placeholder="پاسخ شعبه"
                     onChange={onChange}
                     autoSize={{minRows: 2, maxRows: 6}}
                 />

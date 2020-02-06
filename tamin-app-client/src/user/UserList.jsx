@@ -77,7 +77,7 @@ const columns = [
     }
 ];
 
-const UserList = (props) => {
+const UserList = () => {
     const [data, setData] = useState({users: []});
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {

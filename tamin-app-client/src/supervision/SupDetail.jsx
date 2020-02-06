@@ -3,7 +3,7 @@ import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
 import {Button, Col, Form, Row} from 'antd';
 import * as yup from "yup";
 import {setLocale} from "yup";
-import {AntInput} from "../common/components/CreateAntFields";
+import {AntInput, AntTextArea} from "../common/components/CreateAntFields";
 import {createDetail} from '../util/api';
 import {toast} from 'react-toastify';
 
@@ -17,40 +17,29 @@ const InnerForm = ({
     return (
         <FormikForm>
             <Row gutter={16}>
-                <Col span={6}>
-                    <FormikField
-                        component={AntInput}
-                        labelCol={{span: 12, offset: 12}}
-                        label="توضیحات کارشناس"
-                        name="srdComment"
-                        type='text'
-                        required={true}
-                        hasFeedback
-                    />
-                </Col>
-                <Col span={6}>
+                <Col span={8}>
                     <FormikField
                         component={AntInput}
                         labelCol={{span: 12, offset: 12}}
                         label="تعداد خطا"
                         name="srdSubjectErrorCount"
                         type='text'
-                        required={true}
+                        // required={true}
                         hasFeedback
                     />
                 </Col>
-                <Col span={6}>
+                <Col span={8}>
                     <FormikField
                         component={AntInput}
                         labelCol={{span: 12, offset: 12}}
                         label="تعداد بررسی"
                         name="srdSubjectCount"
                         type='text'
-                        required={true}
+                        // required={true}
                         hasFeedback
                     />
                 </Col>
-                <Col span={6}>
+                <Col span={8}>
                     <FormikField
                         component={AntInput}
                         labelCol={{span: 12, offset: 12}}
@@ -62,16 +51,29 @@ const InnerForm = ({
                     />
                 </Col>
             </Row>
+            <Row gutter={16}>
+                <Col span={24}>
+                    <FormikField
+                        component={AntTextArea}
+                        labelCol={{span: 12, offset: 12}}
+                        label="توضیحات کارشناس"
+                        name="srdComment"
+                        type='text'
+                        required={true}
+                        hasFeedback
+                    />
+                </Col>
+            </Row>
             <Row>
                 <Col span={8}>
-                    <FormItem>
-                        <Button htmlType="submit" type="primary" disabled={isSubmitting}>
+                    <FormItem style={{float: 'left'}}>
+                        <Button htmlType="submit" type="primary" disabled={!dirty || isSubmitting}>
                             افزودن
                         </Button>
-                        <Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}
-                                style={{marginRight: 5}}>
-                            بازنشانی
-                        </Button>
+                        {/*<Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}*/}
+                        {/*        style={{marginRight: 5}}>*/}
+                        {/*    بازنشانی*/}
+                        {/*</Button>*/}
                     </FormItem>
                 </Col>
             </Row>
@@ -108,31 +110,31 @@ const SupDetailForm = withFormik({
     },
     validationSchema: yup.object().shape({
         srdComment: yup.string().required('فیلد توضیحات اجباری می باشد'),
-        srdSubjectErrorCount: yup.number().positive('مقدار این فیلد باید عددی باشد').required('ورود تعداد خطا اجباری است'),
-        srdSubjectCount: yup.number().positive('مقدار این فیلد باید عددی باشد').required('فیلد تعداد بررسی اجباری است'),
+        srdSubjectErrorCount: yup.number().positive('مقدار این فیلد باید عددی باشد'),
+        srdSubjectCount: yup.number().positive('مقدار این فیلد باید عددی باشد'),
         srdSubject: yup.string().required('فیلد موضوع اجباری است')
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
 
-            console.log("Form values", values);
-            createDetail(props.headerId,values)
-                .then(response => {
-                    toast.success('جزئیات با موفقیت ثبت شد');
-                    values={...values,id:response.oid};
-                    props.addDetail(values);
-                    // addHeader(response.oid);
-                }).catch(error => {
-                if (error.status === 401) {
-                    toast.error('You have been logged out. Please login create poll.');
-                } else {
-                    console.log('Error Message :', error);
-                    toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
-                }
-            });
+        console.log("Form values", values);
+        createDetail(props.headerId, values)
+            .then(response => {
+                toast.success('جزئیات با موفقیت ثبت شد');
+                values = {...values, id: response.oid};
+                props.addDetail(values);
+                // addHeader(response.oid);
+            }).catch(error => {
+            if (error.status === 401) {
+                toast.error('You have been logged out. Please login create poll.');
+            } else {
+                console.log('Error Message :', error);
+                toast.error(error.message || 'Sorry! Something went wrong. Please try again!');
+            }
+        });
 
-            // alert(JSON.stringify(props.data, null, 2));
-            // save
-            setSubmitting(false);
+        // alert(JSON.stringify(props.data, null, 2));
+        // save
+        setSubmitting(false);
 
     }
 })(InnerForm);
