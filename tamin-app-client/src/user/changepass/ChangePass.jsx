@@ -32,6 +32,7 @@ const ChangePass = () => {
                         userName: user.name,
                         ...values
                     };
+                    setSubmitting(true);
                     changePass(changePassRequest).then(
                         response => {
                             setSubmitting(false);
