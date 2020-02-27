@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,19 +43,15 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PollRepository pollRepository;
-
-    @Autowired
-    private VoteRepository voteRepository;
-
-    @Autowired
     private PollService pollService;
 
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName(), currentUser.getBrchName(), currentUser.getUnitName());
+        String[] userRoles = currentUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(String[]::new);
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName(),
+                currentUser.getBrchName(), currentUser.getUnitName(),userRoles);
     }
 
     @GetMapping("/user/checkUsernameAvailability")

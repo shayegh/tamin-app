@@ -10,6 +10,7 @@ import {compareByAlph, compareByNum, showError} from "../util/Helpers";
 import './Supervision.scss'
 import ExportExcel from "../common/components/ExportExcel";
 import {UserContext} from "../user/UserContext";
+import {hasRole} from '../auth/auth';
 
 const FormItem = Form.Item;
 
@@ -254,13 +255,13 @@ class SupList extends Component {
 
     confirmHeader = (headerId) => {
         console.log('Context : ',this.context);
-        let {roles} = this.context;
+        let user = this.context;
         let st = '';
-        if (roles.includes(ConfirmRoles.ROLE_ED_BOSS))
+        if (hasRole(user,[ConfirmRoles.ROLE_ED_BOSS]))
             st = {status: SRStatus.ED_BOSS_CONFIRM};
-        else if (roles.includes(ConfirmRoles.ROLE_SHOB_BOSS))
+        else if (hasRole(user,[ConfirmRoles.ROLE_SHOB_BOSS]))
             st = {status: SRStatus.SHOB_BOSS_CONFIRM};
-        else if (roles.includes(ConfirmRoles.ROLE_SHOB_UNIT_BOSS))
+        else if (hasRole(user,[ConfirmRoles.ROLE_SHOB_UNIT_BOSS]))
             st = {status: SRStatus.SHOB_UNIT_BOSS_CONFIRM};
 
         confirmHeader(st, headerId).then(response => {

@@ -9,6 +9,7 @@ import {useParams} from "react-router-dom";
 import {showError} from "../util/Helpers";
 import {UserContext} from "../user/UserContext";
 import {ConfirmRoles} from "../constants";
+import {hasRole} from '../auth/auth';
 
 const {TextArea} = Input;
 const dataSource = [];
@@ -153,10 +154,8 @@ const NewSup = () => {
         setShobComment(value);
     };
 
-    let {roles} = useContext(UserContext);
-    let showDetailForm = false;
-    if (roles !== undefined && roles.includes(ConfirmRoles.ROLE_ED_BOSS))
-        showDetailForm = true;
+    let user = useContext(UserContext);
+    let showDetailForm = hasRole(user,[ConfirmRoles.ROLE_ED_BOSS]);
 
     return (
         <div className='App'>

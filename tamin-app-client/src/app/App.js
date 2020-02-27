@@ -39,11 +39,10 @@ const App = () => {
 
     },[]);
 
-    const loadCurrentUser = (roles) => {
+    const loadCurrentUser = () => {
         getCurrentUser()
             .then(response => {
                 console.log('load user response :', response);
-                response = {...response, roles};
                 setCurrentUser(response);
                 setIsAuthenticated(true);
 
@@ -72,9 +71,9 @@ const App = () => {
         toast.success("با موفقیت خارج شدید");
     };
 
-    const handleLogin = (userRole) => {
+    const handleLogin = () => {
         toast.success("با موفقیت وارد شدید");
-        loadCurrentUser(userRole);
+        loadCurrentUser();
         history.push("/suplist");
     };
 

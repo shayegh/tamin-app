@@ -28,7 +28,7 @@ const Login = props => {
                     .then(response => {
                         // console.log('Login Response :',response);
                         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                        props.onLogin(response.roles);
+                        props.onLogin();
                         setSubmitting(false);
                     }).catch(error => {
                     if(error.status === 401) {
