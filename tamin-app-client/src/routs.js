@@ -1,10 +1,10 @@
 import React, {lazy} from 'react';
 
-const SupList = lazy(() => import('./supervision/SupList'));
-const ChangePass = lazy(() => import('./user/changepass/ChangePass'));
-const UserList = lazy(() => import('./user/UserList'));
-const NewSup = lazy(() => import('./supervision/NewSup'));
-const NotFound = lazy(() => import('./common/NotFound'));
+const SupList = lazy(() => import('supervision/SupList'));
+const ChangePass = lazy(() => import('user/changepass/ChangePass'));
+const UserList = lazy(() => import('user/UserList'));
+const NewSup = lazy(() => import('supervision/NewSup'));
+const NotFound = lazy(() => import('common/NotFound'));
 
 
 const routs = [

@@ -2,20 +2,20 @@ import React, {Suspense, useEffect, useState} from 'react';
 import './App.css';
 import {Route, Switch, useHistory, withRouter} from 'react-router-dom';
 
-import {getCurrentUser} from '../util/api';
+import {getCurrentUser} from 'util/api';
 import {ACCESS_TOKEN} from '../constants';
-import Login from '../user/login/Login';
-import Profile from '../user/profile/Profile';
-import AppHeader from '../common/AppHeader';
-import PrivateRoute from '../common/PrivateRoute';
+import Login from 'user/login/Login';
+import Profile from 'user/profile/Profile';
+import AppHeader from 'common/AppHeader';
+import PrivateRoute from 'common/PrivateRoute';
 import {toast} from 'react-toastify';
 import {Layout} from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
-import SignUpForm from '../user/signup/Signup';
-import {UserProvider} from "../user/UserContext";
-import {showError} from "../util/Helpers";
-import routs from "../routs";
-import ErrorBoundary from "../common/ErrorBoundary";
+import SignUpForm from 'user/signup/Signup';
+import {UserProvider} from "user/UserContext";
+import {showError} from "util/Helpers";
+import routs from "routs";
+import ErrorBoundary from "common/ErrorBoundary";
 
 const {Content} = Layout;
 
