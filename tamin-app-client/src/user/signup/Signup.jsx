@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Field as FormikField, Form as FormikForm, Formik} from "formik";
+import {Field as FormikField, Form as FormikForm, Formik} from 'formik';
 import {Button, Col, Row} from 'antd';
-import * as yup from "yup";
+import * as yup from 'yup';
 import {AntInput, AntPassword, AntSelect} from '../../common/components/CreateAntFields';
 import {brchOptions, roles, unitOptions} from '../../constants';
 import {checkEmailAvailability, checkUsernameAvailability, getUserProfile, signup, updateUser} from '../../util/api';
 import {toast} from 'react-toastify';
-import {showError} from "../../util/Helpers";
-import {useParams} from "react-router-dom";
+import {showError} from '../../util/Helpers';
+import {useParams} from 'react-router-dom';
 
 const validationSchema = yup.object().shape({
     newUser: yup.boolean().required(),
@@ -122,7 +122,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntInput}
-                                    labelCol={{span: 12, offset: 12}}
                                     label="نام"
                                     name="name"
                                     type='text'
@@ -133,7 +132,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntInput}
-                                    labelCol={{span: 12, offset: 12}}
                                     label="نام کاربری"
                                     name="username"
                                     type='text'
@@ -147,7 +145,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntInput}
-                                    labelCol={{span: 12, offset: 12}}
                                     label="ایمیل"
                                     name="email"
                                     type='email'
@@ -159,7 +156,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntPassword}
-                                    labelCol={{span: 12, offset: 12}}
                                     label="کلمه عبور"
                                     name="password"
                                     type='password'
@@ -172,7 +168,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntSelect}
-                                    labelCol={{span: 12, offset: 12}}
                                     label='شعبه '
                                     name="brchName"
                                     selectOptions={brchOptions}
@@ -184,7 +179,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntSelect}
-                                    labelCol={{span: 12, offset: 12}}
                                     label='واحد '
                                     name="unitName"
                                     selectOptions={unitOptions}
@@ -198,7 +192,6 @@ const SignUpForm = (props) => {
                             <Col span={12}>
                                 <FormikField
                                     component={AntSelect}
-                                    labelCol={{span: 12, offset: 12}}
                                     label='نقش '
                                     name="role"
                                     selectOptions={roles}

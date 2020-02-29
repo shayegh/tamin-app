@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Icon, message, Popconfirm, Table} from "antd";
+import {DeleteTwoTone} from '@ant-design/icons';
+import {message, Popconfirm, Table} from 'antd';
 import MyFormikForm from './MyForm';
 
 const dataSource = [
@@ -90,7 +91,7 @@ function TestAntd(props) {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}
+                        <LegacyIcon type="edit" theme="twoTone" style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
                                   setCurrentFruit(record);
@@ -104,10 +105,10 @@ function TestAntd(props) {
                             okText="بله"
                             cancelText="خیر"
                         >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96'/>
+                             <DeleteTwoTone twoToneColor='#eb2f96'/>
                         </Popconfirm>
                     </div>
-                )
+                );
             }
         }
     ];

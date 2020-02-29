@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
-import {ConfirmRoles, POLL_LIST_SIZE, SRStatus} from "../constants";
-import {confirmHeader, deleteHeader, getAllHeaders} from "../util/api";
-import {Button, Form, Icon, Input, Popconfirm, Table} from "antd";
-import {Link} from "react-router-dom";
+import {ConfirmRoles, POLL_LIST_SIZE, SRStatus} from '../constants';
+import {confirmHeader, deleteHeader, getAllHeaders} from 'util/api';
+import {CheckCircleTwoTone, DeleteTwoTone, EditTwoTone, EyeTwoTone, SearchOutlined} from '@ant-design/icons';
+import {Button, Form, Input, Popconfirm, Table} from 'antd';
+import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import Highlighter from "react-highlight-words";
-import {compareByAlph, compareByNum, showError} from "../util/Helpers";
+import Highlighter from 'react-highlight-words';
+import {compareByAlph, compareByNum, showError} from 'util/Helpers';
 
 import './Supervision.scss'
-import ExportExcel from "../common/components/ExportExcel";
-import {UserContext} from "../user/UserContext";
-import {hasRole} from '../auth/auth';
-
-const FormItem = Form.Item;
+import ExportExcel from 'common/components/ExportExcel';
+import {UserContext} from 'user/UserContext';
+import {hasRole} from 'auth/auth';
 
 class SupList extends Component {
 
@@ -78,7 +77,7 @@ class SupList extends Component {
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    icon="search"
+                    icon={<SearchOutlined />}
                     size="small"
                     style={{width: 90, marginRight: 8}}
                 >
@@ -90,7 +89,7 @@ class SupList extends Component {
             </div>
         ),
         filterIcon: filtered => (
-            <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>
+            <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>
         ),
         onFilter: (value, record) =>
             record[dataIndex]
@@ -194,9 +193,9 @@ class SupList extends Component {
                     <div>
                         <Link to={`/newsuprep/${text}`}>
                             {record.status === 'NEW' ?
-                                <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                                <EditTwoTone  style={{marginLeft: 5}}/>
                             :
-                                <Icon type="eye"  twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                                <EyeTwoTone   twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                             }
                         </Link>
                         {
@@ -209,7 +208,7 @@ class SupList extends Component {
                                     okText="بله"
                                     cancelText="خیر"
                                 >
-                                    <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                                    <DeleteTwoTone twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                                 </Popconfirm>
                                 :
                                 null
@@ -224,10 +223,10 @@ class SupList extends Component {
                             cancelText="خیر"
 
                         >
-                            <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/>
+                            <CheckCircleTwoTone  twoToneColor="#52c41a"/>
                         </Popconfirm>
                     </div>
-                )
+                );
             }
         }
     ];
@@ -303,13 +302,14 @@ class SupList extends Component {
                            hideOnSinglePage:true,
                        }}
                 />
-                <FormItem style={{float: "left"}}>
-                    <Button htmlType="submit" type="primary">
+                <br/>
+                <Form.Item>
+                    <Button htmlType="submit" type="primary" style={{float: "left"}}>
                         <Link to='/newsuprep'>
                             جدید
                         </Link>
                     </Button>
-                </FormItem>
+                </Form.Item>
             </div>
         );
     }

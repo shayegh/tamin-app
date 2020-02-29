@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './Poll.css';
-import { Avatar, Icon } from 'antd';
-import { Link } from 'react-router-dom';
-import { getAvatarColor } from '../util/Colors';
-import { formatDateTime } from '../util/Helpers';
+import {Icon as LegacyIcon} from '@ant-design/compatible';
+import {Avatar, Button, Radio} from 'antd';
+import {Link} from 'react-router-dom';
+import {getAvatarColor} from '../util/Colors';
+import {formatDateTime} from '../util/Helpers';
 
-import { Radio, Button } from 'antd';
 const RadioGroup = Radio.Group;
 
 class Poll extends Component {
@@ -136,7 +136,7 @@ function CompletedOrVotedPollChoice(props) {
                 </span>
                 {
                     props.isSelected ? (
-                    <Icon
+                    <LegacyIcon
                         className="selected-choice-icon"
                         type="check-circle-o"
                     /> ): null

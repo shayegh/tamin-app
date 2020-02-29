@@ -1,17 +1,15 @@
 import React from 'react';
-import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
-import {Button, Col, Form, Row} from 'antd';
-import * as yup from "yup";
-import {setLocale} from "yup";
-import {AntInput, AntTextArea} from "../common/components/CreateAntFields";
-import {createDetail} from '../util/api';
+import {Field as FormikField, Form as FormikForm, withFormik} from 'formik';
+import {Button, Col, Row} from 'antd';
+import * as yup from 'yup';
+import {setLocale} from 'yup';
+import {AntInput, AntTextArea} from 'common/components/CreateAntFields';
+import {createDetail} from 'util/api';
 import {toast} from 'react-toastify';
 
-const FormItem = Form.Item;
 
 const InnerForm = ({
                        isSubmitting,
-                       handleReset,
                        dirty
                    }) => {
     return (
@@ -20,29 +18,24 @@ const InnerForm = ({
                 <Col span={8}>
                     <FormikField
                         component={AntInput}
-                        labelCol={{span: 12, offset: 12}}
                         label="تعداد خطا"
                         name="srdSubjectErrorCount"
                         type='text'
-                        // required={true}
                         hasFeedback
                     />
                 </Col>
                 <Col span={8}>
                     <FormikField
                         component={AntInput}
-                        labelCol={{span: 12, offset: 12}}
                         label="تعداد بررسی"
                         name="srdSubjectCount"
                         type='text'
-                        // required={true}
                         hasFeedback
                     />
                 </Col>
                 <Col span={8}>
                     <FormikField
                         component={AntInput}
-                        labelCol={{span: 12, offset: 12}}
                         label="موضوع"
                         name="srdSubject"
                         type='text'
@@ -66,15 +59,9 @@ const InnerForm = ({
             </Row>
             <Row>
                 <Col span={8}>
-                    <FormItem style={{float: 'left'}}>
-                        <Button htmlType="submit" type="primary" disabled={!dirty || isSubmitting}>
+                        <Button htmlType="submit" type="primary" style={{float: 'left'}} disabled={!dirty || isSubmitting}>
                             افزودن
                         </Button>
-                        {/*<Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}*/}
-                        {/*        style={{marginRight: 5}}>*/}
-                        {/*    بازنشانی*/}
-                        {/*</Button>*/}
-                    </FormItem>
                 </Col>
             </Row>
         </FormikForm>

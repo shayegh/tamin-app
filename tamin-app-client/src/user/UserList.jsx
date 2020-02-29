@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {getUsersList} from "util/api";
-import {compareByAlph, showError} from "util/Helpers";
-import {Link} from "react-router-dom";
-import {Button, Icon, Popconfirm, Table, Tooltip} from "antd";
-import ExportExcel from "common/components/ExportExcel";
+import {getUsersList} from 'util/api';
+import {compareByAlph, showError} from 'util/Helpers';
+import {Link} from 'react-router-dom';
+import {DeleteTwoTone, EditTwoTone} from '@ant-design/icons';
+import {Button, Popconfirm, Table, Tooltip} from 'antd';
+import ExportExcel from 'common/components/ExportExcel';
 
 const columns = [
     {
@@ -53,7 +54,7 @@ const columns = [
                 <div>
                     <Link to={`/signup/${text}`}>
                         <Tooltip title="ویرایش">
-                            <Icon type="edit" theme="twoTone" style={{marginLeft: 5}}/>
+                            <EditTwoTone style={{marginLeft: 5}}/>
                         </Tooltip>
                     </Link>
                     {
@@ -66,13 +67,13 @@ const columns = [
                                 okText="بله"
                                 cancelText="خیر"
                             >
-                                <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                                <DeleteTwoTone  twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                             </Popconfirm>
                             :
                             null
                     }
                 </div>
-            )
+            );
         }
     }
 ];

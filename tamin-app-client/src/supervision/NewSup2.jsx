@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import SupHeader2 from "./SupHeader2";
-import {Divider, Icon, Input, Modal, Popconfirm, Table} from "antd";
-import SupDetailForm from "./SupDetail";
-import {toast} from "react-toastify";
+import SupHeader2 from './SupHeader2';
+import {DeleteTwoTone, FileTextTwoTone} from '@ant-design/icons';
+import {Divider, Input, Modal, Popconfirm, Table} from 'antd';
+import SupDetailForm from './SupDetail';
+import {toast} from 'react-toastify';
 import {addShobComment, deleteDetail, getAllDetailsByHeaderId} from '../util/api';
 import {showError} from '../util/Helpers';
-import {UserContext} from "../user/UserContext";
-import {ConfirmRoles} from "../constants";
+import {UserContext} from '../user/UserContext';
+import {ConfirmRoles} from '../constants';
 
 const initialDetailFormState = {
     id: null,
@@ -114,7 +115,7 @@ class NewSup2 extends Component {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="file-text" theme="twoTone" style={{marginLeft: 5}}
+                        <FileTextTwoTone style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
                                   this.showModal(record);
@@ -129,10 +130,10 @@ class NewSup2 extends Component {
                             okText="بله"
                             cancelText="خیر"
                         >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96'/>
+                            <DeleteTwoTone twoToneColor='#eb2f96'/>
                         </Popconfirm>
                     </div>
-                )
+                );
             }
         }
     ];

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by rajeevkumarsingh on 01/08/17.
@@ -24,4 +25,13 @@ public class Role {
     @NaturalId
     @Column(length = 60)
     private RoleName name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "roles_privileges",
+            joinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "privilege_id", referencedColumnName = "id"))
+    private Collection<Privilege> privileges;
 }

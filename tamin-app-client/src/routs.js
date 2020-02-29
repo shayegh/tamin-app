@@ -1,4 +1,4 @@
-import React, {lazy} from 'react';
+import {lazy} from 'react';
 
 const SupList = lazy(() => import('supervision/SupList'));
 const ChangePass = lazy(() => import('user/changepass/ChangePass'));

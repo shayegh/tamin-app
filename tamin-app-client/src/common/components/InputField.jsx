@@ -1,5 +1,5 @@
-import * as React from "react";
-import {Form, Input} from "antd";
+import * as React from 'react';
+import {Form, Input} from 'antd';
 
 const FormItem = Form.Item;
 
