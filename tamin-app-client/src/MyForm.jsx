@@ -1,12 +1,11 @@
 import React from 'react';
-import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
-import * as yup from "yup";
+import {Field as FormikField, Form as FormikForm, withFormik} from 'formik';
+import * as yup from 'yup';
 import moment from 'moment-jalaali';
-import "./index.scss";
-import {AntInput, AntSelect, JalaliDatePicker} from "./common/components/CreateAntFields";
-import {Button, Col, Form, Icon, Row} from 'antd';
+import './index.scss';
+import {AntInput, AntSelect, JalaliDatePicker} from './common/components/CreateAntFields';
+import {Button, Col, Row} from 'antd';
 
-const FormItem = Form.Item;
 
 const InnerForm = ({
                        props,
@@ -32,9 +31,7 @@ const InnerForm = ({
                         name="email"
                         type='email'
                         label="ایمیل"
-                        prefix={
-                            <Icon type="user" style={{color: "rgba(0,0,0,.25)"}}/>
-                        }
+
                         required={true}
                         hasFeedback
                         component={AntInput}
@@ -84,14 +81,12 @@ const InnerForm = ({
                 </Col>
             </Row>
 
-            <FormItem>
                 <Button htmlType="submit" type="primary" disabled={isSubmitting}>
                     Submit
                 </Button>
                 <Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}>
                     Reset
                 </Button>
-            </FormItem>
         </FormikForm>
     );
 };

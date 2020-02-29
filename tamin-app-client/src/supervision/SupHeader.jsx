@@ -1,14 +1,13 @@
 import React from 'react';
-import {Field as FormikField, Form as FormikForm, withFormik} from "formik";
-import * as yup from "yup";
-import {AntInput, AntSelect, AntTextArea, JalaliDatePicker} from '../common/components/CreateAntFields';
-import {Button, Col, Form, Row} from 'antd';
+import {Field as FormikField, Form as FormikForm, withFormik} from 'formik';
+import * as yup from 'yup';
+import {AntInput, AntSelect, AntTextArea, JalaliDatePicker} from 'common/components/CreateAntFields';
+import {Button, Col, Row} from 'antd';
 import moment from 'moment-jalaali';
-import {createHeader, updateHeader} from "../util/api";
-import {toast} from "react-toastify";
+import {createHeader, updateHeader} from 'util/api';
+import {toast} from 'react-toastify';
 import {brchOptions, unitOptions} from '../constants';
 
-const FormItem = Form.Item;
 
 const InnerForm = ({
                        props,
@@ -46,7 +45,7 @@ const InnerForm = ({
                         name="brchName"
                         // defaultValue={values.brch}
                         selectOptions={brchOptions}
-                        tokenSeparators={[","]}
+                        tokenSeparators={[',']}
                         required={true}
                         hasFeedback
                     />
@@ -59,7 +58,7 @@ const InnerForm = ({
                         name="unitName"
                         // defaultValue={values.unit}
                         selectOptions={unitOptions}
-                        tokenSeparators={[","]}
+                        tokenSeparators={[',']}
                         required={true}
                         hasFeedback
                     />
@@ -171,15 +170,13 @@ const InnerForm = ({
             </Row>
             <Row>
                 <Col span={8}>
-                    <FormItem>
-                        <Button htmlType="submit" type="primary" loading={isSubmitting} disabled={isSubmitting}>
-                            ذخیره
-                        </Button>
-                        <Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}
-                                style={{marginRight: 5}}>
-                            بازنشانی
-                        </Button>
-                    </FormItem>
+                    <Button htmlType="submit" type="primary" loading={isSubmitting} disabled={isSubmitting}>
+                        ذخیره
+                    </Button>
+                    <Button onClick={handleReset} type='danger' disabled={!dirty || isSubmitting}
+                            style={{marginRight: 5}}>
+                        بازنشانی
+                    </Button>
                 </Col>
             </Row>
         </FormikForm>
@@ -222,7 +219,7 @@ const SupHeaderForm = withFormik({
         surveySubject: yup.string().required('فیلد موضوع بازدید اجباری است'),
     }),
     handleSubmit: (values, {resetForm, setErrors, setSubmitting, props}) => {
-        console.log("Form values", values);
+        console.log('Form values', values);
         let newValues = {
             ...values,
             surveyDate: values.surveyDate.format('jYYYY/jM/jD'),

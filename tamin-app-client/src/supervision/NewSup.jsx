@@ -1,14 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Divider, Icon, Input, Modal, Popconfirm, Table} from "antd";
+import {Divider, Input, Modal, Popconfirm, Table} from 'antd';
+import {DeleteTwoTone, FileTextTwoTone} from '@ant-design/icons';
 import './Supervision.scss';
-import SupDetailForm from "./SupDetail";
+import SupDetailForm from './SupDetail';
 import {addShobComment, deleteDetail as deleteDetailApi, getAllDetailsByHeaderId} from 'util/api';
 import {toast} from 'react-toastify';
-import SupHeader2 from "./SupHeader2";
-import {useParams} from "react-router-dom";
-import {showError} from "util/Helpers";
-import {UserContext} from "user/UserContext";
-import {ConfirmRoles} from "../constants";
+import SupHeader2 from './SupHeader2';
+import {useParams} from 'react-router-dom';
+import {showError} from 'util/Helpers';
+import {UserContext} from 'user/UserContext';
+import {ConfirmRoles} from '../constants';
 import {hasRole} from '../auth/auth';
 
 const {TextArea} = Input;
@@ -104,7 +105,7 @@ const NewSup = () => {
             render: (text, record) => {
                 return (
                     <div>
-                        <Icon type="file-text" theme="twoTone" style={{marginLeft: 5}}
+                        <FileTextTwoTone  style={{marginLeft: 5}}
                               onClick={() => {
                                   // console.log(record);
                                   showModal(record);
@@ -119,10 +120,10 @@ const NewSup = () => {
                             okText="بله"
                             cancelText="خیر"
                         >
-                            <Icon type="delete" theme="twoTone" twoToneColor='#eb2f96'/>
+                            <DeleteTwoTone  twoToneColor='#eb2f96'/>
                         </Popconfirm>
                     </div>
-                )
+                );
             }
         }
     ];

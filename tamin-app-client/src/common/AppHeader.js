@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import './AppHeader.css';
-import {Dropdown, Icon, Layout, Menu} from 'antd';
+import {CaretDownOutlined, HomeOutlined, UserOutlined} from '@ant-design/icons';
+import {Dropdown, Layout, Menu} from 'antd';
 
 const Header = Layout.Header;
 
 class AppHeader extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleMenuClick = ({key}) => {
         if (key === "logout") {
@@ -22,7 +20,7 @@ class AppHeader extends Component {
             menuItems = [
                 <Menu.Item  style={{float: 'right'}} key="/">
                     <Link to="/">
-                        <Icon type="home" className="nav-icon"/>
+                        <HomeOutlined className="nav-icon"/>
                     </Link>
                 </Menu.Item>,
                 <Menu.Item  style={{float: 'right'}} key="/profile" className="profile-menu">
@@ -102,8 +100,8 @@ function ProfileDropdownMenu(props) {
             trigger={['click']}
             getPopupContainer={() => document.getElementsByClassName('profile-menu')[0]}>
             <a className="ant-dropdown-link">
-                <Icon type="user" className="nav-icon" style={{marginRight: 0}}/>
-                <Icon type="down"/>
+                <UserOutlined className="nav-icon" style={{marginRight: 0}}/>
+                <CaretDownOutlined />
             </a>
         </Dropdown>
     );

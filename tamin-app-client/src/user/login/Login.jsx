@@ -1,16 +1,17 @@
 import React from 'react';
 import {Field as FormikField, Form as FormikForm, Formik} from 'formik';
-import {AntInput, AntPassword} from '../../common/components/CreateAntFields';
+import {AntInput, AntPassword} from 'common/components/CreateAntFields';
 import './Login.css';
-import {Button, Icon} from 'antd';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
+import {Button} from 'antd';
 import * as yup from 'yup';
-import {login} from '../../util/api';
+import {login} from 'util/api';
 import {ACCESS_TOKEN} from '../../constants';
 import {toast} from 'react-toastify';
 
 const validationSchema = yup.object().shape({
-    usernameOrEmail: yup.string().required('Prev Password is required'),
-    password: yup.string().required('New Password is required'),
+    usernameOrEmail: yup.string().required('لطفا نام کاربری را وارد نمایید!'),
+    password: yup.string().required('لطفا پسورد را وارد نمایید!'),
 });
 
 const Login = props => {
@@ -46,18 +47,14 @@ const Login = props => {
                     <h1 className="page-title">ورود به سیستم</h1>
                     <FormikForm className="login-form">
                         <FormikField component={AntInput}
-                                     labelCol={{span: 12, offset: 12}}
-                                     prefix={<Icon type="user"/>}
-                                     size="large"
+                                     prefix={<UserOutlined />}
                                      placeholder="نام کاربری"
                                      name="usernameOrEmail"
                                      type='username'
                         />
                         <FormikField component={AntPassword}
-                                     labelCol={{span: 12, offset: 12}}
                                      placeholder="کلمه عبور"
-                                     prefix={<Icon type="lock"/>}
-                                     size="large"
+                                     prefix={<LockOutlined />}
                                      name="password"
                                      type='pass'
                         />

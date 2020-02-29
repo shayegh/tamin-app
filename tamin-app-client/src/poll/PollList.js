@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { getAllPolls, getUserCreatedPolls, getUserVotedPolls } from '../util/APIUtils';
+import React, {Component} from 'react';
+import {castVote, getAllPolls, getUserCreatedPolls, getUserVotedPolls} from '../util/APIUtils';
 import Poll from './Poll';
-import { castVote } from '../util/APIUtils';
-import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Icon, notification } from 'antd';
-import { POLL_LIST_SIZE } from '../constants';
-import { withRouter } from 'react-router-dom';
+import LoadingIndicator from '../common/LoadingIndicator';
+import {Icon as LegacyIcon} from '@ant-design/compatible';
+import {Button, notification} from 'antd';
+import {POLL_LIST_SIZE} from '../constants';
+import {withRouter} from 'react-router-dom';
 import './PollList.css';
 
 class PollList extends Component {
@@ -166,7 +166,7 @@ class PollList extends Component {
                     !this.state.isLoading && !this.state.last ? (
                         <div className="load-more-polls"> 
                             <Button type="dashed" onClick={this.handleLoadMore} disabled={this.state.isLoading}>
-                                <Icon type="plus" /> Load more
+                                <LegacyIcon type="plus" /> Load more
                             </Button>
                         </div>): null
                 }              

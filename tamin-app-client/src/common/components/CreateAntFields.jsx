@@ -1,8 +1,7 @@
-import React from "react";
-import {DatePicker as antDatePicker, Form, Input, Select, TimePicker} from "antd";
+import React from 'react';
+import {DatePicker as antDatePicker, Form, Input, Select, TimePicker} from 'antd';
 import DatePicker from 'react-datepicker2';
 
-const FormItem = Form.Item;
 const {Option} = Select;
 const {TextArea, Password} = Input;
 
@@ -25,33 +24,40 @@ const CreateAntField = AntComponent => ({
         form.setFieldValue(field.name, value);
     const onChange = value => form.setFieldValue(field.name, value);
     const onBlur = () => form.setFieldTouched(field.name, true);
-    // console.log('type:',type);
     return (
         <div className="field-container">
-            <FormItem
+            <Form.Item
                 labelCol={props.labelCol}
+                wrapperCol={props.wrapperCol ||{span: 24}}
                 label={label}
                 hasFeedback={
                     !!((hasFeedback && submitted) || (hasFeedback && touched))
                 }
                 help={submittedError || touchedError ? hasError : false}
-                validateStatus={submittedError || touchedError ? "error" : "success"}
+                validateStatus={submittedError || touchedError ? 'error' : 'success'}
                 required={props.required}
-            >
-                <AntComponent
-                    {...field}
-                    {...props}
-                    onBlur={onBlur}
-                    onChange={type ? onInputChange : onChange}
-                    showSearch= {!!selectOptions }
-                    optionFilterProp="children"
-                >
-                    {selectOptions &&
-                    selectOptions.map(name => <Option key={name}>{name}</Option>)}
+            >{
+                selectOptions ?
+                    <AntComponent
+                        {...field}
+                        {...props}
+                        onBlur={onBlur}
+                        onChange={type ? onInputChange : onChange}
+                        showSearch={!!selectOptions}
+                        optionFilterProp="children"
+                    >
+                        {selectOptions.map(name => <Option key={name}>{name}</Option>)}
 
-                    {/*// selectOptions.map(({name,value}) => <Option key={value}>{name}</Option>)}*/}
-                </AntComponent>
-            </FormItem>
+                        {/*// selectOptions.map(({name,value}) => <Option key={value}>{name}</Option>)}*/}
+                    </AntComponent> :
+                    <AntComponent
+                        {...field}
+                        {...props}
+                        onBlur={onBlur}
+                        onChange={type ? onInputChange : onChange}
+                    />
+            }
+            </Form.Item>
         </div>
     );
 };
