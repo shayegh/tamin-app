@@ -2,12 +2,12 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Divider, Icon, Input, Modal, Popconfirm, Table} from "antd";
 import './Supervision.scss';
 import SupDetailForm from "./SupDetail";
-import {addShobComment, deleteDetail as deleteDetailApi, getAllDetailsByHeaderId} from '../util/api';
+import {addShobComment, deleteDetail as deleteDetailApi, getAllDetailsByHeaderId} from 'util/api';
 import {toast} from 'react-toastify';
 import SupHeader2 from "./SupHeader2";
 import {useParams} from "react-router-dom";
-import {showError} from "../util/Helpers";
-import {UserContext} from "../user/UserContext";
+import {showError} from "util/Helpers";
+import {UserContext} from "user/UserContext";
 import {ConfirmRoles} from "../constants";
 import {hasRole} from '../auth/auth';
 
