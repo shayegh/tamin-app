@@ -8,9 +8,9 @@ import {ConfigProvider} from 'antd';
 
 ReactDOM.render(
     <ConfigProvider direction={'rtl'}>
-    <Router>
-        <App />
-    </Router>
+        <Router>
+            <App/>
+        </Router>
     </ConfigProvider>,
     document.getElementById('root')
 );

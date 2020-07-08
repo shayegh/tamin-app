@@ -27,6 +27,7 @@ class SupList extends Component {
             isLoading: false,
             searchText: '',
             searchedColumn: '',
+            pagination: {},
             // visible: false,
             currentRecord: {}
         };
@@ -35,6 +36,18 @@ class SupList extends Component {
 
     static contextType = UserContext;
 
+    handleTableChange = (pagination, filters, sorter) => {
+        console.log('pagination: ', pagination);
+        const pager = {...this.state.pagination};
+        console.log('pager: ', pager);
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        if (!this.state.last)
+            this.loadHeaderList(pagination.current);
+    };
+
     loadHeaderList = (page = 0, size = POLL_LIST_SIZE) => {
         this.setState({
             isLoading: true
@@ -42,7 +55,10 @@ class SupList extends Component {
 
         getAllHeaders(page, size)
             .then(response => {
+                console.log('sup response', response);
                 const headers = this.state.headers.slice();
+                const pagination = {...this.state.pagination};
+                pagination.total = response.totalElements;
                 this.setState({
                     headers: headers.concat(response.content),
                     page: response.page,
@@ -50,6 +66,7 @@ class SupList extends Component {
                     totalElements: response.totalElements,
                     totalPages: response.totalPages,
                     last: response.last,
+                    pagination,
                     isLoading: false
                 })
             }).catch(error => {
@@ -77,7 +94,7 @@ class SupList extends Component {
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    icon={<SearchOutlined />}
+                    icon={<SearchOutlined/>}
                     size="small"
                     style={{width: 90, marginRight: 8}}
                 >
@@ -193,9 +210,9 @@ class SupList extends Component {
                     <div>
                         <Link to={`/newsuprep/${text}`}>
                             {record.status === 'NEW' ?
-                                <EditTwoTone  style={{marginLeft: 5}}/>
-                            :
-                                <EyeTwoTone   twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
+                                <EditTwoTone style={{marginLeft: 5}}/>
+                                :
+                                <EyeTwoTone twoToneColor='#eb2f96' style={{marginLeft: 5}}/>
                             }
                         </Link>
                         {
@@ -223,7 +240,7 @@ class SupList extends Component {
                             cancelText="خیر"
 
                         >
-                            <CheckCircleTwoTone  twoToneColor="#52c41a"/>
+                            <CheckCircleTwoTone twoToneColor="#52c41a"/>
                         </Popconfirm>
                     </div>
                 );
@@ -253,14 +270,14 @@ class SupList extends Component {
     };
 
     confirmHeader = (headerId) => {
-        console.log('Context : ',this.context);
+        console.log('Context : ', this.context);
         let user = this.context;
         let st = '';
-        if (hasRole(user,[ConfirmRoles.ROLE_ED_BOSS]))
+        if (hasRole(user, [ConfirmRoles.ROLE_ED_BOSS]))
             st = {status: SRStatus.ED_BOSS_CONFIRM};
-        else if (hasRole(user,[ConfirmRoles.ROLE_SHOB_BOSS]))
+        else if (hasRole(user, [ConfirmRoles.ROLE_SHOB_BOSS]))
             st = {status: SRStatus.SHOB_BOSS_CONFIRM};
-        else if (hasRole(user,[ConfirmRoles.ROLE_SHOB_UNIT_BOSS]))
+        else if (hasRole(user, [ConfirmRoles.ROLE_SHOB_UNIT_BOSS]))
             st = {status: SRStatus.SHOB_UNIT_BOSS_CONFIRM};
 
         confirmHeader(st, headerId).then(response => {
@@ -287,24 +304,25 @@ class SupList extends Component {
         return (
             <div className="App">
                 <ExportExcel cols={this.columns} data={this.state.headers} fileName='SRList'
-                             style={{float: "left", cursor: "pointer", fontSize: '18px'}}/>
+                             style={{float: 'left', cursor: 'pointer', fontSize: '18px'}}/>
                 <Table dataSource={this.state.headers}
                        rowKey={record => record.id} columns={this.columns}
                        bodyStyle={{width: '100%'}} size="small" loading={this.state.isLoading}
+                       onChange={this.handleTableChange}
                        rowClassName={
                            (record, index) => {
-                                return record.status;
+                               return record.status;
                                // if (record.status === SRStatus.ED_BOSS_CONFIRM)
                                //     return 'ed_boss_confirm_report'
                            }}
                        pagination={{
                            showSizeChanger: true,
-                           hideOnSinglePage:true,
+                           hideOnSinglePage: true,
                        }}
                 />
                 <br/>
                 <Form.Item>
-                    <Button htmlType="submit" type="primary" style={{float: "left"}}>
+                    <Button htmlType="submit" type="primary" style={{float: 'left'}}>
                         <Link to='/newsuprep'>
                             جدید
                         </Link>
