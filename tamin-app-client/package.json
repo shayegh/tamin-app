@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://localhost:5000/",
   "dependencies": {
-    "@casl/ability": "^3.4.0",
+    "@casl/ability": "^6.7.5",
     "@casl/react": "^1.0.4",
     "antd": "^4.4.1",
     "@ant-design/icons": "latest",
